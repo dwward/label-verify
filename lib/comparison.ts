@@ -4,6 +4,7 @@ import type {
   FieldVerdict,
   VerdictStatus,
 } from "./types";
+import { checkGovernmentWarning } from "./warning-text";
 
 /**
  * Normalize text for comparison: lowercase, trim, collapse whitespace,
@@ -19,9 +20,51 @@ export function normalize(text: string): string {
 }
 
 /**
+ * Calculate Levenshtein distance between two strings
+ * Standard dynamic programming implementation
+ */
+function levenshteinDistance(a: string, b: string): number {
+  const matrix: number[][] = [];
+
+  // Initialize first column (distance from empty string)
+  for (let i = 0; i <= a.length; i++) {
+    matrix[i] = [i];
+  }
+
+  // Initialize first row (distance from empty string)
+  for (let j = 0; j <= b.length; j++) {
+    matrix[0][j] = j;
+  }
+
+  // Fill in the rest of the matrix
+  for (let i = 1; i <= a.length; i++) {
+    for (let j = 1; j <= b.length; j++) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      matrix[i][j] = Math.min(
+        matrix[i - 1][j] + 1, // deletion
+        matrix[i][j - 1] + 1, // insertion
+        matrix[i - 1][j - 1] + cost // substitution
+      );
+    }
+  }
+
+  return matrix[a.length][b.length];
+}
+
+/**
+ * Calculate string similarity ratio (0 to 1)
+ * 1 = identical, 0 = completely different
+ */
+function stringSimilarity(a: string, b: string): number {
+  const distance = levenshteinDistance(a, b);
+  const maxLength = Math.max(a.length, b.length);
+  if (maxLength === 0) return 1; // both strings empty
+  return 1 - distance / maxLength;
+}
+
+/**
  * Compare brand name or class/type fields
- * M1: Simple exact match after normalization, otherwise NEEDS_REVIEW
- * (Levenshtein distance deferred to M2)
+ * M2: Exact match after normalization, fuzzy matching with Levenshtein distance
  */
 export function compareBrandOrClass(
   fieldName: string,
@@ -55,13 +98,26 @@ export function compareBrandOrClass(
     };
   }
 
-  // M1: Any difference → NEEDS_REVIEW (fuzzy matching in M2)
+  // M2: Check similarity using Levenshtein distance
+  const similarity = stringSimilarity(normalizedApp, normalizedLabel);
+
+  if (similarity >= 0.9) {
+    return {
+      field: fieldName,
+      status: "NEEDS_REVIEW",
+      applicationValue: appValue,
+      labelValue,
+      explanation:
+        "Very similar but not identical—possible typo or OCR artifact",
+    };
+  }
+
   return {
     field: fieldName,
-    status: "NEEDS_REVIEW",
+    status: "MISMATCH",
     applicationValue: appValue,
     labelValue,
-    explanation: "Not an exact match — please verify visually",
+    explanation: `${fieldName} does not match`,
   };
 }
 
@@ -75,8 +131,17 @@ function parsePercentage(text: string): number | null {
 }
 
 /**
+ * Parse proof from alcohol content string and convert to ABV
+ * Proof ÷ 2 = ABV (e.g., "90 Proof" = 45% ABV)
+ */
+function parseProof(text: string): number | null {
+  const match = text.match(/(\d+(?:\.\d+)?)\s*proof/i);
+  return match ? parseFloat(match[1]) / 2 : null;
+}
+
+/**
  * Compare alcohol content
- * M1: Simple percentage parsing (proof conversion deferred to M2)
+ * M2: Handles both percentage and proof notation with internal consistency check
  */
 export function compareAlcoholContent(
   appValue: string,
@@ -92,8 +157,11 @@ export function compareAlcoholContent(
     };
   }
 
-  const appPercent = parsePercentage(appValue);
-  const labelPercent = parsePercentage(labelValue);
+  // Parse application value (try percentage first, then proof)
+  let appPercent = parsePercentage(appValue);
+  if (appPercent === null) {
+    appPercent = parseProof(appValue);
+  }
 
   if (appPercent === null) {
     return {
@@ -103,6 +171,29 @@ export function compareAlcoholContent(
       labelValue,
       explanation: "Cannot parse percentage from application data",
     };
+  }
+
+  // Parse label value (try percentage first, then proof)
+  let labelPercent = parsePercentage(labelValue);
+  const labelProof = parseProof(labelValue);
+
+  // Check for internal consistency if both percentage and proof are present
+  if (labelPercent !== null && labelProof !== null) {
+    if (Math.abs(labelPercent - labelProof) >= 0.01) {
+      return {
+        field: "Alcohol Content",
+        status: "NEEDS_REVIEW",
+        applicationValue: appValue,
+        labelValue,
+        explanation:
+          "Label shows inconsistent ABV and proof values—verify with applicant",
+      };
+    }
+  }
+
+  // Use proof conversion if percentage not found
+  if (labelPercent === null) {
+    labelPercent = labelProof;
   }
 
   if (labelPercent === null) {
@@ -213,30 +304,6 @@ export function compareNetContents(
   };
 }
 
-/**
- * Basic government warning check
- * M1: Simple presence check only (exact-match logic deferred to M2)
- */
-function checkGovernmentWarning(extracted: ExtractedLabel): FieldVerdict {
-  if (!extracted.governmentWarning.present) {
-    return {
-      field: "Government Warning",
-      status: "MISMATCH",
-      applicationValue: "Required",
-      labelValue: null,
-      explanation: "Government warning missing from label",
-    };
-  }
-
-  return {
-    field: "Government Warning",
-    status: "NEEDS_REVIEW",
-    applicationValue: "Required",
-    labelValue: "Present",
-    explanation:
-      "Warning present — full text verification deferred to detailed review",
-  };
-}
 
 /**
  * Calculate overall verdict from individual field verdicts
