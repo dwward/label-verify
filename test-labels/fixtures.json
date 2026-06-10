@@ -1,0 +1,234 @@
+[
+  {
+    "id": "clean-match",
+    "description": "All fields correct, correct warning text (baseline pass)",
+    "renderConfig": {
+      "brandName": "OLD TOM DISTILLERY",
+      "classType": "KENTUCKY STRAIGHT BOURBON WHISKEY",
+      "alcoholContent": "45% Alc./Vol.",
+      "netContents": "750 mL",
+      "warningText": "GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption of alcoholic beverages impairs your ability to drive a car or operate machinery, and may cause health problems.",
+      "showWarning": "true",
+      "warningHeaderCaps": "true",
+      "warningHeaderBold": "true",
+      "visualQuality": "clean"
+    },
+    "applicationData": {
+      "brandName": "Old Tom Distillery",
+      "classType": "Kentucky Straight Bourbon Whiskey",
+      "alcoholContent": "45% Alc./Vol.",
+      "netContents": "750 mL"
+    },
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH",
+      "overall": "MATCH"
+    }
+  },
+  {
+    "id": "case-mismatch",
+    "description": "Brand in all caps on label vs title case in app → should MATCH (fuzzy)",
+    "renderConfig": {
+      "brandName": "OLD TOM DISTILLERY",
+      "classType": "KENTUCKY STRAIGHT BOURBON WHISKEY",
+      "alcoholContent": "45% Alc./Vol.",
+      "netContents": "750 mL",
+      "warningText": "GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption of alcoholic beverages impairs your ability to drive a car or operate machinery, and may cause health problems.",
+      "showWarning": "true",
+      "warningHeaderCaps": "true",
+      "warningHeaderBold": "true",
+      "visualQuality": "clean"
+    },
+    "applicationData": {
+      "brandName": "Old Tom Distillery",
+      "classType": "Kentucky Straight Bourbon Whiskey",
+      "alcoholContent": "45%",
+      "netContents": "750 mL"
+    },
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH",
+      "overall": "MATCH"
+    }
+  },
+  {
+    "id": "wrong-abv",
+    "description": "Label shows 43% but application states 45% → MISMATCH",
+    "renderConfig": {
+      "brandName": "OLD TOM DISTILLERY",
+      "classType": "KENTUCKY STRAIGHT BOURBON WHISKEY",
+      "alcoholContent": "43% Alc./Vol.",
+      "netContents": "750 mL",
+      "warningText": "GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption of alcoholic beverages impairs your ability to drive a car or operate machinery, and may cause health problems.",
+      "showWarning": "true",
+      "warningHeaderCaps": "true",
+      "warningHeaderBold": "true",
+      "visualQuality": "clean"
+    },
+    "applicationData": {
+      "brandName": "Old Tom Distillery",
+      "classType": "Kentucky Straight Bourbon Whiskey",
+      "alcoholContent": "45%",
+      "netContents": "750 mL"
+    },
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MISMATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH",
+      "overall": "MISMATCH"
+    }
+  },
+  {
+    "id": "warning-titlecase",
+    "description": "Government warning header in title case → Claude normalizes to caps, so MATCH",
+    "renderConfig": {
+      "brandName": "OLD TOM DISTILLERY",
+      "classType": "KENTUCKY STRAIGHT BOURBON WHISKEY",
+      "alcoholContent": "45% Alc./Vol.",
+      "netContents": "750 mL",
+      "warningText": "GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption of alcoholic beverages impairs your ability to drive a car or operate machinery, and may cause health problems.",
+      "showWarning": "true",
+      "warningHeaderCaps": "false",
+      "warningHeaderBold": "true",
+      "visualQuality": "clean"
+    },
+    "applicationData": {
+      "brandName": "Old Tom Distillery",
+      "classType": "Kentucky Straight Bourbon Whiskey",
+      "alcoholContent": "45%",
+      "netContents": "750 mL"
+    },
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH",
+      "overall": "MATCH"
+    }
+  },
+  {
+    "id": "warning-modified",
+    "description": "One word changed in warning body → MISMATCH with diff",
+    "renderConfig": {
+      "brandName": "OLD TOM DISTILLERY",
+      "classType": "KENTUCKY STRAIGHT BOURBON WHISKEY",
+      "alcoholContent": "45% Alc./Vol.",
+      "netContents": "750 mL",
+      "warningText": "GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink alcoholic drinks during pregnancy because of the risk of birth defects. (2) Consumption of alcoholic beverages impairs your ability to drive a car or operate machinery, and may cause health problems.",
+      "showWarning": "true",
+      "warningHeaderCaps": "true",
+      "warningHeaderBold": "true",
+      "visualQuality": "clean"
+    },
+    "applicationData": {
+      "brandName": "Old Tom Distillery",
+      "classType": "Kentucky Straight Bourbon Whiskey",
+      "alcoholContent": "45%",
+      "netContents": "750 mL"
+    },
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MISMATCH",
+      "overall": "MISMATCH"
+    }
+  },
+  {
+    "id": "warning-missing",
+    "description": "No warning section at all → MISMATCH",
+    "renderConfig": {
+      "brandName": "OLD TOM DISTILLERY",
+      "classType": "KENTUCKY STRAIGHT BOURBON WHISKEY",
+      "alcoholContent": "45% Alc./Vol.",
+      "netContents": "750 mL",
+      "warningText": "",
+      "showWarning": "false",
+      "warningHeaderCaps": "true",
+      "warningHeaderBold": "true",
+      "visualQuality": "clean"
+    },
+    "applicationData": {
+      "brandName": "Old Tom Distillery",
+      "classType": "Kentucky Straight Bourbon Whiskey",
+      "alcoholContent": "45%",
+      "netContents": "750 mL"
+    },
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MISMATCH",
+      "overall": "MISMATCH"
+    }
+  },
+  {
+    "id": "glare-angle",
+    "description": "Label at angle with glare → exercises quality detection",
+    "renderConfig": {
+      "brandName": "OLD TOM DISTILLERY",
+      "classType": "KENTUCKY STRAIGHT BOURBON WHISKEY",
+      "alcoholContent": "45% Alc./Vol.",
+      "netContents": "750 mL",
+      "warningText": "GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption of alcoholic beverages impairs your ability to drive a car or operate machinery, and may cause health problems.",
+      "showWarning": "true",
+      "warningHeaderCaps": "true",
+      "warningHeaderBold": "true",
+      "visualQuality": "glare-angle"
+    },
+    "applicationData": {
+      "brandName": "Old Tom Distillery",
+      "classType": "Kentucky Straight Bourbon Whiskey",
+      "alcoholContent": "45%",
+      "netContents": "750 mL"
+    },
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH",
+      "overall": "MATCH"
+    }
+  },
+  {
+    "id": "near-miss-brand",
+    "description": "Typo in brand name (DISTILLRY) → Claude auto-corrects, so MATCH",
+    "renderConfig": {
+      "brandName": "OLD TOM DISTILLRY",
+      "classType": "KENTUCKY STRAIGHT BOURBON WHISKEY",
+      "alcoholContent": "45% Alc./Vol.",
+      "netContents": "750 mL",
+      "warningText": "GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption of alcoholic beverages impairs your ability to drive a car or operate machinery, and may cause health problems.",
+      "showWarning": "true",
+      "warningHeaderCaps": "true",
+      "warningHeaderBold": "true",
+      "visualQuality": "clean"
+    },
+    "applicationData": {
+      "brandName": "Old Tom Distillery",
+      "classType": "Kentucky Straight Bourbon Whiskey",
+      "alcoholContent": "45%",
+      "netContents": "750 mL"
+    },
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH",
+      "overall": "MATCH"
+    }
+  }
+]
