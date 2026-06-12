@@ -69,7 +69,8 @@ function stringSimilarity(a: string, b: string): number {
 export function compareBrandOrClass(
   fieldName: string,
   appValue: string,
-  labelValue: string | null
+  labelValue: string | null,
+  foundOn?: string
 ): FieldVerdict {
   if (!labelValue) {
     return {
@@ -78,6 +79,7 @@ export function compareBrandOrClass(
       applicationValue: appValue,
       labelValue: null,
       explanation: "Not found on label",
+      foundOn: foundOn as any,
     };
   }
 
@@ -95,6 +97,7 @@ export function compareBrandOrClass(
       applicationValue: appValue,
       labelValue,
       explanation,
+      foundOn: foundOn as any,
     };
   }
 
@@ -109,6 +112,7 @@ export function compareBrandOrClass(
       labelValue,
       explanation:
         "Very similar but not identical—possible typo or OCR artifact",
+      foundOn: foundOn as any,
     };
   }
 
@@ -118,6 +122,7 @@ export function compareBrandOrClass(
     applicationValue: appValue,
     labelValue,
     explanation: `${fieldName} does not match`,
+    foundOn: foundOn as any,
   };
 }
 
@@ -145,7 +150,8 @@ function parseProof(text: string): number | null {
  */
 export function compareAlcoholContent(
   appValue: string,
-  labelValue: string | null
+  labelValue: string | null,
+  foundOn?: string
 ): FieldVerdict {
   if (!labelValue) {
     return {
@@ -154,6 +160,7 @@ export function compareAlcoholContent(
       applicationValue: appValue,
       labelValue: null,
       explanation: "Not found on label",
+      foundOn: foundOn as any,
     };
   }
 
@@ -170,6 +177,7 @@ export function compareAlcoholContent(
       applicationValue: appValue,
       labelValue,
       explanation: "Cannot parse percentage from application data",
+      foundOn: foundOn as any,
     };
   }
 
@@ -187,6 +195,7 @@ export function compareAlcoholContent(
         labelValue,
         explanation:
           "Label shows inconsistent ABV and proof values—verify with applicant",
+        foundOn: foundOn as any,
       };
     }
   }
@@ -203,6 +212,7 @@ export function compareAlcoholContent(
       applicationValue: appValue,
       labelValue,
       explanation: "Cannot parse percentage from label",
+      foundOn: foundOn as any,
     };
   }
 
@@ -214,6 +224,7 @@ export function compareAlcoholContent(
       applicationValue: appValue,
       labelValue,
       explanation: "Alcohol content matches",
+      foundOn: foundOn as any,
     };
   }
 
@@ -223,6 +234,7 @@ export function compareAlcoholContent(
     applicationValue: appValue,
     labelValue,
     explanation: `Label shows ${labelPercent}% but application states ${appPercent}%`,
+    foundOn: foundOn as any,
   };
 }
 
@@ -250,7 +262,8 @@ function parseVolume(text: string): { value: number; unit: string } | null {
  */
 export function compareNetContents(
   appValue: string,
-  labelValue: string | null
+  labelValue: string | null,
+  foundOn?: string
 ): FieldVerdict {
   if (!labelValue) {
     return {
@@ -259,6 +272,7 @@ export function compareNetContents(
       applicationValue: appValue,
       labelValue: null,
       explanation: "Not found on label",
+      foundOn: foundOn as any,
     };
   }
 
@@ -272,6 +286,7 @@ export function compareNetContents(
       applicationValue: appValue,
       labelValue,
       explanation: "Cannot parse volume from application data",
+      foundOn: foundOn as any,
     };
   }
 
@@ -282,6 +297,7 @@ export function compareNetContents(
       applicationValue: appValue,
       labelValue,
       explanation: "Cannot parse volume from label",
+      foundOn: foundOn as any,
     };
   }
 
@@ -292,6 +308,7 @@ export function compareNetContents(
       applicationValue: appValue,
       labelValue,
       explanation: "Net contents matches",
+      foundOn: foundOn as any,
     };
   }
 
@@ -301,6 +318,7 @@ export function compareNetContents(
     applicationValue: appValue,
     labelValue,
     explanation: `Label shows ${labelVolume.value} mL but application states ${appVolume.value} mL`,
+    foundOn: foundOn as any,
   };
 }
 
@@ -346,22 +364,22 @@ export function verifyLabel(
 
   // Brand name
   verdicts.push(
-    compareBrandOrClass("Brand Name", appData.brandName, extracted.brandName)
+    compareBrandOrClass("Brand Name", appData.brandName, extracted.brandName, extracted.brandNameFoundOn)
   );
 
   // Class/Type
   verdicts.push(
-    compareBrandOrClass("Class/Type", appData.classType, extracted.classType)
+    compareBrandOrClass("Class/Type", appData.classType, extracted.classType, extracted.classTypeFoundOn)
   );
 
   // Alcohol content
   verdicts.push(
-    compareAlcoholContent(appData.alcoholContent, extracted.alcoholContent)
+    compareAlcoholContent(appData.alcoholContent, extracted.alcoholContent, extracted.alcoholContentFoundOn)
   );
 
   // Net contents
   verdicts.push(
-    compareNetContents(appData.netContents, extracted.netContents)
+    compareNetContents(appData.netContents, extracted.netContents, extracted.netContentsFoundOn)
   );
 
   // Government warning (basic check for M1)

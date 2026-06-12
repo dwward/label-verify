@@ -1,0 +1,297 @@
+Running end-to-end evaluations (sample data)...
+
+Fixture ID          | Overall | Fields | Timing  | Result
+--------------------+---------+--------+---------+--------
+26-0001             | ✓       | ✓✓✓✓✓  | 2737ms  | ✓ PASS
+26-0002             | ✗ (MISMATCH) | ✓✓✓✓✗  | 1953ms  | ✗ FAIL
+26-0003             | ✓       | ✓✓✓✓✓  | 2551ms  | ✓ PASS
+26-0004             | ✓       | ✓✓✓✓✓  | 2963ms  | ✓ PASS
+26-0005             | ✓       | ✓✓✓✓✓  | 2460ms  | ✓ PASS
+26-0006             | ✓       | ✓✓✓✓✓  | 5279ms  | ✓ PASS
+26-0007             | ✓       | ✓✓✓✓✓  | 2627ms  | ✓ PASS
+26-0008             | ✗ (MISMATCH) | ✓✓✓✓✗  | 1968ms  | ✗ FAIL
+26-0009             | ✗ (MISMATCH) | ✓✓✓✓✗  | 2026ms  | ✗ FAIL
+26-0010             | ✓       | ✓✓✓✓✓  | 2561ms  | ✓ PASS
+26-0011             | ✗ (MISMATCH) | ✓✓✓✓✗  | 2280ms  | ✗ FAIL
+26-0012             | ✓       | ✓✓✓✓✓  | 2554ms  | ✓ PASS
+26-0013             | ✓       | ✓✓✓✓✓  | 2562ms  | ✓ PASS
+26-0014             | ✓       | ✓✓✓✓✓  | 2476ms  | ✓ PASS
+26-0015             | ✗ (MISMATCH) | ✓✓✓✓✗  | 1946ms  | ✗ FAIL
+26-0016             | ✓       | ✓✓✓✓✓  | 2451ms  | ✓ PASS
+26-0017             | ✓       | ✓✓✓✓✓  | 2424ms  | ✓ PASS
+26-0018             | ✓       | ✓✓✓✓✓  | 2458ms  | ✓ PASS
+26-0019             | ✓       | ✓✓✓✓✓  | 2562ms  | ✓ PASS
+26-0020             | ✗ (MISMATCH) | ✓✓✓✓✗  | 1965ms  | ✗ FAIL
+26-0021             | ✗ (MISMATCH) | ✓✓✓✓✗  | 2479ms  | ✗ FAIL
+26-0022             | ✓       | ✓✓✓✓✓  | 3265ms  | ✓ PASS
+26-0023             | ✓       | ✓✓✓✓✓  | 2109ms  | ✓ PASS
+26-0024             | ✗ (MISMATCH) | ✓✓✓✓✗  | 1803ms  | ✗ FAIL
+26-0025             | ✓       | ✓✓✓✓✓  | 2564ms  | ✓ PASS
+26-0026             | ✓       | ✓✓✓✓✓  | 2517ms  | ✓ PASS
+26-0027             | ✓       | ✓✓✓✓✗  | 2590ms  | ✗ FAIL
+26-0028             | ✗ (MISMATCH) | ✓✓✓✓✗  | 2136ms  | ✗ FAIL
+26-0029             | ✗ (MISMATCH) | ✓✓✓✓✗  | 1599ms  | ✗ FAIL
+26-0030             | ✓       | ✓✓✓✓✓  | 2741ms  | ✓ PASS
+26-0031             | ✓       | ✓✓✓✓✓  | 2984ms  | ✓ PASS
+26-0032             | ✗ (MISMATCH) | ✓✓✓✓✗  | 1894ms  | ✗ FAIL
+26-0033             | ✗ (MISMATCH) | ✓✓✓✓✗  | 1852ms  | ✗ FAIL
+26-0034             | ✓       | ✓✓✓✓✓  | 2514ms  | ✓ PASS
+26-0035             | ✗ (MISMATCH) | ✓✓✓✓✗  | 1928ms  | ✗ FAIL
+26-0036             | ✓       | ✓✓✓✓✓  | 2664ms  | ✓ PASS
+26-0037             | ✗ (MISMATCH) | ✓✓✓✓✗  | 1873ms  | ✗ FAIL
+26-0038             | ✗ (MISMATCH) | ✓✓✓✓✗  | 2140ms  | ✗ FAIL
+26-0039             | ✗ (MISMATCH) | ✓✓✓✓✗  | 1951ms  | ✗ FAIL
+26-0040             | ✗ (MISMATCH) | ✓✓✓✓✗  | 2473ms  | ✗ FAIL
+26-0041             | ✗ (MISMATCH) | ✓✓✓✓✗  | 1956ms  | ✗ FAIL
+26-0042             | ✓       | ✓✓✓✓✓  | 2507ms  | ✓ PASS
+26-0043             | ✓       | ✓✓✓✓✓  | 2471ms  | ✓ PASS
+26-0044             | ✓       | ✓✓✓✓✓  | 2572ms  | ✓ PASS
+26-0045             | ✓       | ✓✓✓✓✓  | 3840ms  | ✓ PASS
+26-0046             | ✓       | ✓✓✓✓✓  | 2473ms  | ✓ PASS
+26-0047             | ✗ (MISMATCH) | ✓✓✓✓✗  | 1850ms  | ✗ FAIL
+26-0048             | ✓       | ✓✓✓✓✓  | 3132ms  | ✓ PASS
+26-0049             | ✓       | ✓✓✓✓✓  | 2795ms  | ✓ PASS
+26-0050             | ✗ (MISMATCH) | ✓✓✓✓✗  | 2101ms  | ✗ FAIL
+26-0051             | ✗ (MISMATCH) | ✓✓✓✓✗  | 1814ms  | ✗ FAIL
+26-0052             | ✓       | ✓✓✓✓✓  | 3815ms  | ✓ PASS
+26-0053             | ✗ (MISMATCH) | ✓✓✓✓✗  | 3949ms  | ✗ FAIL
+26-0054             | ✓       | ✓✓✓✓✓  | 2650ms  | ✓ PASS
+26-0055             | ✓       | ✓✓✓✓✓  | 3029ms  | ✓ PASS
+26-0056             | ✓       | ✓✓✓✓✓  | 2594ms  | ✓ PASS
+26-0057             | ✗ (MISMATCH) | ✓✓✓✓✗  | 2014ms  | ✗ FAIL
+26-0058             | ✗ (MISMATCH) | ✓✓✓✓✗  | 1821ms  | ✗ FAIL
+26-0059             | ✓       | ✓✓✓✓✓  | 2350ms  | ✓ PASS
+26-0060             | ✓       | ✓✓✓✓✓  | 2367ms  | ✓ PASS
+26-0061             | ✗ (MISMATCH) | ✓✓✓✓✗  | 1787ms  | ✗ FAIL
+26-0062             | ✓       | ✓✓✓✓✓  | 2505ms  | ✓ PASS
+26-0063             | ✗ (MISMATCH) | ✓✓✓✓✗  | 2635ms  | ✗ FAIL
+26-0064             | ✓       | ✓✓✓✓✓  | 2104ms  | ✓ PASS
+26-0065             | ✓       | ✓✓✓✓✓  | 2373ms  | ✓ PASS
+26-0066             | ✗ (MISMATCH) | ✓✓✓✓✗  | 1899ms  | ✗ FAIL
+26-0067             | ✓       | ✓✓✓✓✓  | 2449ms  | ✓ PASS
+26-0068             | ✓       | ✓✓✓✓✓  | 2792ms  | ✓ PASS
+26-0069             | ✓       | ✓✓✓✓✓  | 2629ms  | ✓ PASS
+26-0070             | ✗ (MISMATCH) | ✓✓✓✓✗  | 2228ms  | ✗ FAIL
+26-0071             | ✗ (MISMATCH) | ✓✓✓✓✗  | 1877ms  | ✗ FAIL
+26-0072             | ✗ (MISMATCH) | ✓✓✓✓✗  | 2538ms  | ✗ FAIL
+26-0073             | ✓       | ✓✓✓✓✓  | 3103ms  | ✓ PASS
+26-0074             | ✓       | ✓✓✓✓✓  | 3476ms  | ✓ PASS
+26-0075             | ✗ (MISMATCH) | ✓✓✓✓✗  | 2048ms  | ✗ FAIL
+26-0076             | ✗ (MISMATCH) | ✓✓✓✓✗  | 3365ms  | ✗ FAIL
+26-0077             | ✓       | ✓✓✓✓✓  | 3314ms  | ✓ PASS
+26-0078             | ✓       | ✓✓✓✓✓  | 2190ms  | ✓ PASS
+26-0079             | ✓       | ✓✓✓✓✓  | 2787ms  | ✓ PASS
+26-0080             | ✓       | ✓✓✓✓✓  | 3427ms  | ✓ PASS
+26-0081             | ✓       | ✓✓✓✓✓  | 2553ms  | ✓ PASS
+26-0082             | ✓       | ✓✓✓✓✓  | 2499ms  | ✓ PASS
+26-0083             | ✓       | ✓✓✓✓✓  | 2532ms  | ✓ PASS
+26-0084             | ✓       | ✓✓✓✓✓  | 5409ms  | ✓ PASS
+26-0085             | ✓       | ✓✓✓✓✓  | 3661ms  | ✓ PASS
+26-0086             | ✓       | ✓✓✓✓✓  | 5492ms  | ✓ PASS
+26-0087             | ✗ (MISMATCH) | ✓✓✓✓✗  | 2964ms  | ✗ FAIL
+26-0088             | ✓       | ✓✓✓✓✓  | 3347ms  | ✓ PASS
+26-0089             | ✓       | ✓✓✓✓✓  | 3381ms  | ✓ PASS
+26-0090             | ✓       | ✓✓✓✓✓  | 4167ms  | ✓ PASS
+26-0091             | ✓       | ✓✓✓✓✓  | 2586ms  | ✓ PASS
+26-0092             | ✓       | ✓✓✓✓✗  | 2444ms  | ✗ FAIL
+26-0093             | ✗ (MISMATCH) | ✓✓✓✓✗  | 1847ms  | ✗ FAIL
+26-0094             | ✓       | ✓✓✓✓✓  | 3237ms  | ✓ PASS
+26-0095             | ✓       | ✓✓✓✓✓  | 2778ms  | ✓ PASS
+26-0096             | ✓       | ✓✓✓✓✓  | 3985ms  | ✓ PASS
+26-0097             | ✗ (MISMATCH) | ✓✓✓✓✗  | 2299ms  | ✗ FAIL
+26-0098             | ✓       | ✓✓✓✓✓  | 2780ms  | ✓ PASS
+26-0099             | ✓       | ✓✓✓✓✓  | 2595ms  | ✓ PASS
+26-0100             | ✓       | ✓✓✓✓✓  | 2876ms  | ✓ PASS
+26-0101             | ✗ (MISMATCH) | ✓✓✓✓✗  | 2236ms  | ✗ FAIL
+26-0102             | ✗ (MISMATCH) | ✓✓✓✓✗  | 1953ms  | ✗ FAIL
+26-0103             | ✓       | ✓✓✓✓✓  | 2783ms  | ✓ PASS
+26-0104             | ✗ (MISMATCH) | ✓✓✓✓✗  | 2054ms  | ✗ FAIL
+26-0105             | ✗ (MISMATCH) | ✓✓✓✓✗  | 3212ms  | ✗ FAIL
+26-0106             | ✗ (MISMATCH) | ✓✓✓✓✗  | 2466ms  | ✗ FAIL
+26-0107             | ✓       | ✓✓✓✓✓  | 3491ms  | ✓ PASS
+26-0108             | ✗ (MISMATCH) | ✓✓✓✓✗  | 3027ms  | ✗ FAIL
+26-0109             | ✓       | ✓✓✓✓✓  | 3191ms  | ✓ PASS
+26-0110             | ✓       | ✓✓✓✓✓  | 3020ms  | ✓ PASS
+26-0111             | ✓       | ✓✓✓✓✓  | 2981ms  | ✓ PASS
+26-0112             | ✗ (MISMATCH) | ✓✓✓✓✗  | 2151ms  | ✗ FAIL
+26-0113             | ✓       | ✓✓✓✓✓  | 2514ms  | ✓ PASS
+26-0114             | ✗ (MISMATCH) | ✓✓✓✓✗  | 2231ms  | ✗ FAIL
+26-0115             | ✓       | ✓✓✓✓✓  | 2911ms  | ✓ PASS
+26-0116             | ✓       | ✓✓✓✓✓  | 2814ms  | ✓ PASS
+26-0117             | ✓       | ✓✓✓✓✓  | 2529ms  | ✓ PASS
+26-0118             | ✓       | ✓✓✓✓✓  | 2514ms  | ✓ PASS
+26-0119             | ✓       | ✓✓✓✓✓  | 3101ms  | ✓ PASS
+26-0120             | ✓       | ✓✓✓✓✓  | 2580ms  | ✓ PASS
+26-0121             | ✓       | ✓✓✓✓✓  | 2516ms  | ✓ PASS
+26-0122             | ✓       | ✓✓✓✓✓  | 2511ms  | ✓ PASS
+26-0123             | ✓       | ✓✓✓✓✓  | 2490ms  | ✓ PASS
+26-0124             | ✗ (MISMATCH) | ✓✓✓✓✗  | 3538ms  | ✗ FAIL
+26-0125             | ✗ (MISMATCH) | ✓✓✓✓✗  | 2617ms  | ✗ FAIL
+26-0126             | ✓       | ✓✓✓✓✓  | 2492ms  | ✓ PASS
+26-0127             | ✓       | ✓✓✓✓✓  | 5263ms  | ✓ PASS
+26-0128             | ✗ (MISMATCH) | ✓✓✓✓✗  | 1753ms  | ✗ FAIL
+26-0129             | ✗ (MISMATCH) | ✓✓✓✓✗  | 2390ms  | ✗ FAIL
+26-0130             | ✓       | ✓✓✓✓✓  | 2264ms  | ✓ PASS
+26-0131             | ✓       | ✓✓✓✓✓  | 2795ms  | ✓ PASS
+26-0132             | ✓       | ✓✓✓✓✓  | 3108ms  | ✓ PASS
+26-0133             | ✓       | ✓✓✓✓✓  | 2452ms  | ✓ PASS
+26-0134             | ✓       | ✓✓✓✓✓  | 3137ms  | ✓ PASS
+26-0135             | ✓       | ✓✓✓✓✓  | 2498ms  | ✓ PASS
+26-0136             | ✓       | ✓✓✓✓✓  | 2359ms  | ✓ PASS
+26-0137             | ✗ (MISMATCH) | ✓✓✓✓✗  | 2277ms  | ✗ FAIL
+26-0138             | ✓       | ✓✓✓✓✓  | 2776ms  | ✓ PASS
+26-0139             | ✓       | ✓✓✓✓✗  | 2562ms  | ✗ FAIL
+26-0140             | ✗ (MISMATCH) | ✓✓✓✓✗  | 1958ms  | ✗ FAIL
+26-0141             | ✓       | ✓✓✓✓✓  | 2729ms  | ✓ PASS
+26-0142             | ✗ (MISMATCH) | ✓✓✓✓✗  | 2380ms  | ✗ FAIL
+26-0143             | ✓       | ✓✓✓✓✓  | 3136ms  | ✓ PASS
+26-0144             | ✓       | ✓✓✓✓✓  | 2385ms  | ✓ PASS
+26-0145             | ✓       | ✓✓✓✓✓  | 2820ms  | ✓ PASS
+26-0146             | ✓       | ✓✓✓✓✓  | 2708ms  | ✓ PASS
+26-0147             | ✓       | ✓✓✓✓✓  | 3198ms  | ✓ PASS
+26-0148             | ✓       | ✓✓✓✓✓  | 3104ms  | ✓ PASS
+26-0149             | ✓       | ✓✓✓✓✓  | 2601ms  | ✓ PASS
+26-0150             | ✗ (MISMATCH) | ✓✓✓✓✗  | 2066ms  | ✗ FAIL
+26-0151             | ✓       | ✓✓✓✓✓  | 2776ms  | ✓ PASS
+26-0152             | ✗ (MISMATCH) | ✓✓✓✓✗  | 2018ms  | ✗ FAIL
+26-0153             | ✓       | ✓✓✓✓✓  | 2313ms  | ✓ PASS
+26-0154             | ✗ (MISMATCH) | ✓✓✓✓✗  | 2239ms  | ✗ FAIL
+26-0155             | ✗ (MISMATCH) | ✓✓✓✓✗  | 2462ms  | ✗ FAIL
+26-0156             | ✓       | ✓✓✓✓✓  | 3150ms  | ✓ PASS
+26-0157             | ✓       | ✓✓✓✓✓  | 3486ms  | ✓ PASS
+26-0158             | ✓       | ✓✓✓✓✓  | 3537ms  | ✓ PASS
+26-0159             | ✗ (MISMATCH) | ✓✓✓✓✗  | 1882ms  | ✗ FAIL
+26-0160             | ✓       | ✓✓✓✓✓  | 3321ms  | ✓ PASS
+26-0161             | ✓       | ✓✓✓✓✓  | 2854ms  | ✓ PASS
+26-0162             | ✓       | ✓✓✓✓✓  | 3062ms  | ✓ PASS
+26-0163             | ✓       | ✓✓✓✓✓  | 3924ms  | ✓ PASS
+26-0164             | ✗ (MISMATCH) | ✓✓✓✓✗  | 4006ms  | ✗ FAIL
+26-0165             | ✓       | ✓✓✓✓✓  | 9365ms  | ✓ PASS
+26-0166             | ✓       | ✓✓✓✓✓  | 2768ms  | ✓ PASS
+26-0167             | ✓       | ✓✓✓✓✓  | 2398ms  | ✓ PASS
+26-0168             | ✓       | ✓✓✓✓✓  | 2505ms  | ✓ PASS
+26-0169             | ✓       | ✓✓✓✓✓  | 4265ms  | ✓ PASS
+26-0170             | ✗ (MISMATCH) | ✓✓✓✓✗  | 2077ms  | ✗ FAIL
+26-0171             | ✗ (MISMATCH) | ✓✓✓✓✗  | 2135ms  | ✗ FAIL
+26-0172             | ✗ (MISMATCH) | ✓✓✓✓✗  | 2217ms  | ✗ FAIL
+26-0173             | ✓       | ✓✓✓✓✓  | 2568ms  | ✓ PASS
+26-0174             | ✗ (MISMATCH) | ✓✓✓✓✗  | 1791ms  | ✗ FAIL
+26-0175             | ✗ (MISMATCH) | ✓✓✓✓✗  | 1880ms  | ✗ FAIL
+26-0176             | ✗ (MISMATCH) | ✓✓✓✓✗  | 1852ms  | ✗ FAIL
+26-0177             | ✗ (MISMATCH) | ✓✓✓✓✗  | 2158ms  | ✗ FAIL
+26-0178             | ✓       | ✓✓✓✓✓  | 2458ms  | ✓ PASS
+26-0179             | ✓       | ✓✓✓✓✓  | 2899ms  | ✓ PASS
+26-0180             | ✗ (MISMATCH) | ✓✓✓✓✗  | 2011ms  | ✗ FAIL
+26-0181             | ✓       | ✓✓✓✓✓  | 2955ms  | ✓ PASS
+26-0182             | ✓       | ✓✓✓✓✓  | 2510ms  | ✓ PASS
+26-0183             | ✓       | ✓✓✓✓✓  | 2414ms  | ✓ PASS
+26-0184             | ✓       | ✓✓✓✓✓  | 1805ms  | ✓ PASS
+26-0185             | ✓       | ✓✓✓✓✓  | 2950ms  | ✓ PASS
+26-0186             | ✗ (MISMATCH) | ✓✓✓✓✗  | 1801ms  | ✗ FAIL
+26-0187             | ✓       | ✓✓✓✓✓  | 2725ms  | ✓ PASS
+26-0188             | ✓       | ✓✓✓✓✓  | 2648ms  | ✓ PASS
+26-0189             | ✓       | ✓✓✓✓✓  | 2834ms  | ✓ PASS
+26-0190             | ✗ (MISMATCH) | ✓✓✓✓✗  | 1916ms  | ✗ FAIL
+26-0191             | ✓       | ✓✓✓✓✓  | 2543ms  | ✓ PASS
+26-0192             | ✓       | ✓✓✓✓✓  | 2141ms  | ✓ PASS
+26-0193             | ✓       | ✓✓✓✓✓  | 2376ms  | ✓ PASS
+26-0194             | ✓       | ✓✓✓✓✓  | 2367ms  | ✓ PASS
+26-0195             | ✗ (MISMATCH) | ✓✓✓✓✗  | 1987ms  | ✗ FAIL
+26-0196             | ✗ (MISMATCH) | ✓✓✓✓✗  | 1785ms  | ✗ FAIL
+26-0197             | ✓       | ✓✓✓✓✓  | 2330ms  | ✓ PASS
+26-0198             | ✓       | ✓✓✓✓✓  | 2432ms  | ✓ PASS
+26-0199             | ✓       | ✓✓✓✓✓  | 2430ms  | ✓ PASS
+26-0200             | ✗ (MISMATCH) | ✓✓✓✓✗  | 1809ms  | ✗ FAIL
+--------------------+---------+--------+---------+--------
+Results: 128 passed, 72 failed
+
+Accuracy by Defect Type:
+
+Defect Type         | Total | Pass | Fail | Accuracy
+--------------------+-------+------+------+---------
+brand-case-diff     |    10 |    7 |    3 | 70.0%
+brand-mismatch      |     5 |    3 |    2 | 60.0%
+brand-near-miss     |     5 |    2 |    3 | 40.0%
+none                |   162 |   99 |   63 | 61.1%
+warning-missing     |     3 |    3 |    0 | 100.0%
+warning-modified    |     5 |    5 |    0 | 100.0%
+warning-titlecase   |     3 |    3 |    0 | 100.0%
+wrong-abv           |     3 |    2 |    1 | 66.7%
+wrong-volume        |     4 |    4 |    0 | 100.0%
+--------------------+-------+------+------+---------
+Overall             |   200 |  128 |   72 | 64.0%
+
+Failures:
+  - 26-0002: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0008: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0009: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0011: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0015: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0020: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0021: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0024: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0027: Government Warning: expected MATCH, got MISMATCH
+  - 26-0028: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0029: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0032: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0033: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0035: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0037: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0038: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0039: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0040: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0041: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0047: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0050: Government Warning: expected MATCH, got MISMATCH; Overall: expected NEEDS_REVIEW, got MISMATCH
+  - 26-0051: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0053: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0057: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0058: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0061: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0063: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0066: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0070: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0071: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0072: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0075: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0076: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0087: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0092: Government Warning: expected MATCH, got MISMATCH
+  - 26-0093: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0097: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0101: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0102: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0104: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0105: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0106: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0108: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0112: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0114: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0124: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0125: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0128: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0129: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0137: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0139: Government Warning: expected MATCH, got MISMATCH
+  - 26-0140: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0142: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0150: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0152: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0154: Government Warning: expected MATCH, got MISMATCH; Overall: expected NEEDS_REVIEW, got MISMATCH
+  - 26-0155: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0159: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0164: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0170: Government Warning: expected MATCH, got MISMATCH; Overall: expected NEEDS_REVIEW, got MISMATCH
+  - 26-0171: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0172: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0174: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0175: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0176: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0177: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0180: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0186: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0190: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0195: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0196: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+  - 26-0200: Government Warning: expected MATCH, got MISMATCH; Overall: expected MATCH, got MISMATCH
+

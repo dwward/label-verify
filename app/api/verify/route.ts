@@ -1,39 +1,62 @@
 import { NextRequest, NextResponse } from "next/server";
 import { extractLabelData } from "@/lib/extraction";
 import { verifyLabel, calculateOverallVerdict } from "@/lib/comparison";
-import type { ApplicationData, VerificationResult } from "@/lib/types";
+import {
+  calculateFieldConfidence,
+  calculateWarningConfidence,
+  calculateApplicationConfidence,
+} from "@/lib/confidence";
+import type {
+  ApplicationData,
+  VerificationResult,
+  FieldVerdict,
+  FieldConfidence,
+} from "@/lib/types";
 import { IMAGE_MAX_SIZE_MB } from "@/lib/config";
 
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
-    const imageFile = formData.get("image") as File | null;
     const applicationJson = formData.get("application") as string | null;
 
-    // Validate image
-    if (!imageFile) {
+    // Collect all images (1-4 supported)
+    const imageFiles: File[] = [];
+    for (let i = 0; i < 4; i++) {
+      const key = i === 0 ? "image" : `image${i}`;
+      const file = formData.get(key) as File | null;
+      if (file) {
+        imageFiles.push(file);
+      }
+    }
+
+    // Validate at least one image present
+    if (imageFiles.length === 0) {
       return NextResponse.json(
-        { error: "Please upload a label image" },
+        { error: "Please upload at least one label image" },
         { status: 400 }
       );
     }
 
+    // Validate each image
     const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
-    if (!allowedTypes.includes(imageFile.type)) {
-      return NextResponse.json(
-        { error: "Please upload a JPEG, PNG, or WebP image" },
-        { status: 400 }
-      );
-    }
-
     const maxSizeBytes = IMAGE_MAX_SIZE_MB * 1024 * 1024;
-    if (imageFile.size > maxSizeBytes) {
-      return NextResponse.json(
-        {
-          error: `Image is too large. Please upload an image smaller than ${IMAGE_MAX_SIZE_MB} MB`,
-        },
-        { status: 400 }
-      );
+
+    for (const imageFile of imageFiles) {
+      if (!allowedTypes.includes(imageFile.type)) {
+        return NextResponse.json(
+          { error: "Please upload only JPEG, PNG, or WebP images" },
+          { status: 400 }
+        );
+      }
+
+      if (imageFile.size > maxSizeBytes) {
+        return NextResponse.json(
+          {
+            error: `One or more images are too large. Please upload images smaller than ${IMAGE_MAX_SIZE_MB} MB`,
+          },
+          { status: 400 }
+        );
+      }
     }
 
     // Validate application data
@@ -55,26 +78,53 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate required fields
-    if (
-      !applicationData.brandName?.trim() ||
-      !applicationData.classType?.trim() ||
-      !applicationData.alcoholContent?.trim() ||
-      !applicationData.netContents?.trim()
-    ) {
+    const missingFields = [];
+    if (!applicationData.brandName?.trim()) missingFields.push("brandName");
+    if (!applicationData.classType?.trim()) missingFields.push("classType");
+    if (!applicationData.alcoholContent?.trim()) missingFields.push("alcoholContent");
+    if (!applicationData.netContents?.trim()) missingFields.push("netContents");
+
+    if (missingFields.length > 0) {
+      console.error("Missing required fields:", missingFields, "Data:", applicationData);
       return NextResponse.json(
-        { error: "All required fields must be filled out" },
+        { error: `Missing required fields: ${missingFields.join(", ")}` },
         { status: 400 }
       );
     }
 
-    // Extract label data
+    // Extract label data from all images
     const { extracted, processingMs: extractionMs } = await extractLabelData(
-      imageFile
+      imageFiles
     );
 
     // Compare and verify
     const verdicts = verifyLabel(applicationData, extracted);
     const overall = calculateOverallVerdict(verdicts);
+
+    // Calculate confidence for each field
+    const imageQuality = extracted.imageQuality.confidence;
+    const verdictsWithConfidence = verdicts.map((verdict) => {
+      let confidence: FieldConfidence;
+
+      // Special handling for government warning (binary check)
+      if (verdict.field === "Government Warning") {
+        confidence = calculateWarningConfidence(verdict, imageQuality);
+      } else {
+        // For other fields, calculate confidence based on verdict and image quality
+        // Note: similarity score would come from comparison.ts in future enhancement
+        confidence = calculateFieldConfidence(verdict, imageQuality);
+      }
+
+      return {
+        ...verdict,
+        confidence,
+      };
+    });
+
+    // Calculate application-level confidence
+    const applicationConfidence = calculateApplicationConfidence(
+      verdictsWithConfidence
+    );
 
     // Build image quality note
     let imageQualityNote: string | null = null;
@@ -83,10 +133,11 @@ export async function POST(request: NextRequest) {
     }
 
     const result: VerificationResult = {
-      verdicts,
+      verdicts: verdictsWithConfidence,
       overall,
       processingMs: extractionMs,
       imageQualityNote,
+      applicationConfidence,
     };
 
     return NextResponse.json(result);

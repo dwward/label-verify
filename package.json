@@ -9,11 +9,16 @@
     "lint": "next lint",
     "test": "jest",
     "labels:generate": "tsx scripts/generate-labels.ts",
-    "evals:run": "tsx scripts/run-evals.ts"
+    "evals:run": "tsx scripts/run-evals.ts",
+    "sample:generate": "tsx scripts/generate-sample-data.ts",
+    "sample:testbench": "tsx scripts/generate-test-bench-samples.ts",
+    "evals:sample": "tsx scripts/run-evals.ts --source sample-data/ground-truth.json"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.32.1",
+    "ajv": "^8.20.0",
     "browser-image-compression": "^2.0.2",
+    "jszip": "^3.10.1",
     "next": "^15.5.19",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"

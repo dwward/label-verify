@@ -5,7 +5,7 @@ interface VerdictCardProps {
 }
 
 export default function VerdictCard({ verdict }: VerdictCardProps) {
-  const { field, status, applicationValue, labelValue, explanation } = verdict;
+  const { field, status, applicationValue, labelValue, explanation, foundOn } = verdict;
 
   // Icon and color based on status
   const statusConfig = {
@@ -45,13 +45,24 @@ export default function VerdictCard({ verdict }: VerdictCardProps) {
           {config.icon}
         </div>
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-2">
+          <div className="flex items-center gap-2 mb-2 flex-wrap">
             <h3 className="font-semibold text-lg">{field}</h3>
             <span
               className={`text-sm font-medium ${config.textColor} px-2 py-0.5 rounded`}
             >
               {config.label}
             </span>
+            {foundOn && foundOn !== "unknown" && (
+              <span
+                className={`text-xs px-2 py-1 rounded font-medium ${
+                  field === "Government Warning"
+                    ? "bg-purple-100 text-purple-800 border border-purple-300"
+                    : "bg-blue-100 text-blue-800"
+                }`}
+              >
+                Found on: {foundOn.charAt(0).toUpperCase() + foundOn.slice(1)}
+              </span>
+            )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-2 text-base">

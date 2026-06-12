@@ -1,0 +1,2402 @@
+[
+  {
+    "id": "26-0001",
+    "ttbId": "26000000000000",
+    "defectType": "brand-case-diff",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0002",
+    "ttbId": "26000000000001",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0003",
+    "ttbId": "26000000000002",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0004",
+    "ttbId": "26000000000003",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0005",
+    "ttbId": "26000000000004",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0006",
+    "ttbId": "26000000000005",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0007",
+    "ttbId": "26000000000006",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0008",
+    "ttbId": "26000000000007",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0009",
+    "ttbId": "26000000000008",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0010",
+    "ttbId": "26000000000009",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0011",
+    "ttbId": "26000000000010",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0012",
+    "ttbId": "26000000000011",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0013",
+    "ttbId": "26000000000012",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0014",
+    "ttbId": "26000000000013",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0015",
+    "ttbId": "26000000000014",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0016",
+    "ttbId": "26000000000015",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0017",
+    "ttbId": "26000000000016",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0018",
+    "ttbId": "26000000000017",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0019",
+    "ttbId": "26000000000018",
+    "defectType": "brand-mismatch",
+    "expectedVerdicts": {
+      "Brand Name": "MISMATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0020",
+    "ttbId": "26000000000019",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0021",
+    "ttbId": "26000000000020",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0022",
+    "ttbId": "26000000000021",
+    "defectType": "warning-titlecase",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MISMATCH"
+    }
+  },
+  {
+    "id": "26-0023",
+    "ttbId": "26000000000022",
+    "defectType": "warning-modified",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MISMATCH"
+    }
+  },
+  {
+    "id": "26-0024",
+    "ttbId": "26000000000023",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0025",
+    "ttbId": "26000000000024",
+    "defectType": "brand-case-diff",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0026",
+    "ttbId": "26000000000025",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0027",
+    "ttbId": "26000000000026",
+    "defectType": "brand-mismatch",
+    "expectedVerdicts": {
+      "Brand Name": "MISMATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0028",
+    "ttbId": "26000000000027",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0029",
+    "ttbId": "26000000000028",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0030",
+    "ttbId": "26000000000029",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0031",
+    "ttbId": "26000000000030",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0032",
+    "ttbId": "26000000000031",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0033",
+    "ttbId": "26000000000032",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0034",
+    "ttbId": "26000000000033",
+    "defectType": "brand-near-miss",
+    "expectedVerdicts": {
+      "Brand Name": "NEEDS_REVIEW",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0035",
+    "ttbId": "26000000000034",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0036",
+    "ttbId": "26000000000035",
+    "defectType": "wrong-abv",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MISMATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0037",
+    "ttbId": "26000000000036",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0038",
+    "ttbId": "26000000000037",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0039",
+    "ttbId": "26000000000038",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0040",
+    "ttbId": "26000000000039",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0041",
+    "ttbId": "26000000000040",
+    "defectType": "brand-case-diff",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0042",
+    "ttbId": "26000000000041",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0043",
+    "ttbId": "26000000000042",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0044",
+    "ttbId": "26000000000043",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0045",
+    "ttbId": "26000000000044",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0046",
+    "ttbId": "26000000000045",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0047",
+    "ttbId": "26000000000046",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0048",
+    "ttbId": "26000000000047",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0049",
+    "ttbId": "26000000000048",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0050",
+    "ttbId": "26000000000049",
+    "defectType": "brand-near-miss",
+    "expectedVerdicts": {
+      "Brand Name": "NEEDS_REVIEW",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0051",
+    "ttbId": "26000000000050",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0052",
+    "ttbId": "26000000000051",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0053",
+    "ttbId": "26000000000052",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0054",
+    "ttbId": "26000000000053",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0055",
+    "ttbId": "26000000000054",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0056",
+    "ttbId": "26000000000055",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0057",
+    "ttbId": "26000000000056",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0058",
+    "ttbId": "26000000000057",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0059",
+    "ttbId": "26000000000058",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0060",
+    "ttbId": "26000000000059",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0061",
+    "ttbId": "26000000000060",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0062",
+    "ttbId": "26000000000061",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0063",
+    "ttbId": "26000000000062",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0064",
+    "ttbId": "26000000000063",
+    "defectType": "warning-missing",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MISMATCH"
+    }
+  },
+  {
+    "id": "26-0065",
+    "ttbId": "26000000000064",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0066",
+    "ttbId": "26000000000065",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0067",
+    "ttbId": "26000000000066",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0068",
+    "ttbId": "26000000000067",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0069",
+    "ttbId": "26000000000068",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0070",
+    "ttbId": "26000000000069",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0071",
+    "ttbId": "26000000000070",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0072",
+    "ttbId": "26000000000071",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0073",
+    "ttbId": "26000000000072",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0074",
+    "ttbId": "26000000000073",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0075",
+    "ttbId": "26000000000074",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0076",
+    "ttbId": "26000000000075",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0077",
+    "ttbId": "26000000000076",
+    "defectType": "wrong-volume",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MISMATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0078",
+    "ttbId": "26000000000077",
+    "defectType": "warning-titlecase",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MISMATCH"
+    }
+  },
+  {
+    "id": "26-0079",
+    "ttbId": "26000000000078",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0080",
+    "ttbId": "26000000000079",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0081",
+    "ttbId": "26000000000080",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0082",
+    "ttbId": "26000000000081",
+    "defectType": "brand-near-miss",
+    "expectedVerdicts": {
+      "Brand Name": "NEEDS_REVIEW",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0083",
+    "ttbId": "26000000000082",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0084",
+    "ttbId": "26000000000083",
+    "defectType": "wrong-abv",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MISMATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0085",
+    "ttbId": "26000000000084",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0086",
+    "ttbId": "26000000000085",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0087",
+    "ttbId": "26000000000086",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0088",
+    "ttbId": "26000000000087",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0089",
+    "ttbId": "26000000000088",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0090",
+    "ttbId": "26000000000089",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0091",
+    "ttbId": "26000000000090",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0092",
+    "ttbId": "26000000000091",
+    "defectType": "wrong-abv",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MISMATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0093",
+    "ttbId": "26000000000092",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0094",
+    "ttbId": "26000000000093",
+    "defectType": "warning-titlecase",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MISMATCH"
+    }
+  },
+  {
+    "id": "26-0095",
+    "ttbId": "26000000000094",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0096",
+    "ttbId": "26000000000095",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0097",
+    "ttbId": "26000000000096",
+    "defectType": "brand-case-diff",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0098",
+    "ttbId": "26000000000097",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0099",
+    "ttbId": "26000000000098",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0100",
+    "ttbId": "26000000000099",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0101",
+    "ttbId": "26000000000100",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0102",
+    "ttbId": "26000000000101",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0103",
+    "ttbId": "26000000000102",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0104",
+    "ttbId": "26000000000103",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0105",
+    "ttbId": "26000000000104",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0106",
+    "ttbId": "26000000000105",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0107",
+    "ttbId": "26000000000106",
+    "defectType": "brand-mismatch",
+    "expectedVerdicts": {
+      "Brand Name": "MISMATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0108",
+    "ttbId": "26000000000107",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0109",
+    "ttbId": "26000000000108",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0110",
+    "ttbId": "26000000000109",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0111",
+    "ttbId": "26000000000110",
+    "defectType": "warning-modified",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MISMATCH"
+    }
+  },
+  {
+    "id": "26-0112",
+    "ttbId": "26000000000111",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0113",
+    "ttbId": "26000000000112",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0114",
+    "ttbId": "26000000000113",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0115",
+    "ttbId": "26000000000114",
+    "defectType": "brand-mismatch",
+    "expectedVerdicts": {
+      "Brand Name": "MISMATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0116",
+    "ttbId": "26000000000115",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0117",
+    "ttbId": "26000000000116",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0118",
+    "ttbId": "26000000000117",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0119",
+    "ttbId": "26000000000118",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0120",
+    "ttbId": "26000000000119",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0121",
+    "ttbId": "26000000000120",
+    "defectType": "brand-case-diff",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0122",
+    "ttbId": "26000000000121",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0123",
+    "ttbId": "26000000000122",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0124",
+    "ttbId": "26000000000123",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0125",
+    "ttbId": "26000000000124",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0126",
+    "ttbId": "26000000000125",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0127",
+    "ttbId": "26000000000126",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0128",
+    "ttbId": "26000000000127",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0129",
+    "ttbId": "26000000000128",
+    "defectType": "brand-case-diff",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0130",
+    "ttbId": "26000000000129",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0131",
+    "ttbId": "26000000000130",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0132",
+    "ttbId": "26000000000131",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0133",
+    "ttbId": "26000000000132",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0134",
+    "ttbId": "26000000000133",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0135",
+    "ttbId": "26000000000134",
+    "defectType": "warning-modified",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MISMATCH"
+    }
+  },
+  {
+    "id": "26-0136",
+    "ttbId": "26000000000135",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0137",
+    "ttbId": "26000000000136",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0138",
+    "ttbId": "26000000000137",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0139",
+    "ttbId": "26000000000138",
+    "defectType": "brand-mismatch",
+    "expectedVerdicts": {
+      "Brand Name": "MISMATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0140",
+    "ttbId": "26000000000139",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0141",
+    "ttbId": "26000000000140",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0142",
+    "ttbId": "26000000000141",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0143",
+    "ttbId": "26000000000142",
+    "defectType": "warning-modified",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MISMATCH"
+    }
+  },
+  {
+    "id": "26-0144",
+    "ttbId": "26000000000143",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0145",
+    "ttbId": "26000000000144",
+    "defectType": "brand-case-diff",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0146",
+    "ttbId": "26000000000145",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0147",
+    "ttbId": "26000000000146",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0148",
+    "ttbId": "26000000000147",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0149",
+    "ttbId": "26000000000148",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0150",
+    "ttbId": "26000000000149",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0151",
+    "ttbId": "26000000000150",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0152",
+    "ttbId": "26000000000151",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0153",
+    "ttbId": "26000000000152",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0154",
+    "ttbId": "26000000000153",
+    "defectType": "brand-near-miss",
+    "expectedVerdicts": {
+      "Brand Name": "NEEDS_REVIEW",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0155",
+    "ttbId": "26000000000154",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0156",
+    "ttbId": "26000000000155",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0157",
+    "ttbId": "26000000000156",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0158",
+    "ttbId": "26000000000157",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0159",
+    "ttbId": "26000000000158",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0160",
+    "ttbId": "26000000000159",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0161",
+    "ttbId": "26000000000160",
+    "defectType": "brand-case-diff",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0162",
+    "ttbId": "26000000000161",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0163",
+    "ttbId": "26000000000162",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0164",
+    "ttbId": "26000000000163",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0165",
+    "ttbId": "26000000000164",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0166",
+    "ttbId": "26000000000165",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0167",
+    "ttbId": "26000000000166",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0168",
+    "ttbId": "26000000000167",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0169",
+    "ttbId": "26000000000168",
+    "defectType": "brand-case-diff",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0170",
+    "ttbId": "26000000000169",
+    "defectType": "brand-near-miss",
+    "expectedVerdicts": {
+      "Brand Name": "NEEDS_REVIEW",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0171",
+    "ttbId": "26000000000170",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0172",
+    "ttbId": "26000000000171",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0173",
+    "ttbId": "26000000000172",
+    "defectType": "wrong-volume",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MISMATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0174",
+    "ttbId": "26000000000173",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0175",
+    "ttbId": "26000000000174",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0176",
+    "ttbId": "26000000000175",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0177",
+    "ttbId": "26000000000176",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0178",
+    "ttbId": "26000000000177",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0179",
+    "ttbId": "26000000000178",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0180",
+    "ttbId": "26000000000179",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0181",
+    "ttbId": "26000000000180",
+    "defectType": "wrong-volume",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MISMATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0182",
+    "ttbId": "26000000000181",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0183",
+    "ttbId": "26000000000182",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0184",
+    "ttbId": "26000000000183",
+    "defectType": "warning-missing",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MISMATCH"
+    }
+  },
+  {
+    "id": "26-0185",
+    "ttbId": "26000000000184",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0186",
+    "ttbId": "26000000000185",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0187",
+    "ttbId": "26000000000186",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0188",
+    "ttbId": "26000000000187",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0189",
+    "ttbId": "26000000000188",
+    "defectType": "wrong-volume",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MISMATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0190",
+    "ttbId": "26000000000189",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0191",
+    "ttbId": "26000000000190",
+    "defectType": "warning-modified",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MISMATCH"
+    }
+  },
+  {
+    "id": "26-0192",
+    "ttbId": "26000000000191",
+    "defectType": "warning-missing",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MISMATCH"
+    }
+  },
+  {
+    "id": "26-0193",
+    "ttbId": "26000000000192",
+    "defectType": "brand-case-diff",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0194",
+    "ttbId": "26000000000193",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0195",
+    "ttbId": "26000000000194",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0196",
+    "ttbId": "26000000000195",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0197",
+    "ttbId": "26000000000196",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0198",
+    "ttbId": "26000000000197",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0199",
+    "ttbId": "26000000000198",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  },
+  {
+    "id": "26-0200",
+    "ttbId": "26000000000199",
+    "defectType": "none",
+    "expectedVerdicts": {
+      "Brand Name": "MATCH",
+      "Class/Type": "MATCH",
+      "Alcohol Content": "MATCH",
+      "Net Contents": "MATCH",
+      "Government Warning": "MATCH"
+    }
+  }
+]

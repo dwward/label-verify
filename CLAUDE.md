@@ -49,20 +49,25 @@ npm start
 
 ## Architecture
 
+**Always-Batch Queue:** No separate batch mode. Single entry = batch of one. Two entry modalities:
+
+1. **Test Bench** - Manual form entry (4 fields + 1-4 images)
+2. **CAP Packages** - Drag-and-drop .zip files or folders
+
+Both feed a unified results queue with auto-processing (concurrency limit: 5).
+
 ```
-User uploads label + enters application data
+User enters data via Test Bench OR drops CAP package
          ↓
 lib/image-compression.ts → Compress/resize client-side
          ↓
-API route /api/verify (single endpoint for both single & batch)
+Queue orchestrator → /api/verify (accepts 1-4 images per application)
          ↓
-lib/extraction.ts → Claude vision call → ExtractedLabel JSON
+lib/extraction.ts → Claude vision call (multi-image) → ExtractedLabel JSON with foundOn
          ↓
 lib/comparison.ts → Pure deterministic functions → FieldVerdict[]
          ↓
-UI displays color-coded verdicts + timing
-
-Batch mode: Client orchestrates multiple /api/verify calls with concurrency limit 5
+UI displays color-coded verdicts + foundOn panel badges + timing
 ```
 
 **Key principle:** The LLM extracts, deterministic code judges. All comparison logic lives in pure functions with unit tests.
@@ -128,19 +133,28 @@ GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink
 ### Overall Verdict
 `MISMATCH` if any field is `MISMATCH`; else `NEEDS_REVIEW` if any field is `NEEDS_REVIEW`; else `MATCH`.
 
+## Multi-Image Processing (G3)
+
+- `/api/verify` accepts 1-4 images per application
+- All images sent in ONE Anthropic API call  
+- Model merges findings with `foundOn` field ("front" | "back" | "neck" | "unknown")
+- VerdictCards show panel location badges (e.g., "back label")
+- No image concatenation (preserves quality)
+- Rationale: Government warning frequently on back label; multi-image prevents false "warning missing" flags
+
 ## API Routes
 
 ### POST /api/verify
-- **Single endpoint for both single and batch modes**
-- Accepts `multipart/form-data`: `image` (file) + `application` (JSON string)
-- Validates: image present, type jpeg/png/webp, ≤ 4.5 MB (Vercel body limit)
+- **Single endpoint** (no /api/batch route)
+- Accepts `multipart/form-data`: `image`, `image1`, `image2`, `image3` (1-4 files) + `application` (JSON string)
+- Validates: at least one image present, type jpeg/png/webp, each ≤ 4.5 MB
 - Returns `VerificationResult` as JSON
 - Hard timeout: 15s on Anthropic call
 - Errors return `{ error: string }` with plain-English messages
 
-### Batch Mode Implementation
-- **Client-side orchestration** — No /api/batch route needed
-- Batch page calls /api/verify multiple times with concurrency limit of 5
+### Queue Orchestration
+- **Client-side processing** — No /api/batch route
+- Main page queue calls /api/verify multiple times with concurrency limit of 5 (semaphore)
 - Each image compressed client-side before upload (see [lib/image-compression.ts](lib/image-compression.ts))
 - Use `Promise.allSettled` with semaphore pattern to avoid firing 300 requests at once
 - Benefits:
@@ -167,16 +181,23 @@ GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink
 - Results: overall verdict banner + VerdictCard per field + timing badge
 - Yellow note if image quality issues detected
 
-### Batch Page (app/batch/page.tsx)
-- Multi-file drop zone (up to 50 files in prototype)
-- Data entry modes: "Same data for all" OR "CSV upload"
-- Include CSV template download link
-- **Client-side orchestration:**
-  - Compress each image with [lib/image-compression.ts](lib/image-compression.ts)
-  - Call /api/verify with concurrency limit of 5 (semaphore pattern)
-  - Update progress bar in real-time as each verification completes
-- Results table with expandable rows
-- "Download results (CSV)" button
+### Unified Queue Interface (app/page.tsx)
+
+**Entry Area 1: Test Bench**
+- Application data form (4 required fields)
+- Image upload (1-4 images per application)
+- Sample dropdown with test cases + dataset loader
+
+**Entry Area 2: CAP Package Drop Zone**
+- Drag-and-drop .zip, folders, or loose files
+- Four package layouts supported (see CAP format in SPEC.md)
+- Progressive validation and processing
+
+**Results Section**
+- Queue progress bar
+- Results table (expandable rows)
+- Triage sort (errors → mismatches → needs review → matches)
+- CSV export button
 
 ## Test Labels
 
@@ -213,14 +234,26 @@ Generate with AI image tools or build in HTML/CSS and screenshot for pixel-perfe
 - Beverage-type-specific rule engines (note as future work in README)
 - Mobile-specific layouts (desktop-first)
 
-## Build Order (From SPEC)
+## Milestones
 
 Work one milestone at a time, stop for review after each:
 
-**M1** — Skeleton & single-label happy path (extraction, basic comparison, /api/verify, UI with timer)
-**M2** — Warning checker & comparison hardening (full rule set, unit tests)
-**M3** — Batch (multi-upload, concurrency limiting, CSV export)
-**M4** — Polish, test labels, docs, deploy to Vercel
+### Completed
+- ✅ **M1** — Single-label happy path (extraction, basic comparison, /api/verify, UI with timer)
+- ✅ **M2** — Warning checker + comparison hardening (full rule set, unit tests)
+- ✅ **G1** — Always-batch queue refactor (unified architecture, no separate batch mode)
+- ✅ **G2** — CAP loader (4 layouts, JSZip, drop zones, validation)
+- ✅ **G3** — Multi-image extraction (1-4 images, foundOn tracking, panel badges)
+
+### Pending
+- ⏳ **G4** — Sample data pipeline (generator, ground truth, eval harness, accuracy table)
+- ⏳ **M4** — Polish, test labels, deployment
+
+### Stretch Goals (Optional)
+- 🎯 **Accuracy Improvement** — Improve from 64% to 85%+ overall accuracy (see [STRETCH-GOAL-ACCURACY.md](STRETCH-GOAL-ACCURACY.md))
+  - Current bottleneck: Government Warning extraction from clean synthetic labels (61% accuracy)
+  - Perfect defect detection (100% on warning-missing, warning-modified, warning-titlecase)
+  - Quick wins to try: Switch to Sonnet 4.6, enhance extraction prompt, improve label rendering
 
 ## Important Context
 

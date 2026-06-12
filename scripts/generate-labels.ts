@@ -8,6 +8,10 @@ interface Fixture {
   renderConfig: Record<string, any>;
   applicationData: any;
   expectedVerdicts: Record<string, string>;
+  panels?: Array<{
+    panel: 'front' | 'back' | 'neck';
+    renderConfig?: Record<string, any>;
+  }>;
 }
 
 async function generateLabels() {
@@ -26,28 +30,58 @@ async function generateLabels() {
   console.log(`Generating ${fixtures.length} test labels...\n`);
 
   for (const fixture of fixtures) {
-    const page = await context.newPage();
+    // Check if this fixture has multiple panels
+    if (fixture.panels && fixture.panels.length > 0) {
+      // Generate multiple panels
+      for (const panelConfig of fixture.panels) {
+        const page = await context.newPage();
 
-    // Build query string from renderConfig
-    const params = new URLSearchParams();
-    for (const [key, value] of Object.entries(fixture.renderConfig)) {
-      params.set(key, String(value));
+        // Merge base renderConfig with panel-specific config
+        const mergedConfig = { ...fixture.renderConfig, ...panelConfig.renderConfig, panel: panelConfig.panel };
+
+        const params = new URLSearchParams();
+        for (const [key, value] of Object.entries(mergedConfig)) {
+          params.set(key, String(value));
+        }
+
+        // Use multi-panel template
+        const templatePath = join(process.cwd(), 'test-labels', 'template-multi-panel.html');
+        const templateUrl = `file:///${templatePath.replace(/\\/g, '/')}?${params}`;
+
+        await page.goto(templateUrl);
+        await page.waitForTimeout(500);
+
+        const outputPath = join(process.cwd(), 'test-labels', `${fixture.id}-${panelConfig.panel}.png`);
+        await page.screenshot({ path: outputPath, type: 'png' });
+
+        console.log(`✓ Generated ${fixture.id}-${panelConfig.panel}.png`);
+        await page.close();
+      }
+    } else {
+      // Generate single panel (legacy behavior)
+      const page = await context.newPage();
+
+      // Build query string from renderConfig
+      const params = new URLSearchParams();
+      for (const [key, value] of Object.entries(fixture.renderConfig)) {
+        params.set(key, String(value));
+      }
+
+      // Use file:// protocol for local HTML file
+      const templatePath = join(process.cwd(), 'test-labels', 'template.html');
+      const templateUrl = `file:///${templatePath.replace(/\\/g, '/')}?${params}`;
+
+      await page.goto(templateUrl);
+
+      // Wait for fonts and layout to settle
+      await page.waitForTimeout(500);
+
+      const outputPath = join(process.cwd(), 'test-labels', `${fixture.id}.png`);
+      await page.screenshot({ path: outputPath, type: 'png' });
+
+      console.log(`✓ Generated ${fixture.id}.png`);
+      await page.close();
     }
-
-    // Use file:// protocol for local HTML file
-    const templatePath = join(process.cwd(), 'test-labels', 'template.html');
-    const templateUrl = `file:///${templatePath.replace(/\\/g, '/')}?${params}`;
-
-    await page.goto(templateUrl);
-
-    // Wait for fonts and layout to settle
-    await page.waitForTimeout(500);
-
-    const outputPath = join(process.cwd(), 'test-labels', `${fixture.id}.png`);
-    await page.screenshot({ path: outputPath, type: 'png' });
-
-    console.log(`✓ Generated ${fixture.id}.png`);
-    await page.close();
   }
 
   await browser.close();

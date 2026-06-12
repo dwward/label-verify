@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "1.0",
+  "ttbId": "26999001000123",
+  "serialNumber": "26-0001",
+  "productType": "DISTILLED_SPIRITS",
+  "source": "DOMESTIC",
+  "applicant": {
+    "name": "Your Company Name",
+    "permitNumber": "DSP-XX-12345",
+    "address": "City, State"
+  },
+  "label": {
+    "brandName": "YOUR BRAND",
+    "fancifulName": null,
+    "classType": "Kentucky Straight Bourbon Whiskey",
+    "alcoholContent": "45% Alc./Vol.",
+    "netContents": "750 mL",
+    "bottlerNameAddress": "Your Company, City, State",
+    "countryOfOrigin": null
+  },
+  "images": [
+    { "file": "front.png", "panel": "front" },
+    { "file": "back.png", "panel": "back" }
+  ]
+}

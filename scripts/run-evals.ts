@@ -1,13 +1,15 @@
-import { readFileSync } from 'fs';
+import { readFileSync, existsSync } from 'fs';
 import { join } from 'path';
 import FormData from 'form-data';
 import fetch from 'node-fetch';
 
 interface Fixture {
   id: string;
-  description: string;
-  applicationData: any;
+  description?: string;
+  applicationData?: any;
   expectedVerdicts: Record<string, string>;
+  ttbId?: string;
+  defectType?: string;
 }
 
 interface VerificationResult {
@@ -21,28 +23,80 @@ interface VerificationResult {
 }
 
 async function runEvaluations() {
-  const fixturesPath = join(process.cwd(), 'test-labels', 'fixtures.json');
+  // Check for --source argument
+  const args = process.argv.slice(2);
+  const sourceArg = args.find(a => a.startsWith('--source='))?.split('=')[1];
+
+  let fixturesPath: string;
+  let isSampleData = false;
+  let sampleDataDir = '';
+
+  if (sourceArg) {
+    fixturesPath = join(process.cwd(), sourceArg);
+    isSampleData = sourceArg.includes('sample-data');
+    if (isSampleData) {
+      sampleDataDir = join(process.cwd(), 'sample-data', 'applications');
+    }
+  } else {
+    fixturesPath = join(process.cwd(), 'test-labels', 'fixtures.json');
+  }
+
+  if (!existsSync(fixturesPath)) {
+    console.error(`Error: Fixtures file not found: ${fixturesPath}`);
+    process.exit(1);
+  }
+
   const fixtures: Fixture[] = JSON.parse(readFileSync(fixturesPath, 'utf-8'));
 
-  console.log('Running end-to-end evaluations...\n');
+  console.log(`Running end-to-end evaluations (${isSampleData ? 'sample data' : 'test fixtures'})...\n`);
   console.log('Fixture ID          | Overall | Fields | Timing  | Result');
   console.log('--------------------+---------+--------+---------+--------');
 
   let passCount = 0;
   let failCount = 0;
   const failures: Array<{ id: string; reason: string }> = [];
+  const defectTypeAccuracy: Record<string, { pass: number; fail: number }> = {};
 
   for (const fixture of fixtures) {
-    const imagePath = join(process.cwd(), 'test-labels', `${fixture.id}.png`);
+    let imagePath: string;
+    let applicationData: any;
+    let images: string[] = [];
+
+    if (isSampleData) {
+      // Sample data: load application.json and images from directory
+      const appDir = join(sampleDataDir, fixture.id);
+      const appJsonPath = join(appDir, 'application.json');
+
+      if (!existsSync(appJsonPath)) {
+        console.log(`${fixture.id.padEnd(19)} | ERROR   |        |         | ✗ FAIL (app not found)`);
+        failCount++;
+        continue;
+      }
+
+      const appData = JSON.parse(readFileSync(appJsonPath, 'utf-8'));
+      applicationData = appData.label;
+      images = appData.images.map((img: any) => join(appDir, img.file));
+    } else {
+      // Test fixtures: single image
+      imagePath = join(process.cwd(), 'test-labels', `${fixture.id}.png`);
+      images = [imagePath];
+      applicationData = fixture.applicationData;
+    }
 
     try {
       // Create form data
       const formData = new FormData();
-      formData.append('image', readFileSync(imagePath), {
-        filename: `${fixture.id}.png`,
-        contentType: 'image/png',
+
+      // Append all images
+      images.forEach((imgPath, idx) => {
+        const key = idx === 0 ? 'image' : `image${idx}`;
+        formData.append(key, readFileSync(imgPath), {
+          filename: imgPath.split(/[/\\]/).pop() || 'image.png',
+          contentType: 'image/png',
+        });
       });
-      formData.append('application', JSON.stringify(fixture.applicationData));
+
+      formData.append('application', JSON.stringify(applicationData));
 
       // POST to /api/verify
       const response = await fetch('http://localhost:3000/api/verify', {
@@ -75,12 +129,25 @@ async function runEvaluations() {
         fieldResults.push(match ? '✓' : '✗');
       }
 
-      // Check overall
-      const overallMatch = result.overall === fixture.expectedVerdicts.overall;
+      // Check overall - compute expected if not provided
+      let expectedOverall = fixture.expectedVerdicts.overall;
+      if (!expectedOverall) {
+        // Compute expected overall from individual field verdicts
+        const fieldVerdicts = Object.values(fixture.expectedVerdicts);
+        if (fieldVerdicts.includes('MISMATCH')) {
+          expectedOverall = 'MISMATCH';
+        } else if (fieldVerdicts.includes('NEEDS_REVIEW')) {
+          expectedOverall = 'NEEDS_REVIEW';
+        } else {
+          expectedOverall = 'MATCH';
+        }
+      }
+
+      const overallMatch = result.overall === expectedOverall;
       if (!overallMatch) {
         allMatch = false;
         mismatches.push(
-          `Overall: expected ${fixture.expectedVerdicts.overall}, got ${result.overall}`
+          `Overall: expected ${expectedOverall}, got ${result.overall}`
         );
       }
 
@@ -93,6 +160,19 @@ async function runEvaluations() {
           id: fixture.id,
           reason: mismatches.join('; '),
         });
+      }
+
+      // Track defect type accuracy for sample data
+      if (isSampleData && fixture.defectType) {
+        const defectType = fixture.defectType;
+        if (!defectTypeAccuracy[defectType]) {
+          defectTypeAccuracy[defectType] = { pass: 0, fail: 0 };
+        }
+        if (passed) {
+          defectTypeAccuracy[defectType].pass++;
+        } else {
+          defectTypeAccuracy[defectType].fail++;
+        }
       }
 
       const overallStatus = overallMatch
@@ -120,6 +200,28 @@ async function runEvaluations() {
 
   console.log('--------------------+---------+--------+---------+--------');
   console.log(`Results: ${passCount} passed, ${failCount} failed\n`);
+
+  // Print defect type accuracy table for sample data
+  if (isSampleData && Object.keys(defectTypeAccuracy).length > 0) {
+    console.log('Accuracy by Defect Type:\n');
+    console.log('Defect Type         | Total | Pass | Fail | Accuracy');
+    console.log('--------------------+-------+------+------+---------');
+
+    for (const [defectType, stats] of Object.entries(defectTypeAccuracy).sort()) {
+      const total = stats.pass + stats.fail;
+      const accuracy = ((stats.pass / total) * 100).toFixed(1);
+      console.log(
+        `${defectType.padEnd(19)} | ${String(total).padStart(5)} | ${String(stats.pass).padStart(4)} | ${String(stats.fail).padStart(4)} | ${accuracy}%`
+      );
+    }
+
+    const totalTests = Object.values(defectTypeAccuracy).reduce((sum, s) => sum + s.pass + s.fail, 0);
+    const totalPass = Object.values(defectTypeAccuracy).reduce((sum, s) => sum + s.pass, 0);
+    const overallAccuracy = ((totalPass / totalTests) * 100).toFixed(1);
+
+    console.log('--------------------+-------+------+------+---------');
+    console.log(`Overall             | ${String(totalTests).padStart(5)} | ${String(totalPass).padStart(4)} | ${String(totalTests - totalPass).padStart(4)} | ${overallAccuracy}%\n`);
+  }
 
   if (failures.length > 0) {
     console.log('Failures:');

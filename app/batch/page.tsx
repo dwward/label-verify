@@ -1,8 +1,18 @@
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
 export default function BatchPage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push("/");
+  }, [router]);
+
   return (
-    <div className="bg-white rounded-lg shadow p-8 text-center">
-      <h2 className="text-2xl font-bold mb-4">Batch Verification</h2>
-      <p className="text-lg text-gray-600">Coming in Milestone 3</p>
+    <div className="container mx-auto px-4 py-8">
+      <p>Redirecting to unified queue interface...</p>
     </div>
   );
 }

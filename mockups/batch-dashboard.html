@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Batch Dashboard - TTB OCR Review</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 h-screen overflow-hidden">
+  <div class="flex h-screen">
+    <!-- Left Sidebar Navigation -->
+    <div class="w-48 bg-white border-r border-gray-200 flex flex-col">
+      <!-- Logo -->
+      <div class="p-4 border-b border-gray-200">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 bg-blue-600 rounded flex items-center justify-center text-white font-bold text-sm">
+            LV
+          </div>
+          <span class="font-semibold text-sm">Label Verify</span>
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <nav class="flex-1 p-3">
+        <a href="upload-batch.html" class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded mb-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+          </svg>
+          Upload Batch
+        </a>
+        <a href="#" class="flex items-center gap-3 px-3 py-2 text-sm font-medium bg-blue-50 text-blue-700 rounded mb-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+          Batch Dashboard
+        </a>
+        <a href="review-queue.html" class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded mb-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+          </svg>
+          Review Queue
+          <span class="ml-auto bg-yellow-100 text-yellow-800 text-xs font-bold px-1.5 py-0.5 rounded">42</span>
+        </a>
+      </nav>
+
+      <!-- Version Info -->
+      <div class="p-3 border-t border-gray-200 text-xs text-gray-500">
+        <div>Label Verify v1.0</div>
+        <div>TTB Compliance Tool</div>
+      </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+      <!-- Top Bar -->
+      <div class="bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <h1 class="text-lg font-semibold text-gray-900">Batch #2026-06-11-001</h1>
+          <span class="text-xs text-gray-500">Uploaded Jun 11, 2026 9:41 AM</span>
+        </div>
+      </div>
+
+      <!-- Stats Bar -->
+      <div class="bg-white border-b border-gray-200 px-6 py-3">
+        <div class="flex items-center gap-6">
+          <div class="flex items-center gap-2">
+            <span class="text-xs text-gray-500">Processing:</span>
+            <div class="w-48 bg-gray-200 rounded-full h-2">
+              <div class="bg-blue-600 h-2 rounded-full" style="width: 64%"></div>
+            </div>
+            <span class="text-xs font-medium text-gray-700">184 / 287</span>
+            <span class="text-xs text-gray-500">(64%)</span>
+          </div>
+
+          <div class="flex items-center gap-4 ml-auto text-xs">
+            <div class="flex items-center gap-1.5">
+              <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+              <span class="text-gray-600">Passed:</span>
+              <span class="font-medium text-gray-900">126</span>
+              <span class="text-gray-500">(44%)</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <div class="w-2 h-2 bg-yellow-500 rounded-full"></div>
+              <span class="text-gray-600">Needs Review:</span>
+              <span class="font-medium text-gray-900">42</span>
+              <span class="text-gray-500">(15%)</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <div class="w-2 h-2 bg-red-500 rounded-full"></div>
+              <span class="text-gray-600">Failed:</span>
+              <span class="font-medium text-gray-900">3</span>
+              <span class="text-gray-500">(1%)</span>
+            </div>
+            <div class="flex items-center gap-1.5 pl-4 border-l border-gray-300">
+              <span class="text-gray-600">Avg Confidence:</span>
+              <span class="font-semibold text-gray-900">87%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="bg-gray-50 border-b border-gray-200 px-6 py-2 flex items-center gap-3">
+        <span class="text-xs font-medium text-gray-600">Show:</span>
+        <button class="px-2 py-1 text-xs font-medium bg-blue-600 text-white rounded">All (287)</button>
+        <button class="px-2 py-1 text-xs font-medium text-gray-700 hover:bg-white rounded">Needs Review (42)</button>
+        <button class="px-2 py-1 text-xs font-medium text-gray-700 hover:bg-white rounded">Failed (3)</button>
+        <button class="px-2 py-1 text-xs font-medium text-gray-700 hover:bg-white rounded">Low Confidence (28)</button>
+        <button class="px-2 py-1 text-xs font-medium text-gray-700 hover:bg-white rounded">Passed (126)</button>
+
+        <div class="ml-auto flex items-center gap-2">
+          <span class="text-xs text-gray-600">Sort:</span>
+          <select class="text-xs border-gray-300 rounded py-1">
+            <option>Confidence (Low → High)</option>
+            <option>Time</option>
+            <option>Application ID</option>
+          </select>
+        </div>
+
+        <input type="text" placeholder="Search application ID..." class="px-3 py-1 text-xs border-gray-300 rounded w-48">
+      </div>
+
+      <!-- Results Table -->
+      <div class="flex-1 overflow-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50 sticky top-0">
+            <tr>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Application ID</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Confidence</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Issue</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Processed</th>
+              <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Action</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <!-- Needs Review -->
+            <tr class="hover:bg-blue-50 cursor-pointer">
+              <td class="px-4 py-2.5 text-sm font-medium text-gray-900">APP-00123</td>
+              <td class="px-4 py-2.5">
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
+                  Needs Review
+                </span>
+              </td>
+              <td class="px-4 py-2.5">
+                <div class="flex items-center gap-2">
+                  <div class="w-16 bg-gray-200 rounded-full h-1.5">
+                    <div class="bg-yellow-500 h-1.5 rounded-full" style="width: 72%"></div>
+                  </div>
+                  <span class="text-xs font-medium text-gray-900">72%</span>
+                </div>
+              </td>
+              <td class="px-4 py-2.5 text-sm text-gray-600">Alcohol % mismatch</td>
+              <td class="px-4 py-2.5 text-xs text-gray-500">Jun 11, 2026 10:21 AM</td>
+              <td class="px-4 py-2.5">
+                <a href="application-inspector.html" class="text-xs font-medium text-blue-600 hover:text-blue-800">Inspect</a>
+              </td>
+            </tr>
+
+            <!-- Passed -->
+            <tr class="hover:bg-blue-50 cursor-pointer">
+              <td class="px-4 py-2.5 text-sm font-medium text-gray-900">APP-00124</td>
+              <td class="px-4 py-2.5">
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+                  Passed
+                </span>
+              </td>
+              <td class="px-4 py-2.5">
+                <div class="flex items-center gap-2">
+                  <div class="w-16 bg-gray-200 rounded-full h-1.5">
+                    <div class="bg-green-500 h-1.5 rounded-full" style="width: 98%"></div>
+                  </div>
+                  <span class="text-xs font-medium text-gray-900">98%</span>
+                </div>
+              </td>
+              <td class="px-4 py-2.5 text-sm text-gray-400">—</td>
+              <td class="px-4 py-2.5 text-xs text-gray-500">Jun 11, 2026 10:20 AM</td>
+              <td class="px-4 py-2.5">
+                <a href="application-inspector.html" class="text-xs font-medium text-blue-600 hover:text-blue-800">Inspect</a>
+              </td>
+            </tr>
+
+            <!-- Failed OCR -->
+            <tr class="hover:bg-blue-50 cursor-pointer bg-red-50">
+              <td class="px-4 py-2.5 text-sm font-medium text-gray-900">APP-00125</td>
+              <td class="px-4 py-2.5">
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-800">
+                  Failed OCR
+                </span>
+              </td>
+              <td class="px-4 py-2.5">
+                <span class="text-xs text-gray-400">—</span>
+              </td>
+              <td class="px-4 py-2.5 text-sm text-red-700">OCR unreadable</td>
+              <td class="px-4 py-2.5 text-xs text-gray-500">Jun 11, 2026 10:19 AM</td>
+              <td class="px-4 py-2.5">
+                <a href="application-inspector.html" class="text-xs font-medium text-blue-600 hover:text-blue-800">Inspect</a>
+              </td>
+            </tr>
+
+            <!-- Low Confidence -->
+            <tr class="hover:bg-blue-50 cursor-pointer">
+              <td class="px-4 py-2.5 text-sm font-medium text-gray-900">APP-00126</td>
+              <td class="px-4 py-2.5">
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
+                  Needs Review
+                </span>
+              </td>
+              <td class="px-4 py-2.5">
+                <div class="flex items-center gap-2">
+                  <div class="w-16 bg-gray-200 rounded-full h-1.5">
+                    <div class="bg-orange-500 h-1.5 rounded-full" style="width: 61%"></div>
+                  </div>
+                  <span class="text-xs font-medium text-gray-900">61%</span>
+                </div>
+              </td>
+              <td class="px-4 py-2.5 text-sm text-gray-600">Low confidence on required field</td>
+              <td class="px-4 py-2.5 text-xs text-gray-500">Jun 11, 2026 10:18 AM</td>
+              <td class="px-4 py-2.5">
+                <a href="application-inspector.html" class="text-xs font-medium text-blue-600 hover:text-blue-800">Inspect</a>
+              </td>
+            </tr>
+
+            <!-- Processing -->
+            <tr class="bg-blue-50">
+              <td class="px-4 py-2.5 text-sm font-medium text-gray-900">APP-00127</td>
+              <td class="px-4 py-2.5">
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
+                  <svg class="animate-spin -ml-0.5 mr-1 h-3 w-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Processing
+                </span>
+              </td>
+              <td class="px-4 py-2.5">
+                <span class="text-xs text-gray-400">—</span>
+              </td>
+              <td class="px-4 py-2.5 text-sm text-gray-400">—</td>
+              <td class="px-4 py-2.5 text-xs text-gray-500">—</td>
+              <td class="px-4 py-2.5">
+                <span class="text-xs text-gray-400">—</span>
+              </td>
+            </tr>
+
+            <!-- More rows for demonstration -->
+            <tr class="hover:bg-blue-50 cursor-pointer">
+              <td class="px-4 py-2.5 text-sm font-medium text-gray-900">APP-00128</td>
+              <td class="px-4 py-2.5">
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+                  Passed
+                </span>
+              </td>
+              <td class="px-4 py-2.5">
+                <div class="flex items-center gap-2">
+                  <div class="w-16 bg-gray-200 rounded-full h-1.5">
+                    <div class="bg-green-500 h-1.5 rounded-full" style="width: 94%"></div>
+                  </div>
+                  <span class="text-xs font-medium text-gray-900">94%</span>
+                </div>
+              </td>
+              <td class="px-4 py-2.5 text-sm text-gray-400">—</td>
+              <td class="px-4 py-2.5 text-xs text-gray-500">Jun 11, 2026 10:18 AM</td>
+              <td class="px-4 py-2.5">
+                <a href="application-inspector.html" class="text-xs font-medium text-blue-600 hover:text-blue-800">Inspect</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Footer Pagination -->
+      <div class="bg-white border-t border-gray-200 px-6 py-2 flex items-center justify-between text-xs">
+        <span class="text-gray-600">Showing 1 to 25 of 287 results</span>
+        <div class="flex items-center gap-2">
+          <span class="text-gray-600">25 / page</span>
+          <button class="px-2 py-1 border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50" disabled>Previous</button>
+          <button class="px-2 py-1 bg-blue-600 text-white rounded">1</button>
+          <button class="px-2 py-1 border border-gray-300 rounded hover:bg-gray-50">2</button>
+          <button class="px-2 py-1 border border-gray-300 rounded hover:bg-gray-50">3</button>
+          <span class="px-2">...</span>
+          <button class="px-2 py-1 border border-gray-300 rounded hover:bg-gray-50">12</button>
+          <button class="px-2 py-1 border border-gray-300 rounded hover:bg-gray-50">Next</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

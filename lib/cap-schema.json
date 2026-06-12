@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["schemaVersion", "label"],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "ttbId": {
+      "type": "string",
+      "pattern": "^[0-9]{14}$",
+      "description": "14-character TTB identifier"
+    },
+    "serialNumber": {
+      "type": "string",
+      "description": "Application serial number (e.g. 26-0001)"
+    },
+    "productType": {
+      "type": "string",
+      "enum": ["DISTILLED_SPIRITS", "WINE", "MALT_BEVERAGES"]
+    },
+    "source": {
+      "type": "string",
+      "enum": ["DOMESTIC", "IMPORTED"]
+    },
+    "applicant": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "permitNumber": { "type": "string" },
+        "address": { "type": "string" }
+      }
+    },
+    "label": {
+      "type": "object",
+      "required": ["brandName", "classType", "alcoholContent", "netContents"],
+      "properties": {
+        "brandName": { "type": "string", "minLength": 1 },
+        "fancifulName": { "type": ["string", "null"] },
+        "classType": { "type": "string", "minLength": 1 },
+        "alcoholContent": { "type": "string", "minLength": 1 },
+        "netContents": { "type": "string", "minLength": 1 },
+        "bottlerNameAddress": { "type": ["string", "null"] },
+        "countryOfOrigin": { "type": ["string", "null"] }
+      }
+    },
+    "images": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["file", "panel"],
+        "properties": {
+          "file": { "type": "string", "minLength": 1 },
+          "panel": {
+            "type": "string",
+            "enum": ["front", "back", "neck", "other"]
+          }
+        }
+      }
+    }
+  }
+}

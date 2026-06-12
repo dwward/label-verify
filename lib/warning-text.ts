@@ -57,6 +57,8 @@ export function generateWordDiff(expected: string, actual: string): string {
 export function checkGovernmentWarning(
   extracted: ExtractedLabel
 ): FieldVerdict {
+  const foundOn = extracted.governmentWarning.foundOn;
+
   // Check 1: Warning present?
   if (!extracted.governmentWarning.present) {
     return {
@@ -65,6 +67,7 @@ export function checkGovernmentWarning(
       applicationValue: "Required",
       labelValue: null,
       explanation: "Government warning missing from label",
+      foundOn,
     };
   }
 
@@ -77,6 +80,7 @@ export function checkGovernmentWarning(
       labelValue: extracted.governmentWarning.fullText || "Present",
       explanation:
         "Warning header must be 'GOVERNMENT WARNING:' in all capitals (found title case or mixed case)",
+      foundOn,
     };
   }
 
@@ -88,6 +92,7 @@ export function checkGovernmentWarning(
       applicationValue: "Required",
       labelValue: extracted.governmentWarning.fullText || "Present",
       explanation: "Warning header may not be bold—please verify visually",
+      foundOn,
     };
   }
 
@@ -100,6 +105,7 @@ export function checkGovernmentWarning(
       applicationValue: "Required",
       labelValue: null,
       explanation: "Warning text could not be extracted from label",
+      foundOn,
     };
   }
 
@@ -114,6 +120,7 @@ export function checkGovernmentWarning(
       applicationValue: "Required",
       labelValue: fullText,
       explanation: `Warning text does not match statutory text — ${diff}`,
+      foundOn,
     };
   }
 
@@ -124,5 +131,6 @@ export function checkGovernmentWarning(
     applicationValue: "Required",
     labelValue: fullText,
     explanation: "Government warning matches statutory text",
+    foundOn,
   };
 }
