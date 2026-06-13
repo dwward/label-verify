@@ -142,3 +142,7 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
 .vercel
+
+# Sample data (hosted on S3, not in Git)
+sample-data/**/*.zip
+public/samples/

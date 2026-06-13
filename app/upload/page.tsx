@@ -188,25 +188,25 @@ export default function UploadBatchPage() {
             </div>
             <div className="flex gap-2">
               <a
-                href="/samples/sample-1.zip"
+                href="https://label-verify-samples.s3.amazonaws.com/sample-1.zip"
                 download
                 className="px-3 py-1.5 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50"
               >
                 Load Sample (1)
               </a>
               <a
-                href="/samples/sample-10.zip"
+                href="https://label-verify-samples.s3.amazonaws.com/sample-10.zip"
                 download
                 className="px-3 py-1.5 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50"
               >
                 Small Batch (10)
               </a>
               <a
-                href="/samples/sample-200.zip"
+                href="https://label-verify-samples.s3.amazonaws.com/sample-100.zip"
                 download
                 className="px-3 py-1.5 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50"
               >
-                Large Batch (200)
+                Large Batch (100)
               </a>
             </div>
           </div>
