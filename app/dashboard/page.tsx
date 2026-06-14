@@ -77,13 +77,20 @@ export default function DashboardPage() {
     setIsProcessing(true);
     const pending = initialQueue.filter((item) => item.status === "pending");
 
+    // Sort by application ID to process in order (top-down)
+    const sortedPending = pending.sort((a, b) =>
+      (a.ttbId || a.id).localeCompare(b.ttbId || b.id)
+    );
+
     const processItem = async (item: QueueItem) => {
       await semaphore.acquire();
+      const startTime = Date.now();
+
       try {
-        // Update to processing
+        // Update to processing with start time
         setQueue((prev) =>
           prev.map((q) =>
-            q.id === item.id ? { ...q, status: "processing" as const } : q
+            q.id === item.id ? { ...q, status: "processing" as const, startedAt: startTime } : q
           )
         );
 
@@ -115,6 +122,9 @@ export default function DashboardPage() {
         // Determine workflow state
         const workflowState = triageApplication(result);
 
+        const endTime = Date.now();
+        const totalProcessingMs = endTime - startTime;
+
         // Update queue with result (preserve images!)
         setQueue((prev) =>
           prev.map((q) =>
@@ -125,13 +135,15 @@ export default function DashboardPage() {
                   status: "completed" as const,
                   workflowState,
                   result,
-                  completedAt: Date.now(),
+                  completedAt: endTime,
+                  totalProcessingMs,
                 }
               : q
           )
         );
       } catch (error) {
         console.error(`Error processing ${item.id}:`, error);
+        const endTime = Date.now();
         setQueue((prev) =>
           prev.map((q) =>
             q.id === item.id
@@ -141,7 +153,8 @@ export default function DashboardPage() {
                   status: "error" as const,
                   workflowState: "error" as const,
                   error: error instanceof Error ? error.message : "Unknown error",
-                  completedAt: Date.now(),
+                  completedAt: endTime,
+                  totalProcessingMs: endTime - startTime,
                 }
               : q
           )
@@ -151,8 +164,8 @@ export default function DashboardPage() {
       }
     };
 
-    // Process all pending items
-    await Promise.allSettled(pending.map(processItem));
+    // Process items in order (semaphore controls concurrency)
+    await Promise.allSettled(sortedPending.map(processItem));
     setIsProcessing(false);
     setProcessingJustCompleted(true);
     setBatchSummaryVisible(true);
@@ -325,7 +338,7 @@ export default function DashboardPage() {
                 : "text-gray-700 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
             }`}
           >
-            All ({queue.length})
+            Imported ({queue.length})
           </button>
           <button
             onClick={() => setFilterState("needs_review")}
@@ -396,11 +409,25 @@ export default function DashboardPage() {
                     <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">
                       Application ID
                     </th>
+                    {!selectedItem && (
+                      <>
+                        <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                          Conf.
+                        </th>
+                        <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                          Time
+                        </th>
+                        <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                          Issue
+                        </th>
+                      </>
+                    )}
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {filteredQueue.map((item) => {
                     const isSelected = item.id === selectedItemId;
+                    const confidence = item.result?.applicationConfidence?.overall || 0;
 
                     // Determine row background color based on workflow state
                     let rowBgClass = "";
@@ -415,7 +442,7 @@ export default function DashboardPage() {
                     return (
                       <tr
                         key={item.id}
-                        onClick={() => setSelectedItemId(item.id)}
+                        onClick={() => setSelectedItemId(isSelected ? null : item.id)}
                         className={`cursor-pointer ${
                           isSelected
                             ? "bg-blue-100 border-l-4 border-blue-600"
@@ -431,6 +458,63 @@ export default function DashboardPage() {
                             {item.ttbId || item.id.slice(0, 10)}
                           </div>
                         </td>
+
+                        {/* Show Confidence, Time, and Issue columns only when inspector is closed */}
+                        {!selectedItem && (
+                          <>
+                            <td className="px-3 py-2">
+                              {item.status === "completed" && confidence > 0 ? (
+                                <div className="flex items-center gap-1">
+                                  <div className="w-12 bg-gray-200 rounded-full h-1.5">
+                                    <div
+                                      className={`h-1.5 rounded-full ${
+                                        confidence >= 0.85
+                                          ? "bg-green-500"
+                                          : confidence >= 0.6
+                                          ? "bg-yellow-500"
+                                          : "bg-red-500"
+                                      }`}
+                                      style={{ width: `${confidence * 100}%` }}
+                                    ></div>
+                                  </div>
+                                  <span
+                                    className={`text-xs font-bold ${
+                                      confidence >= 0.85
+                                        ? "text-green-600"
+                                        : confidence >= 0.6
+                                        ? "text-yellow-600"
+                                        : "text-red-600"
+                                    }`}
+                                  >
+                                    {Math.round(confidence * 100)}%
+                                  </span>
+                                </div>
+                              ) : (
+                                <span className="text-xs text-gray-400">—</span>
+                              )}
+                            </td>
+                            <td className="px-3 py-2 text-xs text-gray-700">
+                              {item.totalProcessingMs ? (
+                                <span className="font-medium">
+                                  {(item.totalProcessingMs / 1000).toFixed(1)}s
+                                </span>
+                              ) : (
+                                <span className="text-gray-400">—</span>
+                              )}
+                            </td>
+                            <td className="px-3 py-2 text-xs text-gray-700">
+                              {item.status === "processing" && "Processing..."}
+                              {item.status === "pending" && "Pending"}
+                              {item.status === "error" && (
+                                <span className="text-red-600">
+                                  {item.error || "Error"}
+                                </span>
+                              )}
+                              {item.status === "completed" &&
+                                item.result?.applicationConfidence?.reason}
+                            </td>
+                          </>
+                        )}
                       </tr>
                     );
                   })}

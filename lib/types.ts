@@ -111,7 +111,9 @@ export interface QueueItem {
   result?: VerificationResult;
   error?: string;
   addedAt: number;
+  startedAt?: number; // When processing started
   completedAt?: number;
+  totalProcessingMs?: number; // Total time from start to completion
   reviewedAt?: number; // When human reviewed it
   reviewNotes?: string; // Human reviewer notes
 }
