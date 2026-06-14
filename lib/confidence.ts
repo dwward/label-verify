@@ -140,7 +140,7 @@ export function calculateApplicationConfidence(
   );
   const needsReview = overall < CONFIDENCE_THRESHOLD || hasIssues;
 
-  // Determine reason
+  // Determine reason (only for items that need review)
   let reason = "";
   if (hasIssues) {
     const issueFields = verdicts
@@ -150,9 +150,8 @@ export function calculateApplicationConfidence(
   } else if (overall < CONFIDENCE_THRESHOLD) {
     const weakestField = fieldBreakdown.sort((a, b) => a.confidence - b.confidence)[0];
     reason = `${weakestField.field} has low confidence (${Math.round(weakestField.confidence * 100)}%)`;
-  } else {
-    reason = "All fields have high confidence";
   }
+  // No reason needed for passed items (don't set "All fields have high confidence")
 
   return {
     overall: Math.round(overall * 100) / 100, // Round to 2 decimals

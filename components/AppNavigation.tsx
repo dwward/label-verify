@@ -16,7 +16,7 @@ export default function AppNavigation({ reviewQueueCount = 0 }: AppNavigationPro
     <div className="w-48 bg-white border-r border-gray-200 flex flex-col h-screen">
       {/* Logo */}
       <div className="p-4 border-b border-gray-200">
-        <div className="flex items-center gap-2">
+        <Link href="/upload" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
           <img
             src="/images/ttb-logo.jpg"
             alt="TTB"
@@ -32,7 +32,7 @@ export default function AppNavigation({ reviewQueueCount = 0 }: AppNavigationPro
             TTB
           </div>
           <span className="font-semibold text-sm">TTB Label Verify</span>
-        </div>
+        </Link>
       </div>
 
       {/* Navigation */}

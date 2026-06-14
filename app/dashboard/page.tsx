@@ -5,6 +5,7 @@ import AppNavigation from "@/components/AppNavigation";
 import { triageApplication, calculateBatchStatistics } from "@/lib/triage";
 import { compressImage } from "@/lib/image-compression";
 import { Semaphore } from "@/lib/semaphore";
+import { loadCAPPackages } from "@/lib/cap-loader";
 import type { QueueItem, BatchStatistics, WorkflowState } from "@/lib/types";
 
 const semaphore = new Semaphore(5); // Max 5 concurrent requests
@@ -19,9 +20,28 @@ export default function DashboardPage() {
   const [imageZoom, setImageZoom] = useState<"fit" | 100 | 200>("fit");
   const [batchSummaryVisible, setBatchSummaryVisible] = useState(false);
   const [processingJustCompleted, setProcessingJustCompleted] = useState(false);
+  const [isDraggingOver, setIsDraggingOver] = useState(false);
 
   // Load queue from sessionStorage on mount
   useEffect(() => {
+    // Priority 1: Check for preserved dashboard queue with images (same-session navigation)
+    const dashboardQueue = (window as any).__dashboardQueue;
+    if (dashboardQueue && Array.isArray(dashboardQueue) && dashboardQueue.length > 0) {
+      // Verify that at least some items have actual images (File objects)
+      const hasValidImages = dashboardQueue.some(
+        item => item.images && Array.isArray(item.images) && item.images.length > 0 &&
+        item.images.some(img => img instanceof File)
+      );
+
+      if (hasValidImages) {
+        setQueue(dashboardQueue);
+        // Don't delete - keep for subsequent navigations within same session
+        return;
+      }
+      // If no valid images found, fall through to other loading methods
+    }
+
+    // Priority 2: Fresh import from upload page
     const stored = sessionStorage.getItem("label-verify-metadata");
     const pendingImages = (window as any).__pendingQueueImages;
 
@@ -49,14 +69,22 @@ export default function DashboardPage() {
         console.error("Failed to load queue:", error);
       }
     } else {
-      // Try loading from localStorage (for completed items after refresh)
-      const storedResults = localStorage.getItem("label-verify-results");
-      if (storedResults) {
+      // Priority 3: Load from localStorage (browser refresh - no images available)
+      const storedQueue = localStorage.getItem("label-verify-queue");
+      if (storedQueue) {
         try {
-          const parsed: QueueItem[] = JSON.parse(storedResults);
-          setQueue(parsed);
+          const parsed: QueueItem[] = JSON.parse(storedQueue);
+          // Don't filter out items - keep all completed work visible
+          if (parsed.length > 0) {
+            // Set empty images array for items loaded from localStorage
+            const itemsWithEmptyImages = parsed.map(item => ({
+              ...item,
+              images: item.images || [], // Empty array instead of null
+            }));
+            setQueue(itemsWithEmptyImages);
+          }
         } catch (error) {
-          console.error("Failed to load results:", error);
+          console.error("Failed to load queue:", error);
         }
       }
     }
@@ -70,8 +98,25 @@ export default function DashboardPage() {
     }
   }, [queue]);
 
-  // Don't save to localStorage - keep images in memory for current session only
-  // (Images would exceed localStorage quota)
+  // Save queue to both localStorage (no images) and window global (with images)
+  useEffect(() => {
+    if (queue.length > 0) {
+      // Save metadata without File objects for localStorage
+      const metadata = queue.map(item => ({
+        ...item,
+        images: [], // Empty array - images can't be serialized
+      }));
+      localStorage.setItem("label-verify-queue", JSON.stringify(metadata));
+
+      // Store the full queue with images in window global for same-session navigation
+      // Use a ref-like pattern to always have latest queue
+      (window as any).__dashboardQueue = queue;
+    } else {
+      // Queue is empty - clear everything
+      localStorage.removeItem("label-verify-queue");
+      delete (window as any).__dashboardQueue;
+    }
+  }, [queue]);
 
   const startProcessing = async (initialQueue: QueueItem[]) => {
     setIsProcessing(true);
@@ -172,13 +217,29 @@ export default function DashboardPage() {
 
     // Auto-switch to appropriate filter after processing completes
     setTimeout(() => {
-      const stats = calculateBatchStatistics(queue);
-      if (stats.reviewQueueSize > 0) {
-        setFilterState("needs_review");
-      } else if ((stats.byWorkflowState.error || 0) > 0) {
-        setFilterState("error");
-      }
-      // Otherwise stay on "all"
+      setQueue((currentQueue) => {
+        const stats = calculateBatchStatistics(currentQueue);
+        if (stats.reviewQueueSize > 0) {
+          setFilterState("needs_review");
+
+          // Auto-select the first needs_review item (lowest confidence)
+          const needsReviewItems = currentQueue.filter(
+            (item) => item.workflowState === "needs_review"
+          );
+          if (needsReviewItems.length > 0) {
+            const sorted = needsReviewItems.sort((a, b) => {
+              const aConf = a.result?.applicationConfidence?.overall || 0;
+              const bConf = b.result?.applicationConfidence?.overall || 0;
+              return aConf - bConf;
+            });
+            setSelectedItemId(sorted[0].id);
+          }
+        } else if ((stats.byWorkflowState.error || 0) > 0) {
+          setFilterState("error");
+        }
+        // Otherwise stay on "all"
+        return currentQueue;
+      });
     }, 100);
   };
 
@@ -216,6 +277,65 @@ export default function DashboardPage() {
     advanceToNextReview(itemId);
   };
 
+  const handleClearAll = () => {
+    if (confirm(`Clear all ${queue.length} applications from dashboard? This cannot be undone.`)) {
+      setQueue([]);
+      setStatistics(null);
+      setSelectedItemId(null);
+      setFilterState("all");
+      localStorage.removeItem("label-verify-queue");
+      sessionStorage.removeItem("label-verify-metadata");
+      delete (window as any).__pendingQueueImages;
+      delete (window as any).__dashboardQueue; // Also clear the preserved queue
+    }
+  };
+
+  const handleSidebarDrop = async (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDraggingOver(false);
+
+    try {
+      const files = Array.from(e.dataTransfer.files);
+      const result = await loadCAPPackages(files);
+
+      if (result.errors.length > 0) {
+        alert(`Import errors:\n${result.errors.map(e => e.message).join('\n')}`);
+      }
+
+      if (result.applications.length === 0) {
+        return;
+      }
+
+      // APPEND to existing queue instead of replacing
+      const newItems: QueueItem[] = result.applications.map((app, idx) => ({
+        id: `${Date.now()}-${idx}`,
+        ttbId: app.cap.ttbId,
+        serialNumber: app.cap.serialNumber,
+        applicationData: {
+          brandName: app.cap.label.brandName,
+          classType: app.cap.label.classType,
+          alcoholContent: app.cap.label.alcoholContent,
+          netContents: app.cap.label.netContents,
+          bottlerName: app.cap.label.bottlerNameAddress || undefined,
+          countryOfOrigin: app.cap.label.countryOfOrigin || undefined,
+        },
+        adminData: app.cap,
+        images: app.images,
+        status: "pending" as const,
+        workflowState: "pending" as const,
+        addedAt: Date.now(),
+      }));
+
+      setQueue(prev => [...prev, ...newItems]);
+
+      // Start processing new items only
+      startProcessing(newItems);
+    } catch (error) {
+      console.error("Sidebar drop error:", error);
+      alert("Error loading files. Please try again.");
+    }
+  };
+
   const advanceToNextReview = (currentId: string) => {
     const needsReviewItems = queue.filter(
       (item) => item.workflowState === "needs_review" && item.id !== currentId
@@ -230,8 +350,9 @@ export default function DashboardPage() {
       });
       setSelectedItemId(sorted[0].id);
     } else {
-      // No more items to review
+      // No more items to review - switch to Passed filter
       setSelectedItemId(null);
+      setFilterState("auto_passed");
     }
   };
 
@@ -260,13 +381,23 @@ export default function DashboardPage() {
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top Bar */}
         <div className="bg-white border-b border-gray-200 px-6 py-3">
-          <div className="flex items-center gap-4">
-            <h1 className="text-lg font-semibold text-gray-900">
-              Batch Dashboard
-            </h1>
-            <span className="text-xs text-gray-500">
-              {queue.length} applications
-            </span>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <h1 className="text-lg font-semibold text-gray-900">
+                Batch Dashboard
+              </h1>
+              <span className="text-xs text-gray-500">
+                {queue.length} applications
+              </span>
+            </div>
+            {queue.length > 0 && (
+              <button
+                onClick={handleClearAll}
+                className="px-3 py-1.5 text-xs font-medium text-red-600 border border-red-300 rounded hover:bg-red-50"
+              >
+                Clear All
+              </button>
+            )}
           </div>
         </div>
 
@@ -291,40 +422,53 @@ export default function DashboardPage() {
         )}
 
         {/* Batch Summary Banner (dismissible, shown after import completes) */}
-        {batchSummaryVisible && statistics && !isProcessing && (
-          <div className="bg-blue-50 border-b border-blue-200 px-6 py-3">
-            <div className="flex items-start gap-3">
-              <svg
-                className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              <div className="flex-1 text-sm text-blue-900">
-                <span className="font-medium">Import complete:</span>{" "}
-                {queue.length} applications —{" "}
-                {(statistics.byWorkflowState.auto_passed || 0) + (statistics.byWorkflowState.approved || 0)} passed,{" "}
-                {statistics.reviewQueueSize} need review,{" "}
-                {statistics.byWorkflowState.error || 0} failed
-              </div>
-              <button
-                onClick={() => setBatchSummaryVisible(false)}
-                className="text-blue-600 hover:text-blue-800"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+        {batchSummaryVisible && statistics && !isProcessing && (() => {
+          // Calculate average processing time
+          const completedItems = queue.filter(item => item.totalProcessingMs);
+          const avgTime = completedItems.length > 0
+            ? completedItems.reduce((sum, item) => sum + (item.totalProcessingMs || 0), 0) / completedItems.length
+            : 0;
+
+          return (
+            <div className="bg-blue-50 border-b border-blue-200 px-6 py-3">
+              <div className="flex items-start gap-3">
+                <svg
+                  className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
                 </svg>
-              </button>
+                <div className="flex-1 text-sm text-blue-900">
+                  <span className="font-medium">Import complete:</span>{" "}
+                  {queue.length} applications —{" "}
+                  {(statistics.byWorkflowState.auto_passed || 0) + (statistics.byWorkflowState.approved || 0)} passed,{" "}
+                  {statistics.reviewQueueSize} need review,{" "}
+                  {statistics.byWorkflowState.error || 0} failed
+                  {avgTime > 0 && (
+                    <span className="ml-2 text-blue-700">
+                      • Avg time: {(avgTime / 1000).toFixed(1)}s
+                    </span>
+                  )}
+                </div>
+                <button
+                  onClick={() => setBatchSummaryVisible(false)}
+                  className="text-blue-600 hover:text-blue-800"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
             </div>
-          </div>
-        )}
+          );
+        })()}
 
         {/* Filter Bar */}
         <div className="bg-gray-50 border-b border-gray-200 px-6 py-2 flex items-center gap-3">
@@ -382,7 +526,7 @@ export default function DashboardPage() {
                 : "text-gray-700 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
             }`}
           >
-            Failed ({statistics?.byWorkflowState.error || 0})
+            Failed Import ({statistics?.byWorkflowState.error || 0})
           </button>
 
           {filterState === "needs_review" && statistics && (
@@ -428,34 +572,67 @@ export default function DashboardPage() {
                   {filteredQueue.map((item) => {
                     const isSelected = item.id === selectedItemId;
                     const confidence = item.result?.applicationConfidence?.overall || 0;
+                    const isManuallyReviewed = item.workflowState === "approved" || item.workflowState === "rejected";
 
                     // Determine row background color based on workflow state
                     let rowBgClass = "";
-                    if (item.workflowState === "auto_passed" || item.workflowState === "approved") {
+                    if (item.workflowState === "auto_passed") {
                       rowBgClass = "bg-green-50";
+                    } else if (item.workflowState === "approved" || item.workflowState === "rejected") {
+                      // Manually reviewed items get light yellow background
+                      rowBgClass = "bg-amber-50";
                     } else if (item.workflowState === "needs_review") {
                       rowBgClass = "bg-yellow-50";
-                    } else if (item.workflowState === "rejected" || item.workflowState === "error") {
+                    } else if (item.workflowState === "error") {
                       rowBgClass = "bg-red-50";
                     }
 
                     return (
                       <tr
                         key={item.id}
-                        onClick={() => setSelectedItemId(isSelected ? null : item.id)}
-                        className={`cursor-pointer ${
+                        onClick={() => {
+                          if (!isProcessing) {
+                            setSelectedItemId(isSelected ? null : item.id);
+                          }
+                        }}
+                        className={`${isProcessing ? 'cursor-wait' : 'cursor-pointer'} ${
                           isSelected
                             ? "bg-blue-100 border-l-4 border-blue-600"
-                            : `${rowBgClass} hover:bg-gray-100`
+                            : `${rowBgClass} ${!isProcessing && 'hover:bg-gray-100'}`
                         }`}
                       >
                         <td className="px-3 py-2">
-                          <div
-                            className={`text-sm ${
-                              isSelected ? "font-semibold" : "font-medium"
-                            } text-gray-900`}
-                          >
-                            {item.ttbId || item.id.slice(0, 10)}
+                          <div className="flex items-center gap-2">
+                            <div
+                              className={`text-sm ${
+                                isSelected ? "font-semibold" : "font-medium"
+                              } text-gray-900`}
+                            >
+                              {item.ttbId || item.id.slice(0, 10)}
+                            </div>
+                            {/* Loading spinner for processing items */}
+                            {item.status === "processing" && (
+                              <svg
+                                className="animate-spin h-4 w-4 text-blue-600"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                              >
+                                <circle
+                                  className="opacity-25"
+                                  cx="12"
+                                  cy="12"
+                                  r="10"
+                                  stroke="currentColor"
+                                  strokeWidth="4"
+                                ></circle>
+                                <path
+                                  className="opacity-75"
+                                  fill="currentColor"
+                                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                ></path>
+                              </svg>
+                            )}
                           </div>
                         </td>
 
@@ -463,7 +640,11 @@ export default function DashboardPage() {
                         {!selectedItem && (
                           <>
                             <td className="px-3 py-2">
-                              {item.status === "completed" && confidence > 0 ? (
+                              {isManuallyReviewed ? (
+                                <span className="text-xs italic text-amber-700">
+                                  Manually reviewed
+                                </span>
+                              ) : item.status === "completed" && confidence > 0 ? (
                                 <div className="flex items-center gap-1">
                                   <div className="w-12 bg-gray-200 rounded-full h-1.5">
                                     <div
@@ -561,9 +742,28 @@ export default function DashboardPage() {
               {/* Confidence Header */}
               <div className="bg-gray-50 border-b border-gray-200 px-3 py-2">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-medium text-gray-700">
-                    Overall Confidence
-                  </span>
+                  <div className="flex items-center gap-2">
+                    {selectedItem.workflowState === "auto_passed" && (
+                      <span className="text-xs font-semibold text-green-700 bg-green-100 px-2 py-1 rounded">
+                        ✓ Auto Accepted
+                      </span>
+                    )}
+                    {selectedItem.workflowState === "approved" && (
+                      <span className="text-xs font-semibold text-blue-700 bg-blue-100 px-2 py-1 rounded">
+                        ✓ Manually Approved
+                      </span>
+                    )}
+                    {selectedItem.workflowState === "rejected" && (
+                      <span className="text-xs font-semibold text-red-700 bg-red-100 px-2 py-1 rounded">
+                        ✗ Manually Rejected
+                      </span>
+                    )}
+                    {selectedItem.workflowState === "needs_review" && (
+                      <span className="text-xs font-medium text-gray-700">
+                        Overall Confidence
+                      </span>
+                    )}
+                  </div>
                   <div className="flex items-center gap-2">
                     <div className="w-24 bg-gray-200 rounded-full h-2">
                       <div
@@ -615,167 +815,183 @@ export default function DashboardPage() {
                 )}
               </div>
 
-              {/* Image Viewer */}
-              {selectedItem.images && selectedItem.images.length > 0 && (
-                <div className="border-b border-gray-200 bg-gray-900 flex flex-col" style={{ height: "550px" }}>
-                  {/* Image Tabs */}
-                  <div className="flex items-center gap-2 bg-gray-800 px-3 py-2 border-b border-gray-700">
-                    {selectedItem.images.map((_, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => {
-                          setActiveImageIndex(idx);
-                          setImageZoom("fit");
-                        }}
-                        className={`px-3 py-1 text-xs font-medium rounded ${
-                          activeImageIndex === idx
-                            ? "bg-blue-600 text-white"
-                            : "bg-gray-700 text-gray-300 hover:bg-gray-600"
-                        }`}
-                      >
-                        Image {idx + 1}
-                      </button>
-                    ))}
+              {/* Horizontal Split: Image Carousel (Left) | Field Table (Right) */}
+              <div className="flex-1 flex overflow-hidden border-b border-gray-200">
+                {/* Image Viewer - Left Side */}
+                {selectedItem.images && selectedItem.images.length > 0 ? (
+                  <div className="w-1/2 bg-gray-900 flex flex-col border-r border-gray-700">
+                    {/* Image Tabs */}
+                    <div className="flex items-center gap-2 bg-gray-800 px-3 py-2 border-b border-gray-700">
+                      {selectedItem.images.map((_, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => {
+                            setActiveImageIndex(idx);
+                            setImageZoom("fit");
+                          }}
+                          className={`px-3 py-1 text-xs font-medium rounded ${
+                            activeImageIndex === idx
+                              ? "bg-blue-600 text-white"
+                              : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                          }`}
+                        >
+                          Image {idx + 1}
+                        </button>
+                      ))}
 
-                    {/* Zoom Controls */}
-                    <div className="ml-auto flex items-center gap-2">
-                      <button
-                        onClick={() => setImageZoom("fit")}
-                        className={`p-1 rounded ${imageZoom === "fit" ? "bg-blue-600 text-white" : "text-gray-400 hover:bg-gray-700"}`}
-                        title="Fit"
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-                        </svg>
-                      </button>
-                      <button
-                        onClick={() => setImageZoom(100)}
-                        className={`px-2 py-1 text-xs rounded ${imageZoom === 100 ? "bg-blue-600 text-white" : "text-gray-400 hover:bg-gray-700"}`}
-                      >
-                        100%
-                      </button>
-                      <button
-                        onClick={() => setImageZoom(200)}
-                        className={`px-2 py-1 text-xs rounded ${imageZoom === 200 ? "bg-blue-600 text-white" : "text-gray-400 hover:bg-gray-700"}`}
-                      >
-                        200%
-                      </button>
+                      {/* Zoom Controls */}
+                      <div className="ml-auto flex items-center gap-2">
+                        <button
+                          onClick={() => setImageZoom("fit")}
+                          className={`p-1 rounded ${imageZoom === "fit" ? "bg-blue-600 text-white" : "text-gray-400 hover:bg-gray-700"}`}
+                          title="Fit"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                          </svg>
+                        </button>
+                        <button
+                          onClick={() => setImageZoom(100)}
+                          className={`px-2 py-1 text-xs rounded ${imageZoom === 100 ? "bg-blue-600 text-white" : "text-gray-400 hover:bg-gray-700"}`}
+                        >
+                          100%
+                        </button>
+                        <button
+                          onClick={() => setImageZoom(200)}
+                          className={`px-2 py-1 text-xs rounded ${imageZoom === 200 ? "bg-blue-600 text-white" : "text-gray-400 hover:bg-gray-700"}`}
+                        >
+                          200%
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Image Display */}
+                    <div className="flex-1 overflow-auto bg-gray-900 flex items-center justify-center">
+                      {(() => {
+                        const img = selectedItem.images[activeImageIndex];
+                        const imageUrl = img instanceof File ? URL.createObjectURL(img) : img;
+                        return (
+                          <img
+                            key={activeImageIndex}
+                            src={imageUrl}
+                            alt={`Label Image ${activeImageIndex + 1}`}
+                            className={imageZoom === "fit" ? "max-w-full max-h-full object-contain" : ""}
+                            style={imageZoom !== "fit" ? { width: `${imageZoom}%` } : {}}
+                            onLoad={() => {
+                              if (img instanceof File) {
+                                URL.revokeObjectURL(imageUrl);
+                              }
+                            }}
+                          />
+                        );
+                      })()}
                     </div>
                   </div>
-
-                  {/* Image Display */}
-                  <div className="flex-1 overflow-auto bg-gray-900 flex items-center justify-center">
-                    {(() => {
-                      const img = selectedItem.images[activeImageIndex];
-                      const imageUrl = img instanceof File ? URL.createObjectURL(img) : img;
-                      return (
-                        <img
-                          key={activeImageIndex}
-                          src={imageUrl}
-                          alt={`Label Image ${activeImageIndex + 1}`}
-                          className={imageZoom === "fit" ? "max-w-full max-h-full object-contain" : ""}
-                          style={imageZoom !== "fit" ? { width: `${imageZoom}%` } : {}}
-                          onLoad={() => {
-                            if (img instanceof File) {
-                              URL.revokeObjectURL(imageUrl);
-                            }
-                          }}
-                        />
-                      );
-                    })()}
+                ) : (
+                  <div className="w-1/2 bg-gray-100 flex items-center justify-center border-r border-gray-300">
+                    <div className="text-center text-gray-500 p-6">
+                      <svg className="mx-auto h-12 w-12 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      <p className="text-sm font-medium">Images Not Available</p>
+                      <p className="text-xs mt-1">
+                        Images are only available during the current session.<br />
+                        Verification results are preserved.
+                      </p>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
-              {/* Field Comparison Table */}
-              <div className="flex-1 overflow-auto">
-                <table className="min-w-full text-xs">
-                  <thead className="bg-gray-100 sticky top-0">
-                    <tr>
-                      <th className="px-2 py-1.5 text-left text-xs font-medium text-gray-600 uppercase w-24">
-                        Field
-                      </th>
-                      <th className="px-2 py-1.5 text-left text-xs font-medium text-gray-600 uppercase">
-                        Application
-                      </th>
-                      <th className="px-2 py-1.5 text-left text-xs font-medium text-gray-600 uppercase">
-                        Label
-                      </th>
-                      <th className="px-2 py-1.5 text-left text-xs font-medium text-gray-600 uppercase w-20">
-                        Conf.
-                      </th>
-                      <th className="px-2 py-1.5 text-left text-xs font-medium text-gray-600 uppercase w-20">
-                        Status
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200">
-                    {selectedItem.result.verdicts.map((verdict, idx) => {
-                      const bgColor =
-                        verdict.status === "MATCH"
-                          ? "bg-green-50"
-                          : verdict.status === "MISMATCH"
-                          ? "bg-red-50"
-                          : "bg-yellow-50";
-                      const badgeColor =
-                        verdict.status === "MATCH"
-                          ? "bg-green-100 text-green-800"
-                          : verdict.status === "MISMATCH"
-                          ? "bg-red-100 text-red-800"
-                          : "bg-yellow-100 text-yellow-800";
+                {/* Field Comparison Table - Right Side */}
+                <div className="w-1/2 overflow-auto bg-white">
+                  <table className="min-w-full text-xs">
+                    <thead className="bg-gray-100 sticky top-0">
+                      <tr>
+                        <th className="px-2 py-1.5 text-left text-xs font-medium text-gray-600 uppercase w-24">
+                          Field
+                        </th>
+                        <th className="px-2 py-1.5 text-left text-xs font-medium text-gray-600 uppercase">
+                          Application
+                        </th>
+                        <th className="px-2 py-1.5 text-left text-xs font-medium text-gray-600 uppercase">
+                          Label
+                        </th>
+                        <th className="px-2 py-1.5 text-left text-xs font-medium text-gray-600 uppercase w-20">
+                          Conf.
+                        </th>
+                        <th className="px-2 py-1.5 text-left text-xs font-medium text-gray-600 uppercase w-20">
+                          Status
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                      {selectedItem.result.verdicts.map((verdict, idx) => {
+                        const bgColor =
+                          verdict.status === "MATCH"
+                            ? "bg-green-50"
+                            : verdict.status === "MISMATCH"
+                            ? "bg-red-50"
+                            : "bg-yellow-50";
+                        const badgeColor =
+                          verdict.status === "MATCH"
+                            ? "bg-green-100 text-green-800"
+                            : verdict.status === "MISMATCH"
+                            ? "bg-red-100 text-red-800"
+                            : "bg-yellow-100 text-yellow-800";
 
-                      return (
-                        <tr key={idx} className={bgColor}>
-                          <td className="px-2 py-1.5 font-medium text-gray-900">
-                            {verdict.field}
-                          </td>
-                          <td className="px-2 py-1.5 text-gray-900">
-                            {verdict.applicationValue}
-                          </td>
-                          <td className="px-2 py-1.5 text-gray-900">
-                            {verdict.labelValue || (
-                              <span className="text-gray-400">Not found</span>
-                            )}
-                          </td>
-                          <td className="px-2 py-1.5">
-                            {verdict.confidence && (
-                              <div className="flex items-center gap-1">
-                                <div className="w-10 bg-gray-200 rounded-full h-1">
-                                  <div
-                                    className={`h-1 rounded-full ${
-                                      verdict.confidence.score >= 0.85
-                                        ? "bg-green-500"
-                                        : verdict.confidence.score >= 0.6
-                                        ? "bg-yellow-500"
-                                        : "bg-red-500"
-                                    }`}
-                                    style={{
-                                      width: `${verdict.confidence.score * 100}%`,
-                                    }}
-                                  ></div>
+                        return (
+                          <tr key={idx} className={bgColor}>
+                            <td className="px-2 py-1.5 font-medium text-gray-900">
+                              {verdict.field}
+                            </td>
+                            <td className="px-2 py-1.5 text-gray-900">
+                              {verdict.applicationValue}
+                            </td>
+                            <td className="px-2 py-1.5 text-gray-900">
+                              {verdict.labelValue || (
+                                <span className="text-gray-400">Not found</span>
+                              )}
+                            </td>
+                            <td className="px-2 py-1.5">
+                              {verdict.confidence && (
+                                <div className="flex items-center gap-1">
+                                  <div className="w-10 bg-gray-200 rounded-full h-1">
+                                    <div
+                                      className={`h-1 rounded-full ${
+                                        verdict.confidence.score >= 0.85
+                                          ? "bg-green-500"
+                                          : verdict.confidence.score >= 0.6
+                                          ? "bg-yellow-500"
+                                          : "bg-red-500"
+                                      }`}
+                                      style={{
+                                        width: `${verdict.confidence.score * 100}%`,
+                                      }}
+                                    ></div>
+                                  </div>
+                                  <span className="text-xs font-medium">
+                                    {Math.round(verdict.confidence.score * 100)}%
+                                  </span>
                                 </div>
-                                <span className="text-xs font-medium">
-                                  {Math.round(verdict.confidence.score * 100)}%
-                                </span>
-                              </div>
-                            )}
-                          </td>
-                          <td className="px-2 py-1.5">
-                            <span
-                              className={`inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium ${badgeColor}`}
-                            >
-                              {verdict.status === "MATCH"
-                                ? "Match"
-                                : verdict.status === "MISMATCH"
-                                ? "Mismatch"
-                                : "Review"}
-                            </span>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+                              )}
+                            </td>
+                            <td className="px-2 py-1.5">
+                              <span
+                                className={`inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium ${badgeColor}`}
+                              >
+                                {verdict.status === "MATCH"
+                                  ? "Match"
+                                  : verdict.status === "MISMATCH"
+                                  ? "Mismatch"
+                                  : "Review"}
+                              </span>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
               </div>
 
               {/* Action Bar */}
