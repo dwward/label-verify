@@ -294,6 +294,46 @@ export default function DashboardPage() {
     }
   };
 
+  const handleExportDispositions = () => {
+    // Helper to safely convert timestamp to ISO string
+    const toISOSafe = (timestamp: number | undefined | null): string | null => {
+      if (!timestamp) return null;
+      try {
+        return new Date(timestamp).toISOString();
+      } catch {
+        return null;
+      }
+    };
+
+    // Export all items (ignore filter) as JSON
+    const exportData = queue.map((item) => ({
+      id: item.ttbId || item.id,
+      brandName: item.applicationData.brandName,
+      classType: item.applicationData.classType,
+      alcoholContent: item.applicationData.alcoholContent,
+      netContents: item.applicationData.netContents,
+      status: item.workflowState || item.status,
+      overallVerdict: item.result?.overall || null,
+      confidence: item.result?.applicationConfidence?.overall || null,
+      processingTimeMs: item.totalProcessingMs || null,
+      addedAt: toISOSafe(item.addedAt),
+      completedAt: toISOSafe(item.completedAt),
+      reviewedAt: toISOSafe(item.reviewedAt),
+    }));
+
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `label-verify-dispositions-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   const handleSidebarDrop = async (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsDraggingOver(false);
@@ -395,14 +435,27 @@ export default function DashboardPage() {
                 {queue.length} applications
               </span>
             </div>
-            {queue.length > 0 && (
-              <button
-                onClick={handleClearAll}
-                className="px-3 py-1.5 text-xs font-medium text-red-600 border border-red-300 rounded hover:bg-red-50"
-              >
-                Clear All
-              </button>
-            )}
+            <div className="flex items-center gap-2">
+              {queue.length > 0 && (
+                <>
+                  <button
+                    onClick={handleExportDispositions}
+                    className="px-3 py-1.5 text-xs font-medium text-blue-600 border border-blue-300 rounded hover:bg-blue-50 flex items-center gap-1.5"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    Export Dispositions
+                  </button>
+                  <button
+                    onClick={handleClearAll}
+                    className="px-3 py-1.5 text-xs font-medium text-red-600 border border-red-300 rounded hover:bg-red-50"
+                  >
+                    Clear All
+                  </button>
+                </>
+              )}
+            </div>
           </div>
         </div>
 
