@@ -94,6 +94,7 @@ export default function AppNavigation({ reviewQueueCount = 0 }: AppNavigationPro
       <div className="p-3 border-t border-gray-200 text-xs text-gray-500">
         <div>Label Verify v1.0</div>
         <div>TTB Compliance Tool</div>
+        <div>Author: Donald Ward</div>
       </div>
     </div>
   );

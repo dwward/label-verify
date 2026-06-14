@@ -214,6 +214,55 @@ Located in [test-labels/](test-labels/) with [manifest.md](test-labels/manifest.
 
 Generate with AI image tools or build in HTML/CSS and screenshot for pixel-perfect text.
 
+## Phase 4 Features (Advanced Batch Workflow & UX)
+
+These features were implemented beyond the original specification to create a production-ready batch review workflow for TTB agents.
+
+### Dashboard UI (UX1)
+- Master-detail inspector (60/40 split when open, 100/0 when closed)
+- Workflow state badges: auto_passed, approved, rejected, needs_review, pending, error
+- Filter bar: All, Needs Review, Passed, Rejected, Failed Import
+- Batch statistics: total count, by state, avg confidence, processing time (min/max/avg)
+- Expandable row detail with full verdict breakdown
+- Triage sort: errors → mismatches → needs review → matches
+- Clear All button with confirmation dialog
+- CSV export for batch results
+
+### Confidence-Based Triage (UX2)
+- Field-level confidence calculation (0.0-1.0 based on image quality, extraction success, comparison strength)
+- Auto-routing: ≥85% confidence → auto_passed, <60% → needs_review
+- Confidence bars in results table (color-coded: green/yellow/red)
+- Average confidence displayed in batch statistics
+- Weakest field identification in needs_review reason text
+
+### Manual Review Workflow (UX3)
+- Approve/Reject buttons for needs_review items in inspector
+- Auto-advance to next needs_review item after decision
+- Workflow state transitions: needs_review → approved/rejected
+- Review timestamp tracking (reviewedAt field)
+- Review notes field (future: persist to CSV export)
+- Visual state badges in inspector header
+
+### Image Zoom & Pan (UX4)
+- Multi-level zoom: 100%, 200%, 300% with labeled buttons
+- Click anywhere on image/container to cycle through zoom levels
+- Drag-to-pan when zoomed (works on container, not just image)
+- Recenter button with crosshair icon to reset pan position
+- Delta-based drag prevents cursor stickiness
+- 3px movement threshold distinguishes click from drag
+- Visual cursor feedback: zoom-in (at 100%), grab (when zoomed), grabbing (while dragging)
+
+### Navigation & Import UX (UX5)
+- Sidebar navigation with TTB logo, Upload Applications / Batch Dashboard links
+- Active route highlighting
+- Review queue badge showing needs_review count
+- Inline CAP import: drag-and-drop directly in dashboard sidebar (continuous workflow)
+- Click-to-browse: hidden file input triggered by clicking upload zone text
+- Image persistence: three-tier strategy (window globals → sessionStorage → localStorage)
+- "Images Not Available" placeholder when File objects lost after browser refresh
+- TTB logo favicon in browser tab
+- Version info footer
+
 ## Critical Implementation Notes
 
 1. **Never expose API key client-side** — All Anthropic calls happen in API routes
@@ -238,16 +287,29 @@ Generate with AI image tools or build in HTML/CSS and screenshot for pixel-perfe
 
 Work one milestone at a time, stop for review after each:
 
-### Completed
+### Phase 1: Core Verification Engine ✅ COMPLETED
 - ✅ **M1** — Single-label happy path (extraction, basic comparison, /api/verify, UI with timer)
 - ✅ **M2** — Warning checker + comparison hardening (full rule set, unit tests)
 - ✅ **G1** — Always-batch queue refactor (unified architecture, no separate batch mode)
+
+### Phase 2: Package Loading & Multi-Image ✅ COMPLETED
 - ✅ **G2** — CAP loader (4 layouts, JSZip, drop zones, validation)
 - ✅ **G3** — Multi-image extraction (1-4 images, foundOn tracking, panel badges)
 
-### Pending
-- ⏳ **G4** — Sample data pipeline (generator, ground truth, eval harness, accuracy table)
-- ⏳ **M4** — Polish, test labels, deployment
+### Phase 3: UI Polish & Deployment ✅ COMPLETED
+- ✅ **M4** — Polish, test labels, deployment (8 test labels generated, Vercel configured)
+
+### Phase 4: Advanced Batch Workflow & UX ✅ COMPLETED
+- ✅ **UX1** — Dashboard UI (master-detail inspector, filter bar, batch statistics, triage sort)
+- ✅ **UX2** — Confidence-based triage (field-level confidence, auto-routing, confidence bars)
+- ✅ **UX3** — Manual review workflow (approve/reject buttons, auto-advance, workflow states)
+- ✅ **UX4** — Image zoom & pan (multi-level zoom, drag-to-pan, recenter button)
+- ✅ **UX5** — Navigation & import UX (sidebar nav, inline CAP import, click-to-browse, image persistence)
+
+### Phase 5: Evaluation & Accuracy ⏳ IN PROGRESS
+- ✅ **G4a** — Sample data generator (scripts/generate-sample-data.ts creates 200 realistic COLA packages with 8 defect types, 15% defect rate, controlled randomness)
+- ✅ **G4b** — Evaluation harness (scripts/run-evals.ts runs accuracy tests, produces metrics by defect type, validates against ground truth)
+- ⏳ **G4c** — Accuracy dashboard UI (integrate evaluation metrics into main app, display accuracy by defect type, historical tracking, visual charts)
 
 ### Stretch Goals (Optional)
 - 🎯 **Accuracy Improvement** — Improve from 64% to 85%+ overall accuracy (see [STRETCH-GOAL-ACCURACY.md](STRETCH-GOAL-ACCURACY.md))
