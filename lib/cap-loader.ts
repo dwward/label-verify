@@ -75,15 +75,15 @@ async function loadZipPackage(zipFile: File): Promise<LoadResult> {
     // Manifest mode: applications.json (array) + images
     result.layout = "manifest-mode";
     return loadManifestZip(zip, zipFile.name);
-  } else if (subfolderCount > 1) {
-    // Batch-zip: multiple subfolders, each a package
+  } else if (subfolderCount >= 1) {
+    // Batch-zip: one or more subfolders, each a package
     result.layout = "batch-zip";
     return loadBatchZip(zip, zipFile.name);
   } else {
     result.errors.push({
       source: zipFile.name,
       message:
-        "ZIP must contain application.json, applications.json, or multiple subfolders",
+        "ZIP must contain application.json, applications.json, or at least one subfolder with application.json",
     });
     return result;
   }

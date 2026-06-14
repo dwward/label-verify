@@ -17,10 +17,21 @@ export default function AppNavigation({ reviewQueueCount = 0 }: AppNavigationPro
       {/* Logo */}
       <div className="p-4 border-b border-gray-200">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-blue-600 rounded flex items-center justify-center text-white font-bold text-sm">
-            LV
+          <img
+            src="/images/ttb-logo.jpg"
+            alt="TTB"
+            className="w-10 h-10 object-contain"
+            onError={(e) => {
+              // Fallback to text square if logo fails to load
+              e.currentTarget.style.display = 'none';
+              const fallback = e.currentTarget.nextElementSibling as HTMLElement;
+              if (fallback) fallback.style.display = 'flex';
+            }}
+          />
+          <div className="w-10 h-10 bg-blue-600 rounded hidden items-center justify-center text-white font-bold text-sm">
+            TTB
           </div>
-          <span className="font-semibold text-sm">Label Verify</span>
+          <span className="font-semibold text-sm">TTB Label Verify</span>
         </div>
       </div>
 
@@ -47,7 +58,7 @@ export default function AppNavigation({ reviewQueueCount = 0 }: AppNavigationPro
               d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
             />
           </svg>
-          Upload Batch
+          Upload Applications
         </Link>
         <Link
           href="/dashboard"

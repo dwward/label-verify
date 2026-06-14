@@ -17,6 +17,8 @@ export default function DashboardPage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [imageZoom, setImageZoom] = useState<"fit" | 100 | 200>("fit");
+  const [batchSummaryVisible, setBatchSummaryVisible] = useState(false);
+  const [processingJustCompleted, setProcessingJustCompleted] = useState(false);
 
   // Load queue from sessionStorage on mount
   useEffect(() => {
@@ -152,6 +154,19 @@ export default function DashboardPage() {
     // Process all pending items
     await Promise.allSettled(pending.map(processItem));
     setIsProcessing(false);
+    setProcessingJustCompleted(true);
+    setBatchSummaryVisible(true);
+
+    // Auto-switch to appropriate filter after processing completes
+    setTimeout(() => {
+      const stats = calculateBatchStatistics(queue);
+      if (stats.reviewQueueSize > 0) {
+        setFilterState("needs_review");
+      } else if ((stats.byWorkflowState.error || 0) > 0) {
+        setFilterState("error");
+      }
+      // Otherwise stay on "all"
+    }, 100);
   };
 
   const handleApprove = (itemId: string) => {
@@ -210,6 +225,8 @@ export default function DashboardPage() {
   const filteredQueue =
     filterState === "all"
       ? queue
+      : filterState === "auto_passed"
+      ? queue.filter((item) => item.workflowState === "auto_passed" || item.workflowState === "approved")
       : queue.filter((item) => item.workflowState === filterState);
 
   const selectedItem = queue.find((item) => item.id === selectedItemId);
@@ -240,54 +257,58 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Stats Bar */}
-        {statistics && (
+        {/* Processing Progress Bar (only during processing) */}
+        {isProcessing && statistics && (
           <div className="bg-white border-b border-gray-200 px-6 py-3">
-            <div className="flex items-center gap-6">
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-gray-500">Processing:</span>
-                <div className="w-48 bg-gray-200 rounded-full h-2">
-                  <div
-                    className="bg-blue-600 h-2 rounded-full transition-all"
-                    style={{
-                      width: `${(completedCount / queue.length) * 100}%`,
-                    }}
-                  ></div>
-                </div>
-                <span className="text-xs font-medium text-gray-700">
-                  {completedCount} / {queue.length}
-                </span>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-gray-500">Processing:</span>
+              <div className="flex-1 bg-gray-200 rounded-full h-2">
+                <div
+                  className="bg-blue-600 h-2 rounded-full transition-all"
+                  style={{
+                    width: `${(completedCount / queue.length) * 100}%`,
+                  }}
+                ></div>
               </div>
+              <span className="text-xs font-medium text-gray-700">
+                {completedCount} / {queue.length}
+              </span>
+            </div>
+          </div>
+        )}
 
-              <div className="flex items-center gap-4 ml-auto text-xs">
-                <div className="flex items-center gap-1.5">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-gray-600">Passed:</span>
-                  <span className="font-medium text-gray-900">
-                    {statistics.byWorkflowState.auto_passed || 0}
-                  </span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                  <span className="text-gray-600">Needs Review:</span>
-                  <span className="font-medium text-gray-900">
-                    {statistics.reviewQueueSize}
-                  </span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                  <span className="text-gray-600">Failed:</span>
-                  <span className="font-medium text-gray-900">
-                    {statistics.byWorkflowState.error || 0}
-                  </span>
-                </div>
-                <div className="flex items-center gap-1.5 pl-4 border-l border-gray-300">
-                  <span className="text-gray-600">Avg Confidence:</span>
-                  <span className="font-semibold text-gray-900">
-                    {Math.round(statistics.averageConfidence * 100)}%
-                  </span>
-                </div>
+        {/* Batch Summary Banner (dismissible, shown after import completes) */}
+        {batchSummaryVisible && statistics && !isProcessing && (
+          <div className="bg-blue-50 border-b border-blue-200 px-6 py-3">
+            <div className="flex items-start gap-3">
+              <svg
+                className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <div className="flex-1 text-sm text-blue-900">
+                <span className="font-medium">Import complete:</span>{" "}
+                {queue.length} applications —{" "}
+                {(statistics.byWorkflowState.auto_passed || 0) + (statistics.byWorkflowState.approved || 0)} passed,{" "}
+                {statistics.reviewQueueSize} need review,{" "}
+                {statistics.byWorkflowState.error || 0} failed
               </div>
+              <button
+                onClick={() => setBatchSummaryVisible(false)}
+                className="text-blue-600 hover:text-blue-800"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
             </div>
           </div>
         )}
@@ -297,40 +318,55 @@ export default function DashboardPage() {
           <span className="text-xs font-medium text-gray-600">Show:</span>
           <button
             onClick={() => setFilterState("all")}
+            disabled={isProcessing && filterState !== "all"}
             className={`px-2 py-1 text-xs font-medium rounded ${
               filterState === "all"
                 ? "bg-blue-600 text-white"
-                : "text-gray-700 hover:bg-white"
+                : "text-gray-700 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
             }`}
           >
             All ({queue.length})
           </button>
           <button
             onClick={() => setFilterState("needs_review")}
+            disabled={isProcessing}
             className={`px-2 py-1 text-xs font-medium rounded ${
               filterState === "needs_review"
                 ? "bg-yellow-100 text-yellow-800 border border-yellow-300"
-                : "text-gray-700 hover:bg-white"
+                : "text-gray-700 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
             }`}
           >
             Needs Review ({statistics?.reviewQueueSize || 0})
           </button>
           <button
             onClick={() => setFilterState("auto_passed")}
+            disabled={isProcessing}
             className={`px-2 py-1 text-xs font-medium rounded ${
               filterState === "auto_passed"
                 ? "bg-green-100 text-green-800"
-                : "text-gray-700 hover:bg-white"
+                : "text-gray-700 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
             }`}
           >
-            Passed ({statistics?.byWorkflowState.auto_passed || 0})
+            Passed ({(statistics?.byWorkflowState.auto_passed || 0) + (statistics?.byWorkflowState.approved || 0)})
+          </button>
+          <button
+            onClick={() => setFilterState("rejected")}
+            disabled={isProcessing}
+            className={`px-2 py-1 text-xs font-medium rounded ${
+              filterState === "rejected"
+                ? "bg-red-100 text-red-800 border border-red-300"
+                : "text-gray-700 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
+            }`}
+          >
+            Rejected ({statistics?.byWorkflowState.rejected || 0})
           </button>
           <button
             onClick={() => setFilterState("error")}
+            disabled={isProcessing}
             className={`px-2 py-1 text-xs font-medium rounded ${
               filterState === "error"
                 ? "bg-red-100 text-red-800"
-                : "text-gray-700 hover:bg-white"
+                : "text-gray-700 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
             }`}
           >
             Failed ({statistics?.byWorkflowState.error || 0})
@@ -347,10 +383,10 @@ export default function DashboardPage() {
 
         {/* Split Content */}
         <div className="flex-1 flex overflow-hidden">
-          {/* Results Table */}
+          {/* Results Table - Simplified (ID only) */}
           <div
             className={`${
-              selectedItem ? "w-2/5" : "w-full"
+              selectedItem ? "w-1/4" : "w-full"
             } flex flex-col border-r border-gray-200 bg-white transition-all`}
           >
             <div className="flex-1 overflow-auto">
@@ -358,21 +394,23 @@ export default function DashboardPage() {
                 <thead className="bg-gray-50 sticky top-0">
                   <tr>
                     <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">
-                      ID
-                    </th>
-                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">
-                      Conf.
-                    </th>
-                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">
-                      Issue
+                      Application ID
                     </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {filteredQueue.map((item) => {
                     const isSelected = item.id === selectedItemId;
-                    const confidence =
-                      item.result?.applicationConfidence?.overall || 0;
+
+                    // Determine row background color based on workflow state
+                    let rowBgClass = "";
+                    if (item.workflowState === "auto_passed" || item.workflowState === "approved") {
+                      rowBgClass = "bg-green-50";
+                    } else if (item.workflowState === "needs_review") {
+                      rowBgClass = "bg-yellow-50";
+                    } else if (item.workflowState === "rejected" || item.workflowState === "error") {
+                      rowBgClass = "bg-red-50";
+                    }
 
                     return (
                       <tr
@@ -381,7 +419,7 @@ export default function DashboardPage() {
                         className={`cursor-pointer ${
                           isSelected
                             ? "bg-blue-100 border-l-4 border-blue-600"
-                            : "hover:bg-gray-50"
+                            : `${rowBgClass} hover:bg-gray-100`
                         }`}
                       >
                         <td className="px-3 py-2">
@@ -392,51 +430,6 @@ export default function DashboardPage() {
                           >
                             {item.ttbId || item.id.slice(0, 10)}
                           </div>
-                          <div className="text-xs text-gray-600">
-                            {item.applicationData.brandName}
-                          </div>
-                        </td>
-                        <td className="px-3 py-2">
-                          {item.status === "completed" && confidence > 0 ? (
-                            <div className="flex items-center gap-1">
-                              <div className="w-12 bg-gray-200 rounded-full h-1.5">
-                                <div
-                                  className={`h-1.5 rounded-full ${
-                                    confidence >= 0.85
-                                      ? "bg-green-500"
-                                      : confidence >= 0.6
-                                      ? "bg-yellow-500"
-                                      : "bg-red-500"
-                                  }`}
-                                  style={{ width: `${confidence * 100}%` }}
-                                ></div>
-                              </div>
-                              <span
-                                className={`text-xs font-bold ${
-                                  confidence >= 0.85
-                                    ? "text-green-600"
-                                    : confidence >= 0.6
-                                    ? "text-yellow-600"
-                                    : "text-red-600"
-                                }`}
-                              >
-                                {Math.round(confidence * 100)}%
-                              </span>
-                            </div>
-                          ) : (
-                            <span className="text-xs text-gray-400">—</span>
-                          )}
-                        </td>
-                        <td className="px-3 py-2 text-xs text-gray-700">
-                          {item.status === "processing" && "Processing..."}
-                          {item.status === "pending" && "Pending"}
-                          {item.status === "error" && (
-                            <span className="text-red-600">
-                              {item.error || "Error"}
-                            </span>
-                          )}
-                          {item.status === "completed" &&
-                            item.result?.applicationConfidence?.reason}
                         </td>
                       </tr>
                     );
@@ -540,7 +533,7 @@ export default function DashboardPage() {
 
               {/* Image Viewer */}
               {selectedItem.images && selectedItem.images.length > 0 && (
-                <div className="border-b border-gray-200 bg-gray-900 flex flex-col" style={{ height: "300px" }}>
+                <div className="border-b border-gray-200 bg-gray-900 flex flex-col" style={{ height: "550px" }}>
                   {/* Image Tabs */}
                   <div className="flex items-center gap-2 bg-gray-800 px-3 py-2 border-b border-gray-700">
                     {selectedItem.images.map((_, idx) => (

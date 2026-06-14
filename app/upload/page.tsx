@@ -78,26 +78,11 @@ export default function UploadBatchPage() {
       <AppNavigation />
       <div className="flex-1 overflow-auto">
       <div className="max-w-5xl mx-auto py-8 px-4">
-        <div className="mb-6 flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Upload Batch</h1>
-            <p className="text-sm text-gray-600 mt-1">
-              Upload CAP packages (.zip files) or folders containing applications
-              and label images
-            </p>
-          </div>
-          <button
-            onClick={() => {
-              localStorage.clear();
-              sessionStorage.clear();
-              delete (window as any).__pendingQueueImages;
-              setLoadResult(null);
-              window.location.reload();
-            }}
-            className="px-3 py-1.5 text-xs font-medium text-red-600 border border-red-300 rounded hover:bg-red-50"
-          >
-            Clear All Data
-          </button>
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-gray-900">Upload Applications</h1>
+          <p className="text-sm text-gray-600 mt-1">
+            Upload single or multiple applications as CAP packages (.zip files) or folders
+          </p>
         </div>
 
         {/* Upload Zone */}
@@ -126,62 +111,62 @@ export default function UploadBatchPage() {
           <p className="text-lg font-medium text-gray-900 mb-2">
             {isLoading ? "Loading files..." : "Drag and drop files or folders here"}
           </p>
-          <p className="text-sm text-gray-500 mb-4">or click to browse</p>
-          <p className="text-xs text-gray-500">
-            Supported formats:<br />
-            • .zip packages (single or batch)<br />
-            • Folders containing application.json + images<br />
-            • Loose files (application.json + 1-4 label images)
-          </p>
-        </div>
-
-        {/* Instructions */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-          <div className="flex items-start gap-3">
-            <svg
-              className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            <div className="text-sm">
-              <div className="font-medium text-blue-900 mb-1">
-                Expected Package Format
-              </div>
-              <ul className="text-blue-800 space-y-1">
-                <li>
-                  • Each application needs an{" "}
-                  <code className="bg-blue-100 px-1 rounded">
-                    application.json
-                  </code>{" "}
-                  file
-                </li>
-                <li>
-                  • Include 1-4 label images per application (JPEG, PNG, WebP)
-                </li>
-                <li>
-                  • Images should show different label panels (front, back,
-                  neck, side)
-                </li>
-              </ul>
-            </div>
-          </div>
+          <p className="text-sm text-gray-500">or click to browse</p>
         </div>
 
         {/* Sample Data */}
         <div className="bg-gray-50 border border-gray-300 rounded-lg p-4 mb-6">
           <div className="flex items-start justify-between">
             <div>
-              <h3 className="text-sm font-medium text-gray-900 mb-1">
-                Sample Data
-              </h3>
+              <div className="flex items-center gap-1.5 mb-1">
+                <h3 className="text-sm font-medium text-gray-900">
+                  Sample Data
+                </h3>
+
+                {/* Info Tooltip */}
+                <div className="relative group">
+                  <svg
+                    className="w-4 h-4 text-gray-400 hover:text-blue-600 cursor-help"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+
+                  {/* Tooltip Content */}
+                  <div className="hidden group-hover:block absolute left-0 top-6 z-10 w-80 bg-white border border-gray-300 rounded-lg shadow-lg p-4 text-xs">
+                    <div className="font-semibold text-gray-900 mb-2">Expected Package Format</div>
+
+                    <div className="space-y-2 text-gray-700">
+                      <div>
+                        <div className="font-medium mb-1">File Structure:</div>
+                        <ul className="space-y-1 ml-3">
+                          <li>• Each application needs an <code className="bg-gray-100 px-1 rounded">application.json</code> file</li>
+                          <li>• Include 1-4 label images per application (JPEG, PNG, WebP)</li>
+                          <li>• Images should show different label panels (front, back, neck, side)</li>
+                        </ul>
+                      </div>
+
+                      <div>
+                        <div className="font-medium mb-1">Accepted Formats:</div>
+                        <ul className="space-y-1 ml-3">
+                          <li>• <strong>Single .zip</strong>: <code className="bg-gray-100 px-1 rounded">application.json</code> + images at root</li>
+                          <li>• <strong>Batch .zip</strong>: Multiple folders, each with <code className="bg-gray-100 px-1 rounded">application.json</code> + images</li>
+                          <li>• <strong>Folder</strong>: Drag folder with <code className="bg-gray-100 px-1 rounded">application.json</code> + images</li>
+                          <li>• <strong>Loose files</strong>: Select <code className="bg-gray-100 px-1 rounded">application.json</code> + images directly</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <p className="text-xs text-gray-600">
                 Download sample files to test the interface
               </p>
