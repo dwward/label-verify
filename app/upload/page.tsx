@@ -10,6 +10,7 @@ export default function UploadBatchPage() {
   const router = useRouter();
   const [loadResult, setLoadResult] = useState<LoadResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const fileInputRef = useState<HTMLInputElement | null>(null)[0];
 
   const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -30,6 +31,23 @@ export default function UploadBatchPage() {
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
+  };
+
+  const handleFileInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    setIsLoading(true);
+    try {
+      const fileArray = Array.from(files);
+      const result = await loadCAPPackages(fileArray);
+      setLoadResult(result);
+    } catch (error) {
+      console.error("Upload error:", error);
+      alert("Error loading files. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
 
@@ -92,12 +110,21 @@ export default function UploadBatchPage() {
         <div
           onDrop={handleDrop}
           onDragOver={handleDragOver}
+          onClick={() => document.getElementById('file-input')?.click()}
           className={`border-4 border-dashed rounded-lg p-12 text-center mb-6 transition-colors ${
             isLoading
               ? "border-blue-400 bg-blue-50"
               : "border-gray-300 hover:border-blue-400 cursor-pointer"
           }`}
         >
+          <input
+            id="file-input"
+            type="file"
+            multiple
+            className="hidden"
+            onChange={handleFileInput}
+            accept=".zip,.json,.png,.jpg,.jpeg,.webp"
+          />
           <svg
             className="mx-auto h-16 w-16 text-gray-400 mb-4"
             stroke="currentColor"

@@ -21,7 +21,8 @@
     "jszip": "^3.10.1",
     "next": "^15.5.19",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-medium-image-zoom": "^5.4.7"
   },
   "devDependencies": {
     "@playwright/test": "^1.60.0",

@@ -17,7 +17,11 @@ export default function DashboardPage() {
   const [filterState, setFilterState] = useState<"all" | WorkflowState>("all");
   const [isProcessing, setIsProcessing] = useState(false);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
-  const [imageZoom, setImageZoom] = useState<"fit" | 100 | 200>("fit");
+  const [imageZoom, setImageZoom] = useState(1); // 1 = 100%, 2 = 200%
+  const [imagePan, setImagePan] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [hasDragged, setHasDragged] = useState(false);
   const [batchSummaryVisible, setBatchSummaryVisible] = useState(false);
   const [processingJustCompleted, setProcessingJustCompleted] = useState(false);
   const [isDraggingOver, setIsDraggingOver] = useState(false);
@@ -368,7 +372,8 @@ export default function DashboardPage() {
   // Reset image viewer when item changes
   useEffect(() => {
     setActiveImageIndex(0);
-    setImageZoom("fit");
+    setImageZoom(1);
+    setImagePan({ x: 0, y: 0 });
   }, [selectedItemId]);
 
   const processingCount = queue.filter((q) => q.status === "processing").length;
@@ -543,7 +548,7 @@ export default function DashboardPage() {
           {/* Results Table - Simplified (ID only) */}
           <div
             className={`${
-              selectedItem ? "w-1/4" : "w-full"
+              selectedItem ? "w-36" : "w-full"
             } flex flex-col border-r border-gray-200 bg-white transition-all`}
           >
             <div className="flex-1 overflow-auto">
@@ -827,7 +832,8 @@ export default function DashboardPage() {
                           key={idx}
                           onClick={() => {
                             setActiveImageIndex(idx);
-                            setImageZoom("fit");
+                            setImageZoom(1);
+                            setImagePan({ x: 0, y: 0 });
                           }}
                           className={`px-3 py-1 text-xs font-medium rounded ${
                             activeImageIndex === idx
@@ -839,49 +845,114 @@ export default function DashboardPage() {
                         </button>
                       ))}
 
-                      {/* Zoom Controls */}
                       <div className="ml-auto flex items-center gap-2">
+                        <span className="text-xs text-gray-400">Zoom:</span>
                         <button
-                          onClick={() => setImageZoom("fit")}
-                          className={`p-1 rounded ${imageZoom === "fit" ? "bg-blue-600 text-white" : "text-gray-400 hover:bg-gray-700"}`}
-                          title="Fit"
-                        >
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-                          </svg>
-                        </button>
-                        <button
-                          onClick={() => setImageZoom(100)}
-                          className={`px-2 py-1 text-xs rounded ${imageZoom === 100 ? "bg-blue-600 text-white" : "text-gray-400 hover:bg-gray-700"}`}
+                          onClick={() => {
+                            setImageZoom(1);
+                            setImagePan({ x: 0, y: 0 });
+                          }}
+                          className={`px-2 py-1 text-xs rounded ${
+                            imageZoom === 1
+                              ? "bg-blue-600 text-white"
+                              : "text-gray-400 hover:bg-gray-700"
+                          }`}
                         >
                           100%
                         </button>
                         <button
-                          onClick={() => setImageZoom(200)}
-                          className={`px-2 py-1 text-xs rounded ${imageZoom === 200 ? "bg-blue-600 text-white" : "text-gray-400 hover:bg-gray-700"}`}
+                          onClick={() => {
+                            setImageZoom(2);
+                            setImagePan({ x: 0, y: 0 });
+                          }}
+                          className={`px-2 py-1 text-xs rounded ${
+                            imageZoom === 2
+                              ? "bg-blue-600 text-white"
+                              : "text-gray-400 hover:bg-gray-700"
+                          }`}
                         >
                           200%
+                        </button>
+                        <button
+                          onClick={() => {
+                            setImageZoom(3);
+                            setImagePan({ x: 0, y: 0 });
+                          }}
+                          className={`px-2 py-1 text-xs rounded ${
+                            imageZoom === 3
+                              ? "bg-blue-600 text-white"
+                              : "text-gray-400 hover:bg-gray-700"
+                          }`}
+                        >
+                          300%
+                        </button>
+                        <button
+                          onClick={() => setImagePan({ x: 0, y: 0 })}
+                          className="p-1 text-gray-400 hover:bg-gray-700 rounded"
+                          title="Recenter"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
+                          </svg>
                         </button>
                       </div>
                     </div>
 
                     {/* Image Display */}
-                    <div className="flex-1 overflow-auto bg-gray-900 flex items-center justify-center">
-                      {(() => {
+                    <div
+                      className="flex-1 bg-gray-900 flex items-center justify-center p-4 overflow-hidden relative"
+                      style={{ cursor: isDragging ? 'grabbing' : (imageZoom > 1 ? 'grab' : 'zoom-in') }}
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        setHasDragged(false);
+                        setIsDragging(true);
+                        setDragStart({ x: e.clientX, y: e.clientY });
+                      }}
+                      onMouseMove={(e) => {
+                        if (isDragging && imageZoom > 1) {
+                          const deltaX = e.clientX - dragStart.x;
+                          const deltaY = e.clientY - dragStart.y;
+
+                          // If moved more than 3 pixels, it's a drag not a click
+                          if (Math.abs(deltaX) > 3 || Math.abs(deltaY) > 3) {
+                            setHasDragged(true);
+                          }
+
+                          setImagePan({
+                            x: imagePan.x + deltaX,
+                            y: imagePan.y + deltaY,
+                          });
+                          setDragStart({ x: e.clientX, y: e.clientY });
+                        }
+                      }}
+                      onMouseUp={() => {
+                        setIsDragging(false);
+                      }}
+                      onMouseLeave={() => {
+                        setIsDragging(false);
+                      }}
+                      onClick={(e) => {
+                        if (!hasDragged) {
+                          // Cycle through zoom levels: 1 → 2 → 3 → 1
+                          const nextZoom = imageZoom === 1 ? 2 : imageZoom === 2 ? 3 : 1;
+                          setImageZoom(nextZoom);
+                          setImagePan({ x: 0, y: 0 });
+                        }
+                      }}
+                    >
+                      {selectedItem.images[activeImageIndex] && (() => {
                         const img = selectedItem.images[activeImageIndex];
                         const imageUrl = img instanceof File ? URL.createObjectURL(img) : img;
                         return (
                           <img
-                            key={activeImageIndex}
                             src={imageUrl}
                             alt={`Label Image ${activeImageIndex + 1}`}
-                            className={imageZoom === "fit" ? "max-w-full max-h-full object-contain" : ""}
-                            style={imageZoom !== "fit" ? { width: `${imageZoom}%` } : {}}
-                            onLoad={() => {
-                              if (img instanceof File) {
-                                URL.revokeObjectURL(imageUrl);
-                              }
+                            className="max-w-full max-h-full object-contain select-none pointer-events-none"
+                            style={{
+                              transform: `scale(${imageZoom}) translate(${imagePan.x / imageZoom}px, ${imagePan.y / imageZoom}px)`,
+                              transition: isDragging ? 'none' : 'transform 0.2s ease-out',
                             }}
+                            draggable={false}
                           />
                         );
                       })()}
