@@ -33,8 +33,8 @@ export default function DashboardPage() {
     if (dashboardQueue && Array.isArray(dashboardQueue) && dashboardQueue.length > 0) {
       // Verify that at least some items have actual images (File objects)
       const hasValidImages = dashboardQueue.some(
-        item => item.images && Array.isArray(item.images) && item.images.length > 0 &&
-        item.images.some(img => img instanceof File)
+        (item: any) => item.images && Array.isArray(item.images) && item.images.length > 0 &&
+        item.images.some((img: any) => img instanceof File)
       );
 
       if (hasValidImages) {
@@ -428,10 +428,10 @@ export default function DashboardPage() {
         <div className="bg-white border-b border-gray-200 px-6 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <h1 className="text-lg font-semibold text-gray-900">
+              <h1 className="text-xl font-semibold text-gray-900">
                 Batch Dashboard
               </h1>
-              <span className="text-xs text-gray-500">
+              <span className="text-sm text-gray-500">
                 {queue.length} applications
               </span>
             </div>
@@ -440,7 +440,7 @@ export default function DashboardPage() {
                 <>
                   <button
                     onClick={handleExportDispositions}
-                    className="px-3 py-1.5 text-xs font-medium text-blue-600 border border-blue-300 rounded hover:bg-blue-50 flex items-center gap-1.5"
+                    className="px-3 py-1.5 text-sm font-medium text-blue-600 border border-blue-300 rounded hover:bg-blue-50 flex items-center gap-1.5"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -449,7 +449,7 @@ export default function DashboardPage() {
                   </button>
                   <button
                     onClick={handleClearAll}
-                    className="px-3 py-1.5 text-xs font-medium text-red-600 border border-red-300 rounded hover:bg-red-50"
+                    className="px-3 py-1.5 text-sm font-medium text-red-600 border border-red-300 rounded hover:bg-red-50"
                   >
                     Clear All
                   </button>
@@ -530,11 +530,11 @@ export default function DashboardPage() {
 
         {/* Filter Bar */}
         <div className="bg-gray-50 border-b border-gray-200 px-6 py-2 flex items-center gap-3">
-          <span className="text-xs font-medium text-gray-600">Show:</span>
+          <span className="text-sm font-medium text-gray-600">Show:</span>
           <button
             onClick={() => setFilterState("all")}
             disabled={isProcessing && filterState !== "all"}
-            className={`px-2 py-1 text-xs font-medium rounded ${
+            className={`px-3 py-1.5 text-sm font-medium rounded ${
               filterState === "all"
                 ? "bg-blue-600 text-white"
                 : "text-gray-700 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
@@ -545,7 +545,7 @@ export default function DashboardPage() {
           <button
             onClick={() => setFilterState("needs_review")}
             disabled={isProcessing}
-            className={`px-2 py-1 text-xs font-medium rounded ${
+            className={`px-3 py-1.5 text-sm font-medium rounded ${
               filterState === "needs_review"
                 ? "bg-yellow-100 text-yellow-800 border border-yellow-300"
                 : "text-gray-700 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
@@ -556,7 +556,7 @@ export default function DashboardPage() {
           <button
             onClick={() => setFilterState("auto_passed")}
             disabled={isProcessing}
-            className={`px-2 py-1 text-xs font-medium rounded ${
+            className={`px-3 py-1.5 text-sm font-medium rounded ${
               filterState === "auto_passed"
                 ? "bg-green-100 text-green-800"
                 : "text-gray-700 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
@@ -567,7 +567,7 @@ export default function DashboardPage() {
           <button
             onClick={() => setFilterState("rejected")}
             disabled={isProcessing}
-            className={`px-2 py-1 text-xs font-medium rounded ${
+            className={`px-3 py-1.5 text-sm font-medium rounded ${
               filterState === "rejected"
                 ? "bg-red-100 text-red-800 border border-red-300"
                 : "text-gray-700 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
@@ -578,7 +578,7 @@ export default function DashboardPage() {
           <button
             onClick={() => setFilterState("error")}
             disabled={isProcessing}
-            className={`px-2 py-1 text-xs font-medium rounded ${
+            className={`px-3 py-1.5 text-sm font-medium rounded ${
               filterState === "error"
                 ? "bg-red-100 text-red-800"
                 : "text-gray-700 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
@@ -608,18 +608,18 @@ export default function DashboardPage() {
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50 sticky top-0">
                   <tr>
-                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                    <th className="px-3 py-2 text-left text-sm font-medium text-gray-500 uppercase">
                       Application ID
                     </th>
                     {!selectedItem && (
                       <>
-                        <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                        <th className="px-3 py-2 text-left text-sm font-medium text-gray-500 uppercase">
                           Conf.
                         </th>
-                        <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                        <th className="px-3 py-2 text-left text-sm font-medium text-gray-500 uppercase">
                           Time
                         </th>
-                        <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                        <th className="px-3 py-2 text-left text-sm font-medium text-gray-500 uppercase">
                           Issue
                         </th>
                       </>
@@ -627,8 +627,51 @@ export default function DashboardPage() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {filteredQueue.map((item) => {
-                    const isSelected = item.id === selectedItemId;
+                  {queue.length === 0 ? (
+                    <tr>
+                      <td colSpan={4} className="px-6 py-16 text-center">
+                        <div className="flex flex-col items-center justify-center">
+                          <svg className="w-16 h-16 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                          </svg>
+                          <h3 className="text-lg font-medium text-gray-900 mb-2">No Applications Imported</h3>
+                          <p className="text-sm text-gray-600 mb-4">
+                            Import CAP packages to start batch verification
+                          </p>
+                          <a
+                            href="/upload"
+                            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                            </svg>
+                            Go to Upload Applications
+                          </a>
+                        </div>
+                      </td>
+                    </tr>
+                  ) : filteredQueue.length === 0 ? (
+                    <tr>
+                      <td colSpan={4} className="px-6 py-16 text-center">
+                        <div className="flex flex-col items-center justify-center">
+                          <svg className="w-12 h-12 text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                          </svg>
+                          <p className="text-sm text-gray-600">
+                            No applications match the current filter
+                          </p>
+                          <button
+                            onClick={() => setFilterState("all")}
+                            className="mt-3 text-sm text-blue-600 hover:text-blue-700 font-medium"
+                          >
+                            Clear filter
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ) : (
+                    filteredQueue.map((item) => {
+                      const isSelected = item.id === selectedItemId;
                     const confidence = item.result?.applicationConfidence?.overall || 0;
                     const isManuallyReviewed = item.workflowState === "approved" || item.workflowState === "rejected";
 
@@ -756,7 +799,8 @@ export default function DashboardPage() {
                         )}
                       </tr>
                     );
-                  })}
+                  })
+                  )}
                 </tbody>
               </table>
             </div>
@@ -1031,19 +1075,19 @@ export default function DashboardPage() {
                   <table className="min-w-full text-xs">
                     <thead className="bg-gray-100 sticky top-0">
                       <tr>
-                        <th className="px-2 py-1.5 text-left text-xs font-medium text-gray-600 uppercase w-24">
+                        <th className="px-2 py-1.5 text-left text-sm font-medium text-gray-600 uppercase w-24">
                           Field
                         </th>
-                        <th className="px-2 py-1.5 text-left text-xs font-medium text-gray-600 uppercase">
+                        <th className="px-2 py-1.5 text-left text-sm font-medium text-gray-600 uppercase">
                           Application
                         </th>
-                        <th className="px-2 py-1.5 text-left text-xs font-medium text-gray-600 uppercase">
+                        <th className="px-2 py-1.5 text-left text-sm font-medium text-gray-600 uppercase">
                           Label
                         </th>
-                        <th className="px-2 py-1.5 text-left text-xs font-medium text-gray-600 uppercase w-20">
+                        <th className="px-2 py-1.5 text-left text-sm font-medium text-gray-600 uppercase w-20">
                           Conf.
                         </th>
-                        <th className="px-2 py-1.5 text-left text-xs font-medium text-gray-600 uppercase w-20">
+                        <th className="px-2 py-1.5 text-left text-sm font-medium text-gray-600 uppercase w-20">
                           Status
                         </th>
                       </tr>

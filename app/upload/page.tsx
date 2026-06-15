@@ -100,9 +100,6 @@ export default function UploadBatchPage() {
           <h1 className="text-2xl font-bold text-gray-900">Upload Applications</h1>
           <p className="text-sm text-gray-600 mt-1">
             Upload single or multiple applications as CAP packages (.zip files) or folders.
-            <span className="text-blue-600 ml-1">
-              Tip: You can also drag files directly to the dashboard sidebar.
-            </span>
           </p>
         </div>
 

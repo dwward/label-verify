@@ -31,7 +31,7 @@ export default function AppNavigation({ reviewQueueCount = 0 }: AppNavigationPro
           <div className="w-10 h-10 bg-blue-600 rounded hidden items-center justify-center text-white font-bold text-sm">
             TTB
           </div>
-          <span className="font-semibold text-sm">TTB Label Verify</span>
+          <span className="font-semibold text-base">TTB Label Verify</span>
         </Link>
       </div>
 
@@ -39,7 +39,7 @@ export default function AppNavigation({ reviewQueueCount = 0 }: AppNavigationPro
       <nav className="flex-1 p-3">
         <Link
           href="/upload"
-          className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded mb-1 ${
+          className={`flex items-center gap-3 px-3 py-2 text-base font-medium rounded mb-1 ${
             isActive("/upload")
               ? "bg-blue-50 text-blue-700"
               : "text-gray-700 hover:bg-gray-100"
@@ -62,7 +62,7 @@ export default function AppNavigation({ reviewQueueCount = 0 }: AppNavigationPro
         </Link>
         <Link
           href="/dashboard"
-          className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded mb-1 ${
+          className={`flex items-center gap-3 px-3 py-2 text-base font-medium rounded mb-1 ${
             isActive("/dashboard")
               ? "bg-blue-50 text-blue-700"
               : "text-gray-700 hover:bg-gray-100"
@@ -83,7 +83,7 @@ export default function AppNavigation({ reviewQueueCount = 0 }: AppNavigationPro
           </svg>
           Batch Dashboard
           {reviewQueueCount > 0 && (
-            <span className="ml-auto bg-yellow-100 text-yellow-800 text-xs font-bold px-1.5 py-0.5 rounded">
+            <span className="ml-auto bg-yellow-100 text-yellow-800 text-sm font-bold px-2 py-1 rounded">
               {reviewQueueCount}
             </span>
           )}
@@ -91,10 +91,9 @@ export default function AppNavigation({ reviewQueueCount = 0 }: AppNavigationPro
       </nav>
 
       {/* Version Info */}
-      <div className="p-3 border-t border-gray-200 text-xs text-gray-500">
+      <div className="p-3 border-t border-gray-200 text-sm text-gray-500">
         <div>Label Verify v1.0</div>
         <div>TTB Compliance Tool</div>
-        <div>Author: Donald Ward</div>
       </div>
     </div>
   );
