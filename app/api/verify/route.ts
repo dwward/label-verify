@@ -100,9 +100,22 @@ export async function POST(request: NextRequest) {
     // Check if extraction failed due to API/network error
     if (extracted.imageQuality.confidence === "error") {
       const errorMessage = extracted.imageQuality.issues[0] || "Verification service unavailable";
+
+      // Determine appropriate status code based on error type
+      let statusCode = 500;
+      if (errorMessage.toLowerCase().includes('authentication') || errorMessage.toLowerCase().includes('api key')) {
+        statusCode = 401;
+      } else if (errorMessage.toLowerCase().includes('rate limit')) {
+        statusCode = 429;
+      } else if (errorMessage.toLowerCase().includes('network') || errorMessage.toLowerCase().includes('connection')) {
+        statusCode = 503;
+      } else if (errorMessage.toLowerCase().includes('timeout')) {
+        statusCode = 504;
+      }
+
       return NextResponse.json(
         { error: errorMessage },
-        { status: 503 }
+        { status: statusCode }
       );
     }
 
