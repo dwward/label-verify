@@ -4,19 +4,7 @@ AI-powered prototype for TTB (Alcohol and Tobacco Tax and Trade Bureau) complian
 
 ## Overview
 
-This application compares label images to form data and produces per-field verification verdicts (MATCH/MISMATCH/NEEDS_REVIEW) using OCR vision for extraction and deterministic logic for comparison. 
-
-Built to process results in under 5 seconds with support for batch workflows (200-300 applications at once).
-
-**See [docs/APPROACH.md](docs/APPROACH.md) for approach, tools, and assumptions.**
-
-## Tech Stack
-
-- **Framework:** Next.js 14+ (App Router), TypeScript, Tailwind CSS
-- **AI:** Anthropic API with `claude-haiku-4-5` (configured in [lib/config.ts](lib/config.ts))
-- **Image processing:** Client-side compression (max 2048px, JPEG 0.85)
-- **Deployment:** Vercel
-- **No database** — Request/response only (privacy by design)
+Compares label images to form data and produces per-field verification verdicts (MATCH/MISMATCH/NEEDS_REVIEW). Uses Claude vision for extraction, deterministic logic for comparison. Processes results in under 5 seconds with batch support for 200-300 applications.
 
 ## Quick Start
 
@@ -42,6 +30,44 @@ npm run evals:run
 npm run labels:generate
 ```
 
+## Approach, Tools, and Assumptions
+
+### Approach
+
+**Model extracts, code judges.** Claude vision reads labels and transcribes fields verbatim. Every match/mismatch decision happens in unit-tested functions—no LLM in the verdict path. Verdicts are reproducible and auditable.
+
+**Two matching philosophies:**
+- **Fuzzy for identity fields** (brand, class/type) - Handles "STONE'S THROW" vs "Stone's Throw" without false rejections
+- **Character-exact for government warning** - 27 CFR 16.21 statutory text, byte-for-byte
+
+**Three states:** MATCH / MISMATCH / NEEDS_REVIEW. Low extraction confidence and ambiguous near-misses land in NEEDS_REVIEW—the safe failure mode.
+
+**Multi-image extraction:** Front/back/neck panels processed together (government warning typically on back). One application = batch of one.
+
+### Tools
+
+- **Framework:** Next.js 14+ (App Router), TypeScript, Tailwind CSS
+- **AI:** Anthropic Claude Haiku for vision extraction
+- **Deployment:** Vercel (single public URL)
+- **Batch:** Client-side orchestration (JSZip, image compression)
+- **No database:** Request/response only (privacy by design)
+
+### Assumptions
+
+**From stakeholder interviews:**
+- Sub-5-second target (prior vendor at 30-40s abandoned)
+- Batch handles 200-300 applications (peak season)
+- Warning matched exactly—all caps header, no word changes
+- Trivial text differences normalized (case, spacing)
+
+**Scoping decisions:**
+- Distilled spirits only (beer/wine rules noted as future work)
+- No image persistence by design
+- ABV matched exactly (regulatory number)
+- Public deployment without auth (prototype scope)
+
+**CAP format:** COLA Application Package—a versioned JSON Schema defined for this prototype to pair application data with label images (stand-in for COLA export).
+
 ## Sample Datasets
 
 ### Evaluator Quick Start (30 seconds)
@@ -59,26 +85,13 @@ npm run labels:generate
 - [sample-100.zip](https://label-verify-samples.s3.amazonaws.com/sample-100.zip) — Large batch (100 applications)
 - [sample-real-photos-3.zip](https://label-verify-samples.s3.amazonaws.com/sample-real-photos-3.zip) — Real label photos (3 applications)
 
+**Generate your own:**
+```bash
+npm run sample:generate -- --source=synthetic --count=200
 
-## Project Structure
-
-```
-├── app/                    # Next.js pages (upload, dashboard, appmaker)
-├── lib/                    # Core logic
-│   ├── extraction.ts       # Claude vision extraction
-│   ├── comparison.ts       # Deterministic comparison functions
-│   ├── warning-text.ts     # Government warning verification
-│   ├── cap-loader.ts       # CAP package loading with JSZip
-│   ├── cap-schema.json     # JSON Schema for validation
-│   └── types.ts            # TypeScript interfaces
-├── components/             # React components
-├── docs/                   # Architecture & decision documentation
-│   ├── APPROACH.md         # Approach, tools, and assumptions
-│   ├── ARCHITECTURE-DECISIONS.md
-│   └── IMPLEMENTATION-GUIDE.md
-├── sample-data/            # 200 synthetic test packages + ground truth
-├── scripts/                # Sample data generator & eval harness
-└── test-labels/            # 8 fixture test images
+# Output: sample-data/
+#   - cola-sample-batch.zip (200 applications)
+#   - cola-sample-small.zip (12 applications)
 ```
 
 ## Features
@@ -96,20 +109,6 @@ npm run labels:generate
 - **Manual review UI:** Approve/reject workflow with confidence-based triage
 - **Image zoom & pan:** Multi-level zoom with drag-to-pan for detailed inspection
 
-### Generate Sample Data
-
-Or generate your own:
-```bash
-npm run sample:generate -- --source=synthetic --count=200
-
-# Generate with Kaggle data (requires ~/.kaggle/kaggle.json)
-npm run sample:generate -- --source=kaggle --count=200
-
-# Output: sample-data/
-#   - cola-sample-batch.zip (200 applications)
-#   - cola-sample-small.zip (12 applications)
-#   - applications/ (unpacked CAP packages)
-```
 ## Comparison Logic
 
 ### Fuzzy Matching (Brand Name, Class/Type)
@@ -184,94 +183,43 @@ COLA Application Package interchange format for pairing application data with la
 
 **Note on timing:** Processing time displayed reflects AI extraction and comparison only (server-side measurement). Network transfer time varies by connection speed and is excluded—consistent with the requirement that verification itself complete in under 5 seconds. On a fast connection, total response time (including upload) will be ~3-4s; on mobile LTE it may be 8-10s, but the displayed verification time remains consistent at ~3s.
 
-## Network and Deployment Considerations
+## Deployment
 
-### Prototype Environment
-This prototype calls the Anthropic API directly from a Vercel serverless function. Evaluators access the app via its public Vercel URL—no agency firewall is involved during evaluation.
+**Prototype:** Calls Anthropic API directly from Vercel serverless functions. Public URL—no agency firewall during evaluation.
 
-### Production Deployment
-In a production deployment inside the agency network, outbound calls to commercial AI endpoints would be blocked per the network restrictions described in the discovery sessions (Marcus Williams, IT Systems Administrator).
+**Production:** Agency networks block outbound ML endpoints. Recommended paths:
+- Azure Government hosted model (FedRAMP-authorized)
+- AWS Bedrock Claude
+- Self-hosted vision model
+- Agency-approved proxy
 
-**Recommended production paths:**
-- **Azure Government hosted model** — FedRAMP-authorized, stays inside the network boundary; aligns with the agency's existing Azure infrastructure (post-2019 migration to Azure cloud)
-- **AWS Bedrock Claude** — Government cloud deployment with agency-approved egress
-- **Self-hosted vision model** — Deployed within the network perimeter, no outbound dependency
-- **Approved agency proxy** — Route Anthropic API calls through an authorized egress point
+**Easy migration:** All Anthropic API calls isolated to `lib/extraction.ts`. Swap extraction backend without touching comparison logic, UI, or queue.
 
-### Architecture for Easy Migration
-The prototype isolates all Anthropic API calls to a single file ([lib/extraction.ts](lib/extraction.ts)). Swapping the extraction backend for any of the above paths requires changes to that file only—the comparison logic ([lib/comparison.ts](lib/comparison.ts), [lib/warning-text.ts](lib/warning-text.ts)), CAP loader, UI, and queue architecture are unaffected.
-
-**Migration checklist:**
-1. Replace Anthropic SDK initialization in `lib/extraction.ts`
-2. Update `buildVisionPrompt()` to target model's message format
-3. Update response parsing to match new model's output structure
-4. Set `ANTHROPIC_API_KEY` environment variable to new endpoint credentials
-5. All other code remains unchanged
-
-### Error Handling
-The app gracefully handles API failures with user-friendly messages:
-- **Missing API Key:** "API authentication failed. Please check your API key configuration."
-- **Network Unavailable:** "Network connection failed. Please check your internet connection."
-- **Rate Limit:** "Rate limit exceeded. Please wait a moment and try again."
-- **Timeout:** "Verification took too long. Please try again with a clearer image."
-- **Unknown Error:** "Verification service unavailable. Please try again or contact your administrator."
-
-No technical details (stack traces, error codes) are exposed to users—all errors return plain-English guidance.
-
-## Design Principles
-
-Built for 73-year-old usability:
-- 16px minimum text, large click targets, high contrast
-- Every verdict with icon + color + word (never color alone)
-- No technical jargon — errors read like helpful colleague
-- Live processing timer for perceived speed
-- Sample data pre-loaded via dropdown for instant demo
-
-## Architecture Decisions
-
-See [docs/ARCHITECTURE-DECISIONS.md](docs/ARCHITECTURE-DECISIONS.md) for detailed rationale.
-
-**Key decisions:**
-- **LLM extracts, code judges:** Claude vision transcribes, deterministic functions verify
-- **Always-batch queue:** Single entry = batch of one
-- **Client-side orchestration:** No /api/batch route, concurrency limit of 5
-- **No persistence:** Privacy by design
-- **Multi-image extraction:** 1-4 images per API call for government warning detection
-
-## Documentation
-
-- **[APPROACH.md](docs/APPROACH.md)** — Approach, tools, and assumptions *(submission requirement)*
-- **[ARCHITECTURE-DECISIONS.md](docs/ARCHITECTURE-DECISIONS.md)** — Major design decisions and rationale
-- **[IMPLEMENTATION-GUIDE.md](docs/IMPLEMENTATION-GUIDE.md)** — Developer guide with patterns and pitfalls
-- **[docs/decisions/](docs/decisions/)** — Session-by-session decision logs
+**Error handling:** User-friendly messages for auth failures, network issues, rate limits, timeouts. No stack traces exposed.
 
 ## Known Limitations
 
 - Synthetic test data (real-world label photos may perform differently)
-synthetic labels, 100% on defects
 - No authentication/user accounts
 - No database/persistence layer
 
-## Out of Scope (Future Work)
+## Project Structure
 
-- Direct COLA integration (simulated via CAP format)
-- Wine/beer conditional validation (varietal, appellation, vintage)
-- Beverage-type-specific rule engines
-- Azure/AWS Bedrock endpoint (note: agency networks may block direct Anthropic API)
-- Mobile-specific layouts
-
-## Deployment
-
-Built for Vercel with considerations for:
-- 4.5 MB body limit → Client-side image compression
-- Serverless timeout → Client-side batch orchestration
-- No cold starts → Haiku-class model for speed
-
-For production deployment, consider:
-- Azure/AWS Bedrock Claude endpoint (agency network compatibility)
-- Batch processing optimizations for 300 concurrent applications
-- Authentication and audit logging
-- Integration with COLA export format
+```
+├── app/                    # Next.js pages (upload, dashboard, appmaker)
+├── lib/                    # Core logic
+│   ├── extraction.ts       # Claude vision extraction
+│   ├── comparison.ts       # Deterministic comparison functions
+│   ├── warning-text.ts     # Government warning verification
+│   ├── cap-loader.ts       # CAP package loading with JSZip
+│   ├── cap-schema.json     # JSON Schema for validation
+│   └── types.ts            # TypeScript interfaces
+├── components/             # React components
+├── docs/                   # Architecture & decision documentation
+├── sample-data/            # 200 synthetic test packages + ground truth
+├── scripts/                # Sample data generator & eval harness
+└── test-labels/            # 8 fixture test images
+```
 
 ## License
 
