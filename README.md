@@ -33,13 +33,11 @@ npm run dev
 # Run unit tests
 npm test
 
-<<<<<<< HEAD
-# Run evaluations (requires dev server running)
+# While server is running
 npm run evals:run
-=======
+
 # Generate test labels
 npm run labels:generate
->>>>>>> dev
 ```
 
 ## Project Structure
@@ -78,27 +76,20 @@ npm run labels:generate
 - **Manual review UI:** Approve/reject workflow with confidence-based triage
 - **Image zoom & pan:** Multi-level zoom with drag-to-pan for detailed inspection
 
-<<<<<<< HEAD
-### Sample Data
-Download test packages from the Upload Applications page:
-- Single Sample (1 application)
-- Small Batch (10 applications)
-- Large Batch (100 applications)
-- Real Photos (3 applications with actual label photos)
-=======
 ## Sample Datasets
 
 ### Evaluator Quick Start (30 seconds)
 
 1. Open the app at http://localhost:3000
-2. Click "Load sample ▾" → "Load Sample Dataset (12 apps)"
-3. Watch 12 applications process with multi-image extraction
-4. Results table auto-sorts MISMATCH/NEEDS_REVIEW to top
+2. Click "Load sample ▾" → "Load Sample Dataset (10 apps)"
+3. Drag the downloaded zip onto the batch upload dialog
+4. Watch 10 applications process with multi-image extraction
+5. Results table auto-sorts MISMATCH/NEEDS_REVIEW to top
 
 ### Sample Data Overview
 
 - **Source:** Synthetic (realistic fabricated records based on TTB registry patterns)
-- **Count:** 12 applications in small sample, 200 in full batch
+- **Count:** 1 in single example, 10 applications in small sample, 200 in full batch, 3 in photos I took
 - **Defect rate:** 15% with one defect each from 8 test dimensions
 - **Multi-image:** 60% have government warning on back panel
 
@@ -120,46 +111,10 @@ Download test packages from the Upload Applications page:
 - [sample-real-photos-3.zip](https://label-verify-samples.s3.amazonaws.com/sample-real-photos-3.zip) — Real label photos (3 applications)
 
 ### Generate Sample Data
->>>>>>> dev
 
 Or generate your own:
 ```bash
 npm run sample:generate -- --source=synthetic --count=200
-<<<<<<< HEAD
-```
-
-## Testing & Evaluation
-
-### Unit Tests
-```bash
-npm test
-```
-Tests cover all comparison logic in [lib/comparison.ts](lib/comparison.ts) and [lib/warning-text.ts](lib/warning-text.ts).
-
-### Test Fixtures
-8 test labels in [test-labels/](test-labels/) with varying defects:
-- clean-match, case-mismatch, wrong-abv, warning-titlecase
-- warning-modified, warning-missing, glare-angle, near-miss-brand
-
-Generate fixtures:
-```bash
-npm run labels:generate
-```
-
-### Evaluation Harness
-```bash
-# Run against 200 synthetic applications
-npm run evals:sample
-
-# Sample output:
-# Overall: 64.0% accuracy (128/200 pass)
-# Warning defects: 100% accuracy
-# Primary limitation: Government warning extraction from synthetic labels
-```
-
-See [STRETCH-GOAL-ACCURACY.md](STRETCH-GOAL-ACCURACY.md) for improvement opportunities.
-
-=======
 
 # Generate with Kaggle data (requires ~/.kaggle/kaggle.json)
 npm run sample:generate -- --source=kaggle --count=200
@@ -169,8 +124,6 @@ npm run sample:generate -- --source=kaggle --count=200
 #   - cola-sample-small.zip (12 applications)
 #   - applications/ (unpacked CAP packages)
 ```
-
->>>>>>> dev
 ## Comparison Logic
 
 ### Fuzzy Matching (Brand Name, Class/Type)
