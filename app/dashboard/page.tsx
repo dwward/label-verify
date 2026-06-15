@@ -317,7 +317,7 @@ export default function DashboardPage() {
       status: item.workflowState || item.status,
       overallVerdict: item.result?.overall || null,
       confidence: item.result?.applicationConfidence?.overall || null,
-      processingTimeMs: item.totalProcessingMs || null,
+      processingTimeMs: item.result?.processingMs || null,
       addedAt: toISOSafe(item.addedAt),
       completedAt: toISOSafe(item.completedAt),
       reviewedAt: toISOSafe(item.reviewedAt),
@@ -422,36 +422,37 @@ export default function DashboardPage() {
   const completedCount = queue.filter((q) => q.status === "completed").length;
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex flex-col md:flex-row h-screen bg-gray-50">
       <AppNavigation reviewQueueCount={statistics?.reviewQueueSize || 0} />
 
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col overflow-hidden pt-16 md:pt-0">
         {/* Top Bar */}
-        <div className="bg-white border-b border-gray-200 px-6 py-3">
-          <div className="flex items-center justify-between">
+        <div className="bg-white border-b border-gray-200 px-4 md:px-6 py-3">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
             <div className="flex items-center gap-4">
-              <h1 className="text-xl font-semibold text-gray-900">
+              <h1 className="text-lg md:text-xl font-semibold text-gray-900">
                 Batch Dashboard
               </h1>
               <span className="text-sm text-gray-500">
                 {queue.length} applications
               </span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               {queue.length > 0 && (
                 <>
                   <button
                     onClick={handleExportDispositions}
-                    className="px-3 py-1.5 text-sm font-medium text-blue-600 border border-blue-300 rounded hover:bg-blue-50 flex items-center gap-1.5"
+                    className="px-2 md:px-3 py-1.5 text-xs md:text-sm font-medium text-blue-600 border border-blue-300 rounded hover:bg-blue-50 flex items-center gap-1.5 whitespace-nowrap"
                   >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
-                    Export Dispositions
+                    <span className="hidden sm:inline">Export Dispositions</span>
+                    <span className="sm:hidden">Export</span>
                   </button>
                   <button
                     onClick={handleClearAll}
-                    className="px-3 py-1.5 text-sm font-medium text-red-600 border border-red-300 rounded hover:bg-red-50"
+                    className="px-2 md:px-3 py-1.5 text-xs md:text-sm font-medium text-red-600 border border-red-300 rounded hover:bg-red-50 whitespace-nowrap"
                   >
                     Clear All
                   </button>
@@ -483,10 +484,10 @@ export default function DashboardPage() {
 
         {/* Batch Summary Banner (dismissible, shown after import completes) */}
         {batchSummaryVisible && statistics && !isProcessing && (() => {
-          // Calculate average processing time
-          const completedItems = queue.filter(item => item.totalProcessingMs);
+          // Calculate average processing time (server-side only)
+          const completedItems = queue.filter(item => item.result?.processingMs);
           const avgTime = completedItems.length > 0
-            ? completedItems.reduce((sum, item) => sum + (item.totalProcessingMs || 0), 0) / completedItems.length
+            ? completedItems.reduce((sum, item) => sum + (item.result?.processingMs || 0), 0) / completedItems.length
             : 0;
 
           return (
@@ -514,7 +515,7 @@ export default function DashboardPage() {
                   {statistics.byWorkflowState.error || 0} failed
                   {avgTime > 0 && (
                     <span className="ml-2 text-blue-700">
-                      • Avg time: {(avgTime / 1000).toFixed(1)}s
+                      • Avg AI verification: {(avgTime / 1000).toFixed(1)}s
                     </span>
                   )}
                 </div>
@@ -532,8 +533,8 @@ export default function DashboardPage() {
         })()}
 
         {/* Filter Bar */}
-        <div className="bg-gray-50 border-b border-gray-200 px-6 py-2 flex items-center gap-3">
-          <span className="text-sm font-medium text-gray-600">Show:</span>
+        <div className="bg-gray-50 border-b border-gray-200 px-6 py-2 flex flex-wrap md:flex-nowrap items-center gap-2 md:gap-3">
+          <span className="text-sm font-medium text-gray-600 w-full md:w-auto">Show:</span>
           <button
             onClick={() => {
               // Close inspector unless it's the auto-opened item
@@ -543,7 +544,7 @@ export default function DashboardPage() {
               setFilterState("all");
             }}
             disabled={isProcessing && filterState !== "all"}
-            className={`px-3 py-1.5 text-sm font-medium rounded ${
+            className={`flex-1 md:flex-initial px-2 md:px-3 py-1.5 text-xs md:text-sm font-medium rounded ${
               filterState === "all"
                 ? "bg-blue-600 text-white"
                 : "text-gray-700 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
@@ -560,7 +561,7 @@ export default function DashboardPage() {
               setFilterState("needs_review");
             }}
             disabled={isProcessing}
-            className={`px-3 py-1.5 text-sm font-medium rounded ${
+            className={`flex-1 md:flex-initial px-2 md:px-3 py-1.5 text-xs md:text-sm font-medium rounded ${
               filterState === "needs_review"
                 ? "bg-yellow-100 text-yellow-800 border border-yellow-300"
                 : "text-gray-700 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
@@ -577,7 +578,7 @@ export default function DashboardPage() {
               setFilterState("auto_passed");
             }}
             disabled={isProcessing}
-            className={`px-3 py-1.5 text-sm font-medium rounded ${
+            className={`flex-1 md:flex-initial px-2 md:px-3 py-1.5 text-xs md:text-sm font-medium rounded ${
               filterState === "auto_passed"
                 ? "bg-green-100 text-green-800"
                 : "text-gray-700 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
@@ -594,7 +595,7 @@ export default function DashboardPage() {
               setFilterState("rejected");
             }}
             disabled={isProcessing}
-            className={`px-3 py-1.5 text-sm font-medium rounded ${
+            className={`flex-1 md:flex-initial px-2 md:px-3 py-1.5 text-xs md:text-sm font-medium rounded ${
               filterState === "rejected"
                 ? "bg-red-100 text-red-800 border border-red-300"
                 : "text-gray-700 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
@@ -611,7 +612,7 @@ export default function DashboardPage() {
               setFilterState("error");
             }}
             disabled={isProcessing}
-            className={`px-3 py-1.5 text-sm font-medium rounded ${
+            className={`flex-1 md:flex-initial px-2 md:px-3 py-1.5 text-xs md:text-sm font-medium rounded ${
               filterState === "error"
                 ? "bg-red-100 text-red-800"
                 : "text-gray-700 hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed"
@@ -630,11 +631,11 @@ export default function DashboardPage() {
         </div>
 
         {/* Split Content */}
-        <div className="flex-1 flex overflow-hidden">
+        <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
           {/* Results Table - Simplified (ID only) */}
           <div
             className={`${
-              selectedItem ? "w-36" : "w-full"
+              selectedItem ? "hidden md:w-36" : "w-full"
             } flex flex-col border-r border-gray-200 bg-white transition-all`}
           >
             <div className="flex-1 overflow-auto">
@@ -818,9 +819,9 @@ export default function DashboardPage() {
                               )}
                             </td>
                             <td className="px-3 py-2 text-sm text-gray-700">
-                              {item.totalProcessingMs ? (
+                              {item.result?.processingMs ? (
                                 <span className="font-medium">
-                                  {(item.totalProcessingMs / 1000).toFixed(1)}s
+                                  {(item.result.processingMs / 1000).toFixed(1)}s
                                 </span>
                               ) : (
                                 <span className="text-gray-400">—</span>
@@ -830,9 +831,17 @@ export default function DashboardPage() {
                               {item.status === "processing" && "Processing..."}
                               {item.status === "pending" && "Pending"}
                               {item.status === "error" && (
-                                <span className="text-red-600">
-                                  {item.error || "Error"}
-                                </span>
+                                <div className="text-red-600">
+                                  <div className="font-medium flex items-center gap-1">
+                                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                                    </svg>
+                                    Failed
+                                  </div>
+                                  <div className="text-sm mt-1">
+                                    {item.error || "Verification failed"}
+                                  </div>
+                                </div>
                               )}
                               {item.status === "completed" &&
                                 item.result?.applicationConfidence?.reason}
@@ -850,14 +859,14 @@ export default function DashboardPage() {
 
           {/* Inspector Panel */}
           {selectedItem && selectedItem.result && (
-            <div className="flex-1 bg-white flex flex-col ml-4">
+            <div className="flex-1 bg-white flex flex-col md:ml-4 md:min-w-[600px] overflow-auto">
               {/* Inspector Header */}
-              <div className="bg-gray-900 text-white px-4 py-2 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <h2 className="text-base font-semibold">
+              <div className="bg-gray-900 text-white px-2 md:px-4 py-2 flex items-center justify-between">
+                <div className="flex items-center gap-2 md:gap-3 min-w-0 flex-1">
+                  <h2 className="text-sm md:text-base font-semibold truncate">
                     {selectedItem.ttbId || selectedItem.id.slice(0, 10)}
                   </h2>
-                  <span className="text-sm text-gray-400">
+                  <span className="text-xs md:text-sm text-gray-400 truncate">
                     {selectedItem.applicationData.brandName} •{" "}
                     {selectedItem.applicationData.classType}
                   </span>
@@ -960,12 +969,12 @@ export default function DashboardPage() {
               </div>
 
               {/* Horizontal Split: Image Carousel (Left) | Field Table (Right) */}
-              <div className="flex-1 flex overflow-hidden border-b border-gray-200">
+              <div className="flex flex-col md:flex-row flex-1 overflow-auto border-b border-gray-200">
                 {/* Image Viewer - Left Side */}
                 {selectedItem.images && selectedItem.images.length > 0 ? (
-                  <div className="w-1/2 bg-gray-900 flex flex-col border-r border-gray-700">
+                  <div className="w-full md:w-1/2 bg-gray-900 flex flex-col border-b md:border-b-0 md:border-r border-gray-700 h-48 md:h-auto flex-shrink-0">
                     {/* Image Tabs */}
-                    <div className="flex items-center gap-2 bg-gray-800 px-3 py-2 border-b border-gray-700">
+                    <div className="flex items-center gap-2 bg-gray-800 px-3 py-2 border-b border-gray-700 overflow-x-auto">
                       {selectedItem.images.map((_, idx) => (
                         <button
                           key={idx}
@@ -974,7 +983,7 @@ export default function DashboardPage() {
                             setImageZoom(1);
                             setImagePan({ x: 0, y: 0 });
                           }}
-                          className={`px-4 py-1.5 text-sm font-medium rounded ${
+                          className={`px-3 md:px-4 py-1.5 text-xs md:text-sm font-medium rounded whitespace-nowrap flex-shrink-0 ${
                             activeImageIndex === idx
                               ? "bg-blue-600 text-white"
                               : "bg-gray-700 text-gray-300 hover:bg-gray-600"
@@ -984,7 +993,7 @@ export default function DashboardPage() {
                         </button>
                       ))}
 
-                      <div className="ml-auto flex items-center gap-2">
+                      <div className="ml-auto hidden md:flex items-center gap-2">
                         <span className="text-sm text-gray-500">Zoom:</span>
                         <button
                           onClick={() => {
@@ -1039,7 +1048,7 @@ export default function DashboardPage() {
 
                     {/* Image Display */}
                     <div
-                      className="flex-1 bg-gray-900 flex items-center justify-center p-4 overflow-hidden relative"
+                      className="flex-1 bg-gray-900 flex items-center justify-center p-2 md:p-4 overflow-hidden relative touch-none"
                       style={{ cursor: isDragging ? 'grabbing' : (imageZoom > 1 ? 'grab' : 'zoom-in') }}
                       onMouseDown={(e) => {
                         e.preventDefault();
@@ -1070,6 +1079,33 @@ export default function DashboardPage() {
                       onMouseLeave={() => {
                         setIsDragging(false);
                       }}
+                      onTouchStart={(e) => {
+                        if (e.touches.length === 1 && imageZoom > 1) {
+                          e.preventDefault();
+                          setHasDragged(false);
+                          setIsDragging(true);
+                          setDragStart({ x: e.touches[0].clientX, y: e.touches[0].clientY });
+                        }
+                      }}
+                      onTouchMove={(e) => {
+                        if (isDragging && e.touches.length === 1 && imageZoom > 1) {
+                          const deltaX = e.touches[0].clientX - dragStart.x;
+                          const deltaY = e.touches[0].clientY - dragStart.y;
+
+                          if (Math.abs(deltaX) > 3 || Math.abs(deltaY) > 3) {
+                            setHasDragged(true);
+                          }
+
+                          setImagePan({
+                            x: imagePan.x + deltaX,
+                            y: imagePan.y + deltaY,
+                          });
+                          setDragStart({ x: e.touches[0].clientX, y: e.touches[0].clientY });
+                        }
+                      }}
+                      onTouchEnd={() => {
+                        setIsDragging(false);
+                      }}
                       onClick={(e) => {
                         if (!hasDragged) {
                           // Cycle through zoom levels: 1 → 2 → 3 → 1
@@ -1098,7 +1134,7 @@ export default function DashboardPage() {
                     </div>
                   </div>
                 ) : (
-                  <div className="w-1/2 bg-gray-100 flex items-center justify-center border-r border-gray-300">
+                  <div className="w-full md:w-1/2 bg-gray-100 flex items-center justify-center border-b md:border-b-0 md:border-r border-gray-300 h-48 md:h-auto flex-shrink-0">
                     <div className="text-center text-gray-500 p-6">
                       <svg className="mx-auto h-12 w-12 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -1113,23 +1149,23 @@ export default function DashboardPage() {
                 )}
 
                 {/* Field Comparison Table - Right Side */}
-                <div className="w-1/2 overflow-auto bg-white">
-                  <table className="min-w-full text-sm">
+                <div className="w-full md:w-1/2 overflow-auto bg-white">
+                  <table className="min-w-full text-xs md:text-sm">
                     <thead className="bg-gray-100 sticky top-0">
                       <tr>
-                        <th className="px-2 py-1.5 text-left text-sm font-medium text-gray-600 uppercase w-24">
+                        <th className="px-1 md:px-2 py-1.5 text-left text-xs font-medium text-gray-600 uppercase w-24">
                           Field
                         </th>
-                        <th className="px-2 py-1.5 text-left text-sm font-medium text-gray-600 uppercase">
+                        <th className="px-1 md:px-2 py-1.5 text-left text-xs font-medium text-gray-600 uppercase">
                           Application
                         </th>
-                        <th className="px-2 py-1.5 text-left text-sm font-medium text-gray-600 uppercase">
+                        <th className="px-1 md:px-2 py-1.5 text-left text-xs font-medium text-gray-600 uppercase">
                           Label
                         </th>
-                        <th className="px-2 py-1.5 text-left text-sm font-medium text-gray-600 uppercase w-20">
+                        <th className="px-1 md:px-2 py-1.5 text-left text-xs font-medium text-gray-600 uppercase w-20 hidden sm:table-cell">
                           Conf.
                         </th>
-                        <th className="px-2 py-1.5 text-left text-sm font-medium text-gray-600 uppercase w-20">
+                        <th className="px-1 md:px-2 py-1.5 text-left text-xs font-medium text-gray-600 uppercase w-20">
                           Status
                         </th>
                       </tr>
@@ -1151,18 +1187,18 @@ export default function DashboardPage() {
 
                         return (
                           <tr key={idx} className={bgColor}>
-                            <td className="px-2 py-1.5 font-medium text-gray-900">
+                            <td className="px-1 md:px-2 py-1 md:py-1.5 font-medium text-gray-900">
                               {verdict.field}
                             </td>
-                            <td className="px-2 py-1.5 text-gray-900">
+                            <td className="px-1 md:px-2 py-1 md:py-1.5 text-gray-900">
                               {verdict.applicationValue}
                             </td>
-                            <td className="px-2 py-1.5 text-gray-900">
+                            <td className="px-1 md:px-2 py-1 md:py-1.5 text-gray-900">
                               {verdict.labelValue || (
                                 <span className="text-gray-400">Not found</span>
                               )}
                             </td>
-                            <td className="px-2 py-1.5">
+                            <td className="px-1 md:px-2 py-1 md:py-1.5 hidden sm:table-cell">
                               {verdict.confidence && (
                                 <div className="flex items-center gap-1">
                                   <div className="w-10 bg-gray-200 rounded-full h-1">
@@ -1185,9 +1221,9 @@ export default function DashboardPage() {
                                 </div>
                               )}
                             </td>
-                            <td className="px-2 py-1.5">
+                            <td className="px-1 md:px-2 py-1 md:py-1.5">
                               <span
-                                className={`inline-flex items-center px-2 py-1 rounded text-sm font-medium ${badgeColor}`}
+                                className={`inline-flex items-center px-2 py-1 rounded text-xs md:text-sm font-medium ${badgeColor}`}
                               >
                                 {verdict.status === "MATCH"
                                   ? "Match"
@@ -1206,17 +1242,17 @@ export default function DashboardPage() {
 
               {/* Action Bar */}
               {selectedItem.workflowState === "needs_review" && (
-                <div className="bg-white border-t border-gray-200 px-3 py-2">
+                <div className="bg-white border-t border-gray-200 px-2 md:px-3 py-2">
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => handleApprove(selectedItem.id)}
-                      className="flex-1 px-4 py-2.5 bg-green-600 text-white rounded text-base font-medium hover:bg-green-700"
+                      className="flex-1 px-3 md:px-4 py-2 md:py-2.5 bg-green-600 text-white rounded text-sm md:text-base font-medium hover:bg-green-700"
                     >
                       ✓ Approve
                     </button>
                     <button
                       onClick={() => handleReject(selectedItem.id)}
-                      className="flex-1 px-4 py-2.5 bg-red-600 text-white rounded text-base font-medium hover:bg-red-700"
+                      className="flex-1 px-3 md:px-4 py-2 md:py-2.5 bg-red-600 text-white rounded text-sm md:text-base font-medium hover:bg-red-700"
                     >
                       ✗ Reject
                     </button>

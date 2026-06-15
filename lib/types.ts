@@ -45,7 +45,7 @@ export interface ExtractedLabel {
   imageQuality: {
     readable: boolean;
     issues: string[]; // e.g. ["glare on upper left", "slight angle"]
-    confidence: "high" | "medium" | "low";
+    confidence: "high" | "medium" | "low" | "error"; // "error" = API/network failure
   };
 }
 
