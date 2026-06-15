@@ -427,31 +427,32 @@ export default function DashboardPage() {
 
       <div className="flex-1 flex flex-col overflow-hidden pt-16 md:pt-0">
         {/* Top Bar */}
-        <div className="bg-white border-b border-gray-200 px-6 py-3">
-          <div className="flex items-center justify-between">
+        <div className="bg-white border-b border-gray-200 px-4 md:px-6 py-3">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
             <div className="flex items-center gap-4">
-              <h1 className="text-xl font-semibold text-gray-900">
+              <h1 className="text-lg md:text-xl font-semibold text-gray-900">
                 Batch Dashboard
               </h1>
               <span className="text-sm text-gray-500">
                 {queue.length} applications
               </span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               {queue.length > 0 && (
                 <>
                   <button
                     onClick={handleExportDispositions}
-                    className="px-3 py-1.5 text-sm font-medium text-blue-600 border border-blue-300 rounded hover:bg-blue-50 flex items-center gap-1.5"
+                    className="px-2 md:px-3 py-1.5 text-xs md:text-sm font-medium text-blue-600 border border-blue-300 rounded hover:bg-blue-50 flex items-center gap-1.5 whitespace-nowrap"
                   >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
-                    Export Dispositions
+                    <span className="hidden sm:inline">Export Dispositions</span>
+                    <span className="sm:hidden">Export</span>
                   </button>
                   <button
                     onClick={handleClearAll}
-                    className="px-3 py-1.5 text-sm font-medium text-red-600 border border-red-300 rounded hover:bg-red-50"
+                    className="px-2 md:px-3 py-1.5 text-xs md:text-sm font-medium text-red-600 border border-red-300 rounded hover:bg-red-50 whitespace-nowrap"
                   >
                     Clear All
                   </button>
