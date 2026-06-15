@@ -4,9 +4,11 @@ AI-powered prototype for TTB (Alcohol and Tobacco Tax and Trade Bureau) complian
 
 ## Overview
 
-This application compares uploaded label images to form data and produces per-field verification verdicts (MATCH/MISMATCH/NEEDS_REVIEW) using Claude vision for extraction and deterministic logic for comparison. Built to process results in under 5 seconds with support for batch workflows (200-300 applications at once).
+This application compares label images to form data and produces per-field verification verdicts (MATCH/MISMATCH/NEEDS_REVIEW) using OCR vision for extraction and deterministic logic for comparison. 
 
-**📄 See [docs/APPROACH.md](docs/APPROACH.md) for approach, tools, and assumptions.**
+Built to process results in under 5 seconds with support for batch workflows (200-300 applications at once).
+
+**See [docs/APPROACH.md](docs/APPROACH.md) for approach, tools, and assumptions.**
 
 ## Tech Stack
 
@@ -39,6 +41,24 @@ npm run evals:run
 # Generate test labels
 npm run labels:generate
 ```
+
+## Sample Datasets
+
+### Evaluator Quick Start (30 seconds)
+
+1. Open the app at http://localhost:3000
+2. Download sample data (4 data sets provided)
+3. Drag the downloaded zip onto the batch upload dialog
+4. Watch applications process with multi-image extraction
+5. Review applications with issues
+
+**S3-Hosted Sample Data:**
+
+- [sample-1.zip](https://label-verify-samples.s3.amazonaws.com/sample-1.zip) — Single application for quick testing
+- [sample-10.zip](https://label-verify-samples.s3.amazonaws.com/sample-10.zip) — Small batch (10 applications)
+- [sample-100.zip](https://label-verify-samples.s3.amazonaws.com/sample-100.zip) — Large batch (100 applications)
+- [sample-real-photos-3.zip](https://label-verify-samples.s3.amazonaws.com/sample-real-photos-3.zip) — Real label photos (3 applications)
+
 
 ## Project Structure
 
@@ -75,40 +95,6 @@ npm run labels:generate
 - **Client-side orchestration:** 5 concurrent verifications, real-time progress
 - **Manual review UI:** Approve/reject workflow with confidence-based triage
 - **Image zoom & pan:** Multi-level zoom with drag-to-pan for detailed inspection
-
-## Sample Datasets
-
-### Evaluator Quick Start (30 seconds)
-
-1. Open the app at http://localhost:3000
-2. Click "Load sample ▾" → "Load Sample Dataset (10 apps)"
-3. Drag the downloaded zip onto the batch upload dialog
-4. Watch 10 applications process with multi-image extraction
-5. Results table auto-sorts MISMATCH/NEEDS_REVIEW to top
-
-### Sample Data Overview
-
-- **Source:** Synthetic (realistic fabricated records based on TTB registry patterns)
-- **Count:** 1 in single example, 10 applications in small sample, 200 in full batch, 3 in photos I took
-- **Defect rate:** 15% with one defect each from 8 test dimensions
-- **Multi-image:** 60% have government warning on back panel
-
-**Defect Types:**
-- `brand-case-diff` — Case-only difference (should MATCH due to normalization)
-- `brand-near-miss` — Single-character typo (should flag NEEDS_REVIEW)
-- `brand-mismatch` — Completely different brand name
-- `wrong-abv` — Alcohol content mismatch
-- `wrong-volume` — Net contents mismatch
-- `warning-titlecase` — Warning header not in all caps (regulatory failure)
-- `warning-modified` — Word-level difference in warning text
-- `warning-missing` — No warning on label
-
-**S3-Hosted Sample Data:**
-
-- [sample-1.zip](https://label-verify-samples.s3.amazonaws.com/sample-1.zip) — Single application for quick testing
-- [sample-10.zip](https://label-verify-samples.s3.amazonaws.com/sample-10.zip) — Small batch (10 applications)
-- [sample-100.zip](https://label-verify-samples.s3.amazonaws.com/sample-100.zip) — Large batch (100 applications)
-- [sample-real-photos-3.zip](https://label-verify-samples.s3.amazonaws.com/sample-real-photos-3.zip) — Real label photos (3 applications)
 
 ### Generate Sample Data
 
@@ -261,9 +247,8 @@ See [docs/ARCHITECTURE-DECISIONS.md](docs/ARCHITECTURE-DECISIONS.md) for detaile
 
 ## Known Limitations
 
-- Desktop-first (no mobile-specific layouts)
 - Synthetic test data (real-world label photos may perform differently)
-- Government warning extraction: 61% accuracy on synthetic labels, 100% on defects
+synthetic labels, 100% on defects
 - No authentication/user accounts
 - No database/persistence layer
 

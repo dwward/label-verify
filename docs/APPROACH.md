@@ -1,22 +1,41 @@
 # Approach, Tools, and Assumptions
 
-A quick note on how to read this: I filled gaps by inferring from the discovery interviews and TTB's public COLA documentation, and I made independent scoping calls where the assignment invited them. Where a decision traces back to something a stakeholder actually said, I've pointed at it — because most of the real requirements here live in the interview notes, not the requirements section.
+*Short Version:*
+
+I gathered requirements and filled gaps by inferring from the discovery interviews and TTB's public COLA documentation, and I made independent scoping calls where the assignment invited them. Where a decision traces back to something a stakeholder actually said, I've pointed at it — because most of the real requirements here live in the interview notes, not the requirements section.
 
 ## Approach
 
-The assignment reads like "compare a label to a form," but the interviews are where the actual specifying happens. Almost every decision below traces back to something a stakeholder said in passing rather than to the bulleted requirements. Sarah's failed vendor pilot is a hard 5-second performance bar. Her peak-season story is the batch requirement. Dave's "STONE'S THROW vs Stone's Throw" example sitting next to Jenny's title-case rejection is the whole matching strategy. So the approach was to treat the discovery notes as the real spec and build to what these people actually do all day.
+The assignment at first glance appears to be just "comparing labels to form emtries," but the interviews are where the actual specifying happens. Almost every decision below traces back to something a stakeholder said in passing rather than to the bulleted requirements. 
+
+For example:
+
+- Sarah's failed vendor pilot is a hard 5-second performance bar. Her peak-season story is the batch requirement. 
+- Dave's "STONE'S THROW vs Stone's Throw" example sitting next to Jenny's title-case rejection is the whole matching strategy. 
+
+So the approach was to treat the discovery notes as the real spec and build to what these people actually do all day.
 
 A few decisions carry most of the weight:
 
-**The model extracts, the code judges.** Claude's vision reads the label and transcribes the fields and the warning verbatim. Every match/mismatch decision after that happens in plain, unit-tested functions — no LLM in the verdict path. This matters for two reasons: verdicts are reproducible and auditable (same inputs, same answer, which you want in a compliance tool), and I can test the comparison rules without burning API calls. It also draws a clean line between the part that's allowed to be probabilistic (reading a photo) and the part that has to be defensible (the verdict).
+**The model extracts, the code judges.** 
 
-**Two opposite matching philosophies, on purpose.** Brand name and class/type use fuzzy, three-state matching so that capitalization and spacing differences don't trigger false rejections — that's the STONE'S THROW problem Dave described. The government warning does the exact opposite: byte-for-byte verification against the statutory text in 27 CFR Part 16, because Jenny's whole job on that field is catching the label that quietly drops a word or sets the header in title case. Running both behaviors correctly in the same tool is the core of the thing.
+Claude's vision reads the label and transcribes the fields and the warning verbatim. Every match/mismatch decision after that happens in plain, unit-tested functions — no LLM in the verdict path. This matters for two reasons: verdicts are reproducible and auditable (same inputs, same answer, which you want in a compliance tool), and I can test the comparison rules without burning API calls. It also draws a clean line between the part that's allowed to be probabilistic (reading a photo) and the part that has to be defensible (the verdict).
 
-**Three states, not pass/fail.** MATCH / MISMATCH / NEEDS_REVIEW mirrors how the agents actually work — when they can't read something confidently, they kick it to a human instead of guessing. Low extraction confidence and ambiguous near-misses both land in NEEDS_REVIEW. That's also the safe failure mode for a compliance system: it should never throw a confident green on something it couldn't actually verify.
+**Two opposite matching philosophies, on purpose.** 
 
-**The unit of work is the application, not the image.** A submission is form data plus one to four images, and a single label is just a batch of one. That gave me one queue, one results table, one export, and no single-vs-batch mode switching to confuse anyone. It also forced multi-image extraction: a real COLA application carries front/back/neck images and the warning usually lives on the back, so a front-image-only tool would false-flag "warning missing" constantly. All of an application's images go to the model in one call to keep it under the 5-second bar.
+Brand name and class/type use fuzzy, three-state matching so that capitalization and spacing differences don't trigger false rejections — that's the STONE'S THROW problem Dave described. The government warning does the exact opposite: byte-for-byte verification against the statutory text in 27 CFR Part 16, because Jenny's whole job on that field is catching the label that quietly drops a word or sets the header in title case. Running both behaviors correctly in the same tool is the core of the thing.
 
-**The agent reviews verdicts — they don't retype data.** In production, both inputs would come straight out of COLA and this tool would sit on top as a verdict layer. COLA integration was explicitly out of scope, so the prototype simulates the record two ways: manual entry (the Test Bench) and a package format I defined (CAP), which stands in for a COLA export. The point is that nobody adds data entry to their day — the agent's job shifts from doing the comparison to dispositioning the tool's output, and the CSV export is what leaves the building.
+**Three states, not pass/fail.** 
+
+MATCH / MISMATCH / NEEDS_REVIEW mirrors how the agents actually work — when they can't read something confidently, they kick it to a human instead of guessing. Low extraction confidence and ambiguous near-misses both land in NEEDS_REVIEW. That's also the safe failure mode for a compliance system: it should never throw a confident green on something it couldn't actually verify.
+
+**The unit of work is the application, not the image.** 
+
+A submission is form data plus one to four images, and a single label is just a batch of one. That gave me one queue, one results table, one export, and no single-vs-batch mode switching to confuse anyone. It also forced multi-image extraction: a real COLA application carries front/back/neck images and the warning usually lives on the back, so a front-image-only tool would false-flag "warning missing" constantly. All of an application's images go to the model in one call to keep it under the 5-second bar.
+
+**The agent reviews verdicts — they don't retype data.** 
+
+In production, both inputs would come straight out of COLA and this tool would sit on top as a verdict layer. COLA integration was explicitly out of scope, so the prototype simulates the record two ways: manual entry (the Test Bench) and a package format I defined (CAP), which stands in for a COLA export. The point is that nobody adds data entry to their day — the agent's job shifts from doing the comparison to dispositioning the tool's output, and the CSV export is what leaves the building.
 
 ## Tools
 

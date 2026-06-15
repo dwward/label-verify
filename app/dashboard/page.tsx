@@ -635,7 +635,7 @@ export default function DashboardPage() {
           {/* Results Table - Simplified (ID only) */}
           <div
             className={`${
-              selectedItem ? "hidden md:w-36" : "w-full"
+              selectedItem ? "hidden md:block md:w-64" : "w-full"
             } flex flex-col border-r border-gray-200 bg-white transition-all`}
           >
             <div className="flex-1 overflow-auto">
