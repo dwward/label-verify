@@ -34,39 +34,48 @@ npm run labels:generate
 
 ### Approach
 
-**Model extracts, code judges.** Claude vision reads labels and transcribes fields verbatim. Every match/mismatch decision happens in unit-tested functions—no LLM in the verdict path. Verdicts are reproducible and auditable.
+The assignment looks at first glance like we are just comparing labels to forms, but the real requirements live in the stakeholder interviews: Sarah's failed vendor pilot set a hard 5-second bar, or Dave's "STONE'S THROW vs Stone's Throw" example sitting next to Jenny's title-case rejection revealed the core tension: trivial differences can't trigger false alarms, but regulatory text must match exactly.
 
-**Two matching philosophies:**
-- **Fuzzy for identity fields** (brand, class/type) - Handles "STONE'S THROW" vs "Stone's Throw" without false rejections
-- **Character-exact for government warning** - 27 CFR 16.21 statutory text, byte-for-byte
+**Key decisions:**
 
-**Three states:** MATCH / MISMATCH / NEEDS_REVIEW. Low extraction confidence and ambiguous near-misses land in NEEDS_REVIEW—the safe failure mode.
+The model extracts from images, the code judges. Claude vision reads the label and transcribes verbatim. Every match/mismatch decision after that happens in plain, unit-tested functions—no LLM in the verdict path. This makes verdicts reproducible and auditable, which matters for compliance tools.
 
-**Multi-image extraction:** Front/back/neck panels processed together (government warning typically on back). One application = batch of one.
+Two opposite matching strategies run in the same tool: brand/class use fuzzy three-state matching (exact → MATCH, close → NEEDS_REVIEW, different → MISMATCH) to avoid crying wolf on spacing and case. The government warning does the opposite: byte-for-byte verification against 27 CFR 16.21, because Jenny's whole job is catching labels that quietly drop a word or use title case.
+
+The unit of work is the application, not the image. A submission is form data plus 1-4 images, and a single label is just a batch of one. This forced multi-image extraction (government warning usually lives on the back panel), gave me one queue and one results table, and avoided single-vs-batch mode switching.
+
+**Constraints and trade-offs:**
+
+Vercel's 4.5 MB body limit and function timeout pushed zip handling and batch concurrency to the browser instead of a server-side batch endpoint. Client-side orchestration with a concurrency cap was the path of least resistance. I'd make a different call on different infrastructure.
+
+Speed requirement eliminated heavyweight OCR preprocessing. The vision model handles rotation and mild skew natively; extreme cases fall through to NEEDS_REVIEW rather than getting preprocessed.
+
+No COLA integration (explicitly out of scope) meant simulating the record. Built two input paths: manual entry (Test Bench) and a package format I defined (CAP), which stands in for a COLA export. CAP is versioned with a JSON Schema so it's documented as a prototype stand-in, not a claim about how COLA actually exports data.
 
 ### Tools
 
-- **Framework:** Next.js 14+ (App Router), TypeScript, Tailwind CSS
-- **AI:** Anthropic Claude Haiku for vision extraction
-- **Deployment:** Vercel (single public URL)
-- **Batch:** Client-side orchestration (JSZip, image compression)
-- **No database:** Request/response only (privacy by design)
+Next.js and TypeScript on Vercel (shortest path to deployed prototype behind a single URL). Claude Haiku for vision extraction (model ID pulled into config for easy swapping). Tailwind for UI. JSZip handles packages in-browser, client-side image compression stays under body limits. No database—request/response only, deliberate privacy choice.
 
 ### Assumptions
 
-**From stakeholder interviews:**
-- Sub-5-second target (prior vendor at 30-40s abandoned)
-- Batch handles 200-300 applications (peak season)
-- Warning matched exactly—all caps header, no word changes
-- Trivial text differences normalized (case, spacing)
+**From interviews:**
+- Sub-5-second target per application (vendor pilot died at 30-40s)
+- Batch must survive 200-300 applications (peak season, big importers)
+- Warning matched exactly, header included—all caps, bold
+- Trivial text differences (case, spacing) don't cause rejections
+- Built for low-tech users (73-year-old benchmark)
 
-**Scoping decisions:**
-- Distilled spirits only (beer/wine rules noted as future work)
-- No image persistence by design
-- ABV matched exactly (regulatory number)
-- Public deployment without auth (prototype scope)
+**From TTB/COLA:**
+- COLA is system of record, integration out of scope
+- Applications carry multiple images, warning often on back
+- Government warning baseline: 27 CFR Part 16 statutory text
 
-**CAP format:** COLA Application Package—a versioned JSON Schema defined for this prototype to pair application data with label images (stand-in for COLA export).
+**Scoping calls I made:**
+- Distilled spirits only (beer/wine have different rules)
+- No image persistence (privacy by design)
+- ABV matched exactly (regulatory number, no tolerance)
+- Bold detection best-effort (flags NEEDS_REVIEW, not MISMATCH)
+- Public deployment without auth (prototype scope, changes for production)
 
 ## Sample Datasets
 

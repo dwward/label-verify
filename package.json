@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.32.1",
+    "@vercel/analytics": "^2.0.1",
     "ajv": "^8.20.0",
     "browser-image-compression": "^2.0.2",
     "jszip": "^3.10.1",
