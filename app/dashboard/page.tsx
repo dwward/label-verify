@@ -25,6 +25,7 @@ export default function DashboardPage() {
   const [batchSummaryVisible, setBatchSummaryVisible] = useState(false);
   const [processingJustCompleted, setProcessingJustCompleted] = useState(false);
   const [isDraggingOver, setIsDraggingOver] = useState(false);
+  const [autoOpenedItemId, setAutoOpenedItemId] = useState<string | null>(null);
 
   // Load queue from sessionStorage on mount
   useEffect(() => {
@@ -237,6 +238,7 @@ export default function DashboardPage() {
               return aConf - bConf;
             });
             setSelectedItemId(sorted[0].id);
+            setAutoOpenedItemId(sorted[0].id); // Track auto-opened item
           }
         } else if ((stats.byWorkflowState.error || 0) > 0) {
           setFilterState("error");
@@ -508,6 +510,7 @@ export default function DashboardPage() {
                   {queue.length} applications —{" "}
                   {(statistics.byWorkflowState.auto_passed || 0) + (statistics.byWorkflowState.approved || 0)} passed,{" "}
                   {statistics.reviewQueueSize} need review,{" "}
+                  {statistics.byWorkflowState.rejected || 0} rejected,{" "}
                   {statistics.byWorkflowState.error || 0} failed
                   {avgTime > 0 && (
                     <span className="ml-2 text-blue-700">
@@ -532,7 +535,13 @@ export default function DashboardPage() {
         <div className="bg-gray-50 border-b border-gray-200 px-6 py-2 flex items-center gap-3">
           <span className="text-sm font-medium text-gray-600">Show:</span>
           <button
-            onClick={() => setFilterState("all")}
+            onClick={() => {
+              // Close inspector unless it's the auto-opened item
+              if (selectedItemId && selectedItemId !== autoOpenedItemId) {
+                setSelectedItemId(null);
+              }
+              setFilterState("all");
+            }}
             disabled={isProcessing && filterState !== "all"}
             className={`px-3 py-1.5 text-sm font-medium rounded ${
               filterState === "all"
@@ -543,7 +552,13 @@ export default function DashboardPage() {
             Imported ({queue.length})
           </button>
           <button
-            onClick={() => setFilterState("needs_review")}
+            onClick={() => {
+              // Close inspector unless it's the auto-opened item
+              if (selectedItemId && selectedItemId !== autoOpenedItemId) {
+                setSelectedItemId(null);
+              }
+              setFilterState("needs_review");
+            }}
             disabled={isProcessing}
             className={`px-3 py-1.5 text-sm font-medium rounded ${
               filterState === "needs_review"
@@ -554,7 +569,13 @@ export default function DashboardPage() {
             Needs Review ({statistics?.reviewQueueSize || 0})
           </button>
           <button
-            onClick={() => setFilterState("auto_passed")}
+            onClick={() => {
+              // Close inspector unless it's the auto-opened item
+              if (selectedItemId && selectedItemId !== autoOpenedItemId) {
+                setSelectedItemId(null);
+              }
+              setFilterState("auto_passed");
+            }}
             disabled={isProcessing}
             className={`px-3 py-1.5 text-sm font-medium rounded ${
               filterState === "auto_passed"
@@ -565,7 +586,13 @@ export default function DashboardPage() {
             Passed ({(statistics?.byWorkflowState.auto_passed || 0) + (statistics?.byWorkflowState.approved || 0)})
           </button>
           <button
-            onClick={() => setFilterState("rejected")}
+            onClick={() => {
+              // Close inspector unless it's the auto-opened item
+              if (selectedItemId && selectedItemId !== autoOpenedItemId) {
+                setSelectedItemId(null);
+              }
+              setFilterState("rejected");
+            }}
             disabled={isProcessing}
             className={`px-3 py-1.5 text-sm font-medium rounded ${
               filterState === "rejected"
@@ -576,7 +603,13 @@ export default function DashboardPage() {
             Rejected ({statistics?.byWorkflowState.rejected || 0})
           </button>
           <button
-            onClick={() => setFilterState("error")}
+            onClick={() => {
+              // Close inspector unless it's the auto-opened item
+              if (selectedItemId && selectedItemId !== autoOpenedItemId) {
+                setSelectedItemId(null);
+              }
+              setFilterState("error");
+            }}
             disabled={isProcessing}
             className={`px-3 py-1.5 text-sm font-medium rounded ${
               filterState === "error"
@@ -661,7 +694,12 @@ export default function DashboardPage() {
                             No applications match the current filter
                           </p>
                           <button
-                            onClick={() => setFilterState("all")}
+                            onClick={() => {
+                              if (selectedItemId && selectedItemId !== autoOpenedItemId) {
+                                setSelectedItemId(null);
+                              }
+                              setFilterState("all");
+                            }}
                             className="mt-3 text-sm text-blue-600 hover:text-blue-700 font-medium"
                           >
                             Clear filter
@@ -694,6 +732,10 @@ export default function DashboardPage() {
                         onClick={() => {
                           if (!isProcessing) {
                             setSelectedItemId(isSelected ? null : item.id);
+                            // Clear auto-opened tracking when user manually selects
+                            if (!isSelected) {
+                              setAutoOpenedItemId(null);
+                            }
                           }
                         }}
                         className={`${isProcessing ? 'cursor-wait' : 'cursor-pointer'} ${
@@ -808,7 +850,7 @@ export default function DashboardPage() {
 
           {/* Inspector Panel */}
           {selectedItem && selectedItem.result && (
-            <div className="flex-1 bg-white flex flex-col">
+            <div className="flex-1 bg-white flex flex-col ml-4">
               {/* Inspector Header */}
               <div className="bg-gray-900 text-white px-4 py-2 flex items-center justify-between">
                 <div className="flex items-center gap-3">

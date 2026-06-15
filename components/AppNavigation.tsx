@@ -13,7 +13,7 @@ export default function AppNavigation({ reviewQueueCount = 0 }: AppNavigationPro
   const isActive = (path: string) => pathname === path;
 
   return (
-    <div className="w-48 bg-white border-r border-gray-200 flex flex-col h-screen">
+    <div className="w-60 bg-white border-r border-gray-200 flex flex-col h-screen">
       {/* Logo */}
       <div className="p-4 border-b border-gray-200">
         <Link href="/upload" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
@@ -46,7 +46,7 @@ export default function AppNavigation({ reviewQueueCount = 0 }: AppNavigationPro
           }`}
         >
           <svg
-            className="w-5 h-5"
+            className="w-5 h-5 flex-shrink-0"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -58,7 +58,7 @@ export default function AppNavigation({ reviewQueueCount = 0 }: AppNavigationPro
               d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
             />
           </svg>
-          Upload Applications
+          <span className="flex-shrink-0">Upload Applications</span>
         </Link>
         <Link
           href="/dashboard"
@@ -69,7 +69,7 @@ export default function AppNavigation({ reviewQueueCount = 0 }: AppNavigationPro
           }`}
         >
           <svg
-            className="w-5 h-5"
+            className="w-5 h-5 flex-shrink-0"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -81,7 +81,7 @@ export default function AppNavigation({ reviewQueueCount = 0 }: AppNavigationPro
               d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
             />
           </svg>
-          Batch Dashboard
+          <span className="flex-shrink-0">Batch Dashboard</span>
           {reviewQueueCount > 0 && (
             <span className="ml-auto bg-yellow-100 text-yellow-800 text-sm font-bold px-2 py-1 rounded">
               {reviewQueueCount}
@@ -94,6 +94,7 @@ export default function AppNavigation({ reviewQueueCount = 0 }: AppNavigationPro
       <div className="p-3 border-t border-gray-200 text-sm text-gray-500">
         <div>Label Verify v1.0</div>
         <div>TTB Compliance Tool</div>
+        <div>Author: <a href="mailto:dwward@gmail.com">Don Ward</a></div>
       </div>
     </div>
   );
