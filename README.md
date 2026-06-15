@@ -2,10 +2,10 @@
 
 AI-powered prototype for TTB (Alcohol and Tobacco Tax and Trade Bureau) compliance agents to verify alcohol label images against COLA application data.
 
-**🎯 Critical Success Criteria:**
-- ⚡ **Speed:** Results in under 5 seconds (prior vendor pilot failed at 30-40s)
-- 🎨 **Three-state verdicts:** `MATCH` (green), `MISMATCH` (red), `NEEDS_REVIEW` (yellow)
-- 🔍 **Dual matching philosophy:** Fuzzy for brand/identity, character-exact for government warning
+**Critical Success Criteria:**
+- **Speed:** Results in under 5 seconds (prior vendor pilot failed at 30-40s)
+- **Three-state verdicts:** `MATCH` (green), `MISMATCH` (red), `NEEDS_REVIEW` (yellow)
+- **Dual matching philosophy:** Fuzzy for brand/identity, character-exact for government warning
 
 ## Features
 
