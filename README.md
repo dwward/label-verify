@@ -2,28 +2,19 @@
 
 AI-powered prototype for TTB (Alcohol and Tobacco Tax and Trade Bureau) compliance agents to verify alcohol label images against COLA application data.
 
-**Critical Success Criteria:**
-- **Speed:** Results in under 5 seconds (prior vendor pilot failed at 30-40s)
-- **Three-state verdicts:** `MATCH` (green), `MISMATCH` (red), `NEEDS_REVIEW` (yellow)
-- **Dual matching philosophy:** Fuzzy for brand/identity, character-exact for government warning
+## Overview
 
-## Features
+This application compares uploaded label images to form data and produces per-field verification verdicts (MATCH/MISMATCH/NEEDS_REVIEW) using Claude vision for extraction and deterministic logic for comparison. Built to process results in under 5 seconds with support for batch workflows (200-300 applications at once).
 
-- **Multi-image processing:** Handles 1-4 label panels (front, back, neck) in a single verification
-- **Intelligent extraction:** Claude 4.5 Haiku vision model extracts structured data from label images
-- **Deterministic comparison:** Pure functions with comprehensive unit tests verify extracted vs. application data
-- **Zero-tolerance warning check:** Character-level validation of 27 CFR 16.21 statutory text
-- **Batch processing:** Client-side orchestration with concurrency limiting (5 simultaneous requests)
-- **CAP format support:** COLA Application Package interchange format for realistic data entry
-- **Sample datasets:** Ready-made test data with ground truth for evaluator testing
+**📄 See [docs/APPROACH.md](docs/APPROACH.md) for approach, tools, and assumptions.**
 
 ## Tech Stack
 
 - **Framework:** Next.js 14+ (App Router), TypeScript, Tailwind CSS
-- **AI:** Anthropic API with `claude-haiku-4-5` (swappable constant in [lib/config.ts](lib/config.ts))
-- **Image processing:** Client-side compression/resize before upload (max 2048px, JPEG 0.85)
-- **Deployment:** Vercel (4.5 MB body limit consideration)
-- **No database** — Request/response only, no persistence (privacy by design)
+- **AI:** Anthropic API with `claude-haiku-4-5` (configured in [lib/config.ts](lib/config.ts))
+- **Image processing:** Client-side compression (max 2048px, JPEG 0.85)
+- **Deployment:** Vercel
+- **No database** — Request/response only (privacy by design)
 
 ## Quick Start
 
@@ -33,7 +24,7 @@ npm install
 
 # Set up environment
 cp .env.local.example .env.local
-# Add: ANTHROPIC_API_KEY=your_key_here
+# Add your API key: ANTHROPIC_API_KEY=sk-ant-...
 
 # Run development server
 npm run dev
@@ -42,162 +33,88 @@ npm run dev
 # Run unit tests
 npm test
 
-# Generate test labels
-npm run labels:generate
-
 # Run evaluations (requires dev server running)
 npm run evals:run
 ```
 
-## Multi-Image Architecture
+## Project Structure
 
-**Rationale:** The government warning frequently appears on the BACK label in real-world applications. Single-image verification would false-flag "warning missing" on realistic data.
-
-**Implementation:**
-1. User uploads 1-4 images per application (front, back, neck, side)
-2. All images sent in ONE Anthropic API call with merged extraction
-3. Model returns `foundOn` field for each extracted item ("front" | "back" | "neck" | "unknown")
-4. VerdictCard UI surfaces panel location (e.g., "✓ Government warning — back label")
-
-**Benefits:**
-- Eliminates false positives from split-panel labels
-- Maintains <5s performance target (single API call)
-- Realistic simulation of TTB agent workflow
-
-## COLA Application Package (CAP) Format
-
-Interchange format pairing application data with label imagery. Production analog is a COLA export.
-
-### Supported Layouts
-
-1. **Package zip:** `application.json` + images in one archive
-2. **Batch zip:** Multiple subfolders, each a package
-3. **Manifest mode:** Root `applications.json` (array) + images
-4. **Loose drop:** `application.json` + images as separate files
-
-### Schema Example
-
-```json
-{
-  "schemaVersion": "1.0",
-  "ttbId": "26999001000123",
-  "serialNumber": "26-0001",
-  "productType": "DISTILLED_SPIRITS",
-  "source": "DOMESTIC",
-  "applicant": {
-    "name": "Old Tom Distillery LLC",
-    "permitNumber": "DSP-KY-12345",
-    "address": "Bardstown, KY"
-  },
-  "label": {
-    "brandName": "OLD TOM DISTILLERY",
-    "classType": "Kentucky Straight Bourbon Whiskey",
-    "alcoholContent": "45% Alc./Vol.",
-    "netContents": "750 mL",
-    "bottlerNameAddress": "Old Tom Distillery, Bardstown, KY",
-    "countryOfOrigin": null
-  },
-  "images": [
-    { "file": "front.png", "panel": "front" },
-    { "file": "back.png", "panel": "back" }
-  ]
-}
+```
+├── app/                    # Next.js pages (upload, dashboard, appmaker)
+├── lib/                    # Core logic
+│   ├── extraction.ts       # Claude vision extraction
+│   ├── comparison.ts       # Deterministic comparison functions
+│   ├── warning-text.ts     # Government warning verification
+│   ├── cap-loader.ts       # CAP package loading with JSZip
+│   ├── cap-schema.json     # JSON Schema for validation
+│   └── types.ts            # TypeScript interfaces
+├── components/             # React components
+├── docs/                   # Architecture & decision documentation
+│   ├── APPROACH.md         # Approach, tools, and assumptions
+│   ├── ARCHITECTURE-DECISIONS.md
+│   └── IMPLEMENTATION-GUIDE.md
+├── sample-data/            # 200 synthetic test packages + ground truth
+├── scripts/                # Sample data generator & eval harness
+└── test-labels/            # 8 fixture test images
 ```
 
-**Verifiable vs. Administrative Fields:**
+## Features
 
-- **Verifiable** (`label.*`): Brand name, class/type, alcohol content, net contents, government warning → drive verdicts
-- **Administrative** (everything else): Applicant info, TTB ID, serial number → displayed as context, never verified
+### Core Verification
+- **Multi-image processing:** 1-4 label panels (front, back, neck) per application
+- **Three-state verdicts:** MATCH (green), MISMATCH (red), NEEDS_REVIEW (yellow)
+- **Dual matching philosophy:**
+  - Fuzzy for brand/identity (handles "STONE'S THROW" vs "Stone's Throw")
+  - Character-exact for government warning (27 CFR 16.21)
 
-Full schema: [lib/cap-schema.json](lib/cap-schema.json)
+### Batch Workflow
+- **CAP format support:** COLA Application Package interchange format (4 layouts)
+- **Client-side orchestration:** 5 concurrent verifications, real-time progress
+- **Manual review UI:** Approve/reject workflow with confidence-based triage
+- **Image zoom & pan:** Multi-level zoom with drag-to-pan for detailed inspection
 
-## Sample Datasets
+### Sample Data
+Download test packages from the Upload Applications page:
+- Single Sample (1 application)
+- Small Batch (10 applications)
+- Large Batch (100 applications)
+- Real Photos (3 applications with actual label photos)
 
-### Evaluator Quick Start (30 seconds)
-
-1. Open the app at http://localhost:3000
-2. Click "Load sample ▾" → "📦 Load Sample Dataset (12 apps)"
-3. Watch 12 applications process with multi-image extraction
-4. Results table auto-sorts MISMATCH/NEEDS_REVIEW to top
-
-### Sample Data Overview
-
-- **Source:** Synthetic (realistic fabricated records based on TTB registry patterns)
-- **Count:** 12 applications in small sample, 200 in full batch
-- **Defect rate:** 15% with one defect each from 8 test dimensions
-- **Multi-image:** 60% have government warning on back panel
-
-**Defect Types:**
-- `brand-case-diff` — Case-only difference (should MATCH due to normalization)
-- `brand-near-miss` — Single-character typo (should flag NEEDS_REVIEW)
-- `brand-mismatch` — Completely different brand name
-- `wrong-abv` — Alcohol content mismatch
-- `wrong-volume` — Net contents mismatch
-- `warning-titlecase` — Warning header not in all caps (regulatory failure)
-- `warning-modified` — Word-level difference in warning text
-- `warning-missing` — No warning on label
-
-**Files:**
-- `public/samples/cola-sample-small.zip` — 12-application quick-start batch
-- `sample-data/cola-sample-batch.zip` — Full 200-application dataset
-- `sample-data/ground-truth.json` — Expected verdicts for eval harness
-- `sample-data/SAMPLE-DATA.md` — Generation details and usage guide
-
-### Generate Sample Data
-
+Or generate your own:
 ```bash
-# Generate 200 applications (synthetic mode)
 npm run sample:generate -- --source=synthetic --count=200
-
-# Generate with Kaggle data (requires ~/.kaggle/kaggle.json)
-npm run sample:generate -- --source=kaggle --count=200
-
-# Output: sample-data/
-#   - cola-sample-batch.zip (200 applications)
-#   - cola-sample-small.zip (12 applications)
-#   - ground-truth.json (expected verdicts)
-#   - applications/ (unpacked CAP packages)
 ```
 
-## Evaluation Harness
+## Testing & Evaluation
 
+### Unit Tests
 ```bash
-# Run against test fixtures
-npm run evals:run
+npm test
+```
+Tests cover all comparison logic in [lib/comparison.ts](lib/comparison.ts) and [lib/warning-text.ts](lib/warning-text.ts).
 
-# Run against sample dataset with accuracy table
+### Test Fixtures
+8 test labels in [test-labels/](test-labels/) with varying defects:
+- clean-match, case-mismatch, wrong-abv, warning-titlecase
+- warning-modified, warning-missing, glare-angle, near-miss-brand
+
+Generate fixtures:
+```bash
+npm run labels:generate
+```
+
+### Evaluation Harness
+```bash
+# Run against 200 synthetic applications
 npm run evals:sample
+
+# Sample output:
+# Overall: 64.0% accuracy (128/200 pass)
+# Warning defects: 100% accuracy
+# Primary limitation: Government warning extraction from synthetic labels
 ```
 
-**Sample output (measured against 200 synthetic applications):**
-
-```
-Accuracy by Defect Type:
-
-Defect Type         | Total | Pass | Fail | Accuracy
---------------------+-------+------+------+---------
-brand-case-diff     |    10 |    7 |    3 | 70.0%
-brand-mismatch      |     5 |    3 |    2 | 60.0%
-brand-near-miss     |     5 |    2 |    3 | 40.0%
-none (clean)        |   162 |   99 |   63 | 61.1%
-warning-missing     |     3 |    3 |    0 | 100.0%
-warning-modified    |     5 |    5 |    0 | 100.0%
-warning-titlecase   |     3 |    3 |    0 | 100.0%
-wrong-abv           |     3 |    2 |    1 | 66.7%
-wrong-volume        |     4 |    4 |    0 | 100.0%
---------------------+-------+------+------+---------
-Overall             |   200 |  128 |   72 | 64.0%
-```
-
-**Key Findings:**
-- Warning detection defects (missing, modified, titlecase) achieved 100% accuracy
-- Volume and brand mismatch detection performed well (60-100%)
-- Primary accuracy limitation: Government Warning extraction from clean labels (~61%)
-- Model: `claude-haiku-4-5` | Dataset: 200 synthetic applications | Date: 2026-06-11
-
-*The lower-than-expected accuracy on clean labels is primarily due to Government Warning text extraction challenges from synthetic rendered images. Real-world label photos may perform differently.*
-
-**Improvement Opportunities:** See [STRETCH-GOAL-ACCURACY.md](STRETCH-GOAL-ACCURACY.md) for detailed analysis and quick wins to try (switch to Sonnet, enhance prompts, improve rendering).
+See [STRETCH-GOAL-ACCURACY.md](STRETCH-GOAL-ACCURACY.md) for improvement opportunities.
 
 ## Comparison Logic
 
@@ -234,91 +151,98 @@ GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink
 
 Implementation: [lib/warning-text.ts](lib/warning-text.ts)
 
-## Test Labels
+## CAP Package Format
 
-Located in [test-labels/](test-labels/) with [manifest.md](test-labels/manifest.md):
+COLA Application Package interchange format for pairing application data with label images. Supports 4 layouts:
 
-1. `clean-match` — All correct
-2. `case-mismatch` — Brand case differs (should MATCH)
-3. `wrong-abv` — Wrong ABV (MISMATCH)
-4. `warning-titlecase` — Title case warning (MISMATCH)
-5. `warning-modified` — Modified warning text (MISMATCH with diff)
-6. `warning-missing` — No warning (MISMATCH)
-7. `glare-angle` — Quality issues (exercises quality note)
-8. `near-miss-brand` — Typo in brand (NEEDS_REVIEW)
+1. **Package zip:** `application.json` + images in one archive
+2. **Batch zip:** Multiple subfolders, each with `application.json` + images
+3. **Manifest mode:** Root `applications.json` (array) + images
+4. **Loose drop:** `application.json` + images as separate files
 
-**Generate labels:**
-```bash
-npm run labels:generate
-# Uses Playwright to render test-labels/template.html with varying defects
+**Schema:** [lib/cap-schema.json](lib/cap-schema.json)
+
+**Example:**
+```json
+{
+  "schemaVersion": "1.0",
+  "ttbId": "26999001000123",
+  "productType": "DISTILLED_SPIRITS",
+  "label": {
+    "brandName": "OLD TOM DISTILLERY",
+    "classType": "Kentucky Straight Bourbon Whiskey",
+    "alcoholContent": "45% Alc./Vol.",
+    "netContents": "750 mL"
+  },
+  "images": [
+    { "file": "front.png", "panel": "front" },
+    { "file": "back.png", "panel": "back" }
+  ]
+}
 ```
 
 ## Performance
 
-- **Target:** <5s per application (critical differentiator vs. prior vendor)
-- **Measured:** ~1.5-3s typical (depends on image size and API latency)
+- **Target:** <5 seconds per application
+- **Measured:** ~1.5-3s typical
 - **Timing displayed:** Prominent badge in results UI
-- **Optimization:** Client-side image compression keeps requests small and extraction fast
+- **Optimization:** Client-side image compression for faster uploads
 
-## Design for 73-Year-Old Usability
+## Design Principles
 
-- **16px minimum text, large click targets, high contrast**
-- **Every verdict with icon + color + word** (never color alone for accessibility)
-- **No technical jargon** — errors read like helpful colleague
-- **Live processing timer** ("Checking… 1.8s")
-- **Pre-fill sample data** via "Load sample" dropdown for instant demo
+Built for 73-year-old usability:
+- 16px minimum text, large click targets, high contrast
+- Every verdict with icon + color + word (never color alone)
+- No technical jargon — errors read like helpful colleague
+- Live processing timer for perceived speed
+- Sample data pre-loaded via dropdown for instant demo
 
 ## Architecture Decisions
 
-### Why Always-Batch (Single = Batch of One)
+See [docs/ARCHITECTURE-DECISIONS.md](docs/ARCHITECTURE-DECISIONS.md) for detailed rationale.
 
-**Removed:** "Apply one form to all images" concept
+**Key decisions:**
+- **LLM extracts, code judges:** Claude vision transcribes, deterministic functions verify
+- **Always-batch queue:** Single entry = batch of one
+- **Client-side orchestration:** No /api/batch route, concurrency limit of 5
+- **No persistence:** Privacy by design
+- **Multi-image extraction:** 1-4 images per API call for government warning detection
 
-**Rationale:** Doesn't model reality. A real batch is multiple applications, each with its own data. One queue, one results table, one CSV export simplifies UX and matches production workflow.
+## Documentation
 
-### Why Client-Side Orchestration
+- **[APPROACH.md](docs/APPROACH.md)** — Approach, tools, and assumptions *(submission requirement)*
+- **[ARCHITECTURE-DECISIONS.md](docs/ARCHITECTURE-DECISIONS.md)** — Major design decisions and rationale
+- **[IMPLEMENTATION-GUIDE.md](docs/IMPLEMENTATION-GUIDE.md)** — Developer guide with patterns and pitfalls
+- **[docs/decisions/](docs/decisions/)** — Session-by-session decision logs
 
-**No /api/batch route.** The batch page calls /api/verify repeatedly with concurrency limit of 5.
+## Known Limitations
 
-**Benefits:**
-- Avoids Vercel function timeout issues with large batches
-- Stays under 4.5 MB body limit per request
-- Real-time progress updates as each verification completes
-- Failed images don't block the entire batch
+- Desktop-first (no mobile-specific layouts)
+- Synthetic test data (real-world label photos may perform differently)
+- Government warning extraction: 61% accuracy on synthetic labels, 100% on defects
+- No authentication/user accounts
+- No database/persistence layer
 
-### Why No Persistence
+## Out of Scope (Future Work)
 
-All processing is request/response with no database. **Privacy by design** — uploaded images never stored.
-
-## Out of Scope (Noted for Future Work)
-
-- Authentication/user accounts
-- Database/persistence layer
 - Direct COLA integration (simulated via CAP format)
-- Beverage-type-specific rule engines (wine appellation, varietal validation)
-- Mobile-specific layouts (desktop-first)
+- Wine/beer conditional validation (varietal, appellation, vintage)
+- Beverage-type-specific rule engines
+- Azure/AWS Bedrock endpoint (note: agency networks may block direct Anthropic API)
+- Mobile-specific layouts
 
-## Domain Context (TTB Research)
+## Deployment
 
-1. **COLA is the system of record:** TTB's "COLAs Online" system (Form TTB F 5100.31) is the sole internal database. Agents never type application data — they pull up an existing record.
+Built for Vercel with considerations for:
+- 4.5 MB body limit → Client-side image compression
+- Serverless timeout → Client-side batch orchestration
+- No cold starts → Haiku-class model for speed
 
-2. **One application : many images:** A single COLA application can include front, back, and neck label images. Government warning frequently appears on the back label.
-
-3. **Public COLA Registry:** ttbonline.gov exposes approved records (application data + label images, 1999/2003+) as public records under CC0 license.
-
-4. **Kaggle dataset exists:** "TTB COLAs Demo" by COLA Cloud (~4M records) — parsed sample of the registry with structured fields and OCR features.
-
-5. **Form 5100.31 field taxonomy:** Mixes administrative (identify filer, not on label) and label-verifiable fields (must/should appear on artwork). Only label-verifiable fields drive verdicts.
-
-## Contributing
-
-This is a prototype demonstrating feasibility. For production deployment, consider:
-
-- Azure/AWS Bedrock Claude endpoint (agency networks may block direct Anthropic API)
-- Batch processing optimizations for 200-300 concurrent applications (peak season)
-- Wine/beer conditional field validation (varietal, appellation, vintage)
+For production deployment, consider:
+- Azure/AWS Bedrock Claude endpoint (agency network compatibility)
+- Batch processing optimizations for 300 concurrent applications
+- Authentication and audit logging
 - Integration with COLA export format
-- Audit logging and user session tracking
 
 ## License
 
