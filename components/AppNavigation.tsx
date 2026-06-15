@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 interface AppNavigationProps {
   reviewQueueCount?: number;
@@ -9,14 +10,76 @@ interface AppNavigationProps {
 
 export default function AppNavigation({ reviewQueueCount = 0 }: AppNavigationProps) {
   const pathname = usePathname();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const isActive = (path: string) => pathname === path;
 
   return (
-    <div className="w-60 bg-white border-r border-gray-200 flex flex-col h-screen">
+    <>
+      {/* Mobile Hamburger Button */}
+      <button
+        onClick={() => setMobileMenuOpen(true)}
+        className="md:hidden fixed top-4 left-4 z-40 p-2 bg-white border border-gray-300 rounded-lg shadow-lg hover:bg-gray-50"
+        aria-label="Open navigation menu"
+      >
+        <svg
+          className="w-6 h-6 text-gray-700"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M4 6h16M4 12h16M4 18h16"
+          />
+        </svg>
+      </button>
+
+      {/* Mobile Backdrop */}
+      {mobileMenuOpen && (
+        <div
+          className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
+
+      {/* Sidebar - Desktop: always visible, Mobile: drawer overlay */}
+      <div className={`
+        w-60 bg-white border-r border-gray-200 flex flex-col h-screen
+        md:relative md:translate-x-0
+        fixed top-0 left-0 z-50 transition-transform duration-300
+        ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+      `}>
+      {/* Close button - mobile only */}
+      <button
+        onClick={() => setMobileMenuOpen(false)}
+        className="md:hidden absolute top-4 right-4 p-2 hover:bg-gray-100 rounded z-10"
+        aria-label="Close navigation menu"
+      >
+        <svg
+          className="w-6 h-6 text-gray-700"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+
       {/* Logo */}
       <div className="p-4 border-b border-gray-200">
-        <Link href="/upload" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+        <Link
+          href="/upload"
+          className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+          onClick={() => setMobileMenuOpen(false)}
+        >
           <img
             src="/images/ttb-logo.jpg"
             alt="TTB"
@@ -44,6 +107,7 @@ export default function AppNavigation({ reviewQueueCount = 0 }: AppNavigationPro
               ? "bg-blue-50 text-blue-700"
               : "text-gray-700 hover:bg-gray-100"
           }`}
+          onClick={() => setMobileMenuOpen(false)}
         >
           <svg
             className="w-5 h-5 flex-shrink-0"
@@ -67,6 +131,7 @@ export default function AppNavigation({ reviewQueueCount = 0 }: AppNavigationPro
               ? "bg-blue-50 text-blue-700"
               : "text-gray-700 hover:bg-gray-100"
           }`}
+          onClick={() => setMobileMenuOpen(false)}
         >
           <svg
             className="w-5 h-5 flex-shrink-0"
@@ -97,5 +162,6 @@ export default function AppNavigation({ reviewQueueCount = 0 }: AppNavigationPro
         <div>Author: <a href="mailto:dwward@gmail.com">Don Ward</a></div>
       </div>
     </div>
+    </>
   );
 }

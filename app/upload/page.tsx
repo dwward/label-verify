@@ -104,10 +104,10 @@ export default function UploadBatchPage() {
     0;
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex flex-col md:flex-row min-h-screen bg-gray-50">
       <AppNavigation />
-      <div className="flex-1 overflow-auto">
-      <div className="max-w-5xl mx-auto py-8 px-4">
+      <div className="flex-1 overflow-auto pt-16 md:pt-0">
+      <div className="max-w-5xl mx-auto py-4 md:py-8 px-4">
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-gray-900">Upload Applications</h1>
           <p className="text-base text-gray-600 mt-1">
@@ -120,7 +120,7 @@ export default function UploadBatchPage() {
           onDrop={handleDrop}
           onDragOver={handleDragOver}
           onClick={() => document.getElementById('file-input')?.click()}
-          className={`border-4 border-dashed rounded-lg p-12 text-center mb-6 transition-colors ${
+          className={`border-4 border-dashed rounded-lg p-6 md:p-12 text-center mb-4 md:mb-6 transition-colors ${
             isLoading
               ? "border-blue-400 bg-blue-50"
               : "border-gray-300 hover:border-blue-400 cursor-pointer"
@@ -135,7 +135,7 @@ export default function UploadBatchPage() {
             accept=".zip,.json,.png,.jpg,.jpeg,.webp"
           />
           <svg
-            className="mx-auto h-16 w-16 text-gray-400 mb-4"
+            className="mx-auto h-12 w-12 md:h-16 md:w-16 text-gray-400 mb-3 md:mb-4"
             stroke="currentColor"
             fill="none"
             viewBox="0 0 48 48"
@@ -147,10 +147,10 @@ export default function UploadBatchPage() {
               strokeLinejoin="round"
             />
           </svg>
-          <p className="text-xl font-medium text-gray-900 mb-2">
+          <p className="text-lg md:text-xl font-medium text-gray-900 mb-1 md:mb-2">
             {isLoading ? "Loading files..." : "Drag and drop files or folders here"}
           </p>
-          <p className="text-base text-gray-500">or click to browse</p>
+          <p className="text-sm md:text-base text-gray-500">or click to browse</p>
         </div>
 
         {/* Sample Data */}
@@ -179,7 +179,7 @@ export default function UploadBatchPage() {
                   </svg>
 
                   {/* Tooltip Content */}
-                  <div className="hidden group-hover:block absolute left-0 top-6 z-10 w-80 bg-white border border-gray-300 rounded-lg shadow-lg p-4 text-sm">
+                  <div className="hidden group-hover:block absolute left-0 top-6 z-10 w-screen max-w-[calc(100vw-2rem)] md:w-80 md:max-w-none bg-white border border-gray-300 rounded-lg shadow-lg p-3 md:p-4 text-xs md:text-sm">
                     <div className="font-semibold text-gray-900 mb-2">Expected Package Format</div>
 
                     <div className="space-y-2 text-gray-700">
@@ -210,35 +210,35 @@ export default function UploadBatchPage() {
                 Download sample files to test the interface
               </p>
             </div>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               <a
                 href="https://label-verify-samples.s3.amazonaws.com/sample-1.zip"
                 download
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50"
+                className="px-3 md:px-4 py-2 text-xs md:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50 whitespace-nowrap"
               >
                 Single Sample (1)
               </a>
               <a
                 href="https://label-verify-samples.s3.amazonaws.com/sample-10.zip"
                 download
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50"
+                className="px-3 md:px-4 py-2 text-xs md:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50 whitespace-nowrap"
               >
                 Small Batch (10)
               </a>
               <a
                 href="https://label-verify-samples.s3.amazonaws.com/sample-100.zip"
                 download
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50"
+                className="px-3 md:px-4 py-2 text-xs md:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50 whitespace-nowrap"
               >
                 Large Batch (100)
               </a>
               <a
                 href="https://label-verify-samples.s3.amazonaws.com/sample-real-photos-3.zip"
                 download
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50"
+                className="px-3 md:px-4 py-2 text-xs md:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50 whitespace-nowrap"
               >
                 Real Photos (3)
-              </a>              
+              </a>
             </div>
           </div>
         </div>
