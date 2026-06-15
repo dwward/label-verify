@@ -2,6 +2,11 @@ import Anthropic from "@anthropic-ai/sdk";
 import type { ExtractedLabel } from "./types";
 import { ANTHROPIC_MODEL, ANTHROPIC_MAX_TOKENS } from "./config";
 
+// Validate API key at startup
+if (!process.env.ANTHROPIC_API_KEY) {
+  throw new Error('ANTHROPIC_API_KEY environment variable is required');
+}
+
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
@@ -176,13 +181,34 @@ DO NOT include markdown code fences or any text outside the JSON object.`,
     }
 
     return { extracted, processingMs };
-  } catch (error) {
+  } catch (error: any) {
     const endTime = performance.now();
     const processingMs = Math.round(endTime - startTime);
 
     console.error("Error extracting label data:", error);
 
-    // Return low-confidence result on error
+    // Categorize error type for user-friendly messaging
+    let errorMessage = "Verification service unavailable";
+    let errorType = "unknown";
+
+    if (error.status === 401 || error.status === 403) {
+      errorType = "authentication";
+      errorMessage = "API authentication failed";
+    } else if (error.status === 429) {
+      errorType = "rate_limit";
+      errorMessage = "Rate limit exceeded";
+    } else if (error.code === 'ECONNREFUSED' || error.code === 'ENOTFOUND' || error.code === 'ETIMEDOUT' || error.code === 'ENOTCONN') {
+      errorType = "network";
+      errorMessage = "Network connection failed";
+    } else if (error.message?.toLowerCase().includes('interrupted') || error.message?.toLowerCase().includes('network') || error.message?.toLowerCase().includes('fetch failed')) {
+      errorType = "network";
+      errorMessage = "Network connection failed";
+    } else if (error.message?.includes('timeout')) {
+      errorType = "timeout";
+      errorMessage = "Request timed out";
+    }
+
+    // Return structured error instead of low-confidence result
     const extracted: ExtractedLabel = {
       brandName: null,
       brandNameFoundOn: "unknown",
@@ -202,9 +228,9 @@ DO NOT include markdown code fences or any text outside the JSON object.`,
       imageQuality: {
         readable: false,
         issues: [
-          error instanceof Error ? error.message : "Unknown extraction error",
+          `${errorMessage}. Please check your connection and try again.`,
         ],
-        confidence: "low",
+        confidence: "error",
       },
     };
 

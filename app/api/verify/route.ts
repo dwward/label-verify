@@ -97,6 +97,15 @@ export async function POST(request: NextRequest) {
       imageFiles
     );
 
+    // Check if extraction failed due to API/network error
+    if (extracted.imageQuality.confidence === "error") {
+      const errorMessage = extracted.imageQuality.issues[0] || "Verification service unavailable";
+      return NextResponse.json(
+        { error: errorMessage },
+        { status: 503 }
+      );
+    }
+
     // Compare and verify
     const verdicts = verifyLabel(applicationData, extracted);
     const overall = calculateOverallVerdict(verdicts);
@@ -141,24 +150,48 @@ export async function POST(request: NextRequest) {
     };
 
     return NextResponse.json(result);
-  } catch (error) {
+  } catch (error: any) {
     console.error("Verification error:", error);
 
-    if (error instanceof Error && error.message.includes("timeout")) {
+    // Return user-friendly message based on error type
+    if (error.status === 401 || error.status === 403) {
       return NextResponse.json(
-        {
-          error:
-            "Verification took too long. Please try again with a clearer image.",
-        },
+        { error: "API authentication failed. Please check your API key configuration." },
+        { status: 401 }
+      );
+    }
+
+    if (error.status === 429) {
+      return NextResponse.json(
+        { error: "Rate limit exceeded. Please wait a moment and try again." },
+        { status: 429 }
+      );
+    }
+
+    if (error.code === 'ECONNREFUSED' || error.code === 'ENOTFOUND' || error.code === 'ETIMEDOUT' || error.code === 'ENOTCONN') {
+      return NextResponse.json(
+        { error: "Network connection failed. Please check your internet connection." },
+        { status: 503 }
+      );
+    }
+
+    if (error.message?.toLowerCase().includes('interrupted') || error.message?.toLowerCase().includes('network') || error.message?.toLowerCase().includes('fetch failed')) {
+      return NextResponse.json(
+        { error: "Network connection failed. Please check your internet connection." },
+        { status: 503 }
+      );
+    }
+
+    if (error.message?.includes('timeout')) {
+      return NextResponse.json(
+        { error: "Verification took too long. Please try again with a clearer image." },
         { status: 504 }
       );
     }
 
+    // Generic fallback for unknown errors
     return NextResponse.json(
-      {
-        error:
-          "We couldn't process this image. Please try again or use a different photo.",
-      },
+      { error: "Verification service unavailable. Please try again or contact your administrator." },
       { status: 500 }
     );
   }

@@ -15,10 +15,18 @@ import { CONFIDENCE_THRESHOLD } from "./config";
  */
 export function calculateFieldConfidence(
   verdict: FieldVerdict,
-  imageQuality: "high" | "medium" | "low",
+  imageQuality: "high" | "medium" | "low" | "error",
   similarityScore?: number // For fuzzy matches (0-1)
 ): FieldConfidence {
   const { status, labelValue } = verdict;
+
+  // Handle API/network errors
+  if (imageQuality === "error") {
+    return {
+      score: 0.0,
+      reason: "API or network error - verification failed",
+    };
+  }
 
   // Base multiplier from image quality
   const qualityMultiplier = imageQuality === "high" ? 1.0 : imageQuality === "medium" ? 0.75 : 0.5;
@@ -85,9 +93,17 @@ export function calculateFieldConfidence(
  */
 export function calculateWarningConfidence(
   verdict: FieldVerdict,
-  imageQuality: "high" | "medium" | "low"
+  imageQuality: "high" | "medium" | "low" | "error"
 ): FieldConfidence {
   const { status } = verdict;
+
+  // Handle API/network errors
+  if (imageQuality === "error") {
+    return {
+      score: 0.0,
+      reason: "API or network error - verification failed",
+    };
+  }
 
   // Apply quality multiplier
   const qualityMultiplier = imageQuality === "high" ? 1.0 : imageQuality === "medium" ? 0.75 : 0.5;

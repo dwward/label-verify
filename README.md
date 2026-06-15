@@ -196,6 +196,40 @@ COLA Application Package interchange format for pairing application data with la
 - **Timing displayed:** Prominent badge in results UI
 - **Optimization:** Client-side image compression for faster uploads
 
+## Network and Deployment Considerations
+
+### Prototype Environment
+This prototype calls the Anthropic API directly from a Vercel serverless function. Evaluators access the app via its public Vercel URL—no agency firewall is involved during evaluation.
+
+### Production Deployment
+In a production deployment inside the agency network, outbound calls to commercial AI endpoints would be blocked per the network restrictions described in the discovery sessions (Marcus Williams, IT Systems Administrator).
+
+**Recommended production paths:**
+- **Azure Government hosted model** — FedRAMP-authorized, stays inside the network boundary; aligns with the agency's existing Azure infrastructure (post-2019 migration to Azure cloud)
+- **AWS Bedrock Claude** — Government cloud deployment with agency-approved egress
+- **Self-hosted vision model** — Deployed within the network perimeter, no outbound dependency
+- **Approved agency proxy** — Route Anthropic API calls through an authorized egress point
+
+### Architecture for Easy Migration
+The prototype isolates all Anthropic API calls to a single file ([lib/extraction.ts](lib/extraction.ts)). Swapping the extraction backend for any of the above paths requires changes to that file only—the comparison logic ([lib/comparison.ts](lib/comparison.ts), [lib/warning-text.ts](lib/warning-text.ts)), CAP loader, UI, and queue architecture are unaffected.
+
+**Migration checklist:**
+1. Replace Anthropic SDK initialization in `lib/extraction.ts`
+2. Update `buildVisionPrompt()` to target model's message format
+3. Update response parsing to match new model's output structure
+4. Set `ANTHROPIC_API_KEY` environment variable to new endpoint credentials
+5. All other code remains unchanged
+
+### Error Handling
+The app gracefully handles API failures with user-friendly messages:
+- **Missing API Key:** "API authentication failed. Please check your API key configuration."
+- **Network Unavailable:** "Network connection failed. Please check your internet connection."
+- **Rate Limit:** "Rate limit exceeded. Please wait a moment and try again."
+- **Timeout:** "Verification took too long. Please try again with a clearer image."
+- **Unknown Error:** "Verification service unavailable. Please try again or contact your administrator."
+
+No technical details (stack traces, error codes) are exposed to users—all errors return plain-English guidance.
+
 ## Design Principles
 
 Built for 73-year-old usability:
