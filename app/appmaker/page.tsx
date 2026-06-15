@@ -67,10 +67,20 @@ export default function AppMakerPage() {
           netContents: app.netContents,
         },
         {
-          ttbId: `TEST${app.id.slice(-10).padStart(10, "0")}`,
+          ttbId: `99${String(Date.now()).slice(-12)}`, // 14 digits: 99 + 12 from timestamp
           serialNumber: `99-${app.id.slice(-4)}`,
         }
       );
+
+      // Build images array matching actual filenames
+      const panelNames = ["front", "back", "neck", "side"];
+      cap.images = app.images.map((img, idx) => {
+        const ext = img.name.split(".").pop();
+        return {
+          file: `${panelNames[idx]}.${ext}`,
+          panel: panelNames[idx] as "front" | "back" | "neck" | "other",
+        };
+      });
 
       return JSON.stringify(cap, null, 2);
     } catch (error) {
@@ -107,21 +117,28 @@ export default function AppMakerPage() {
           netContents: app.netContents,
         },
         {
-          ttbId: `TEST${String(i + 1).padStart(10, "0")}`,
+          ttbId: `${String(i + 1).padStart(14, "0")}`, // 14 digits all numeric
           serialNumber: `99-${String(i + 1).padStart(4, "0")}`,
         }
       );
 
-      folder.file("application.json", JSON.stringify(cap, null, 2));
-
-      // Add images
+      // Add images to folder and build images array
       const panelNames = ["front", "back", "neck", "side"];
+      cap.images = [];
       for (let j = 0; j < app.images.length; j++) {
         const img = app.images[j];
         const ext = img.name.split(".").pop();
-        const fileName = `${panelNames[j] || "image" + j}.${ext}`;
+        const fileName = `${panelNames[j]}.${ext}`;
         folder.file(fileName, img);
+
+        // Add to images array in JSON
+        cap.images.push({
+          file: fileName,
+          panel: panelNames[j] as "front" | "back" | "neck" | "other",
+        });
       }
+
+      folder.file("application.json", JSON.stringify(cap, null, 2));
     }
 
     // Generate and download

@@ -20,6 +20,12 @@ export default function UploadBatchPage() {
       // Convert FileList to File array
       const files = Array.from(e.dataTransfer.files);
       const result = await loadCAPPackages(files);
+
+      // Log errors to console for debugging
+      if (result.errors.length > 0) {
+        console.error("CAP Package Loading Errors:", result.errors);
+      }
+
       setLoadResult(result);
     } catch (error) {
       console.error("Upload error:", error);
@@ -41,6 +47,12 @@ export default function UploadBatchPage() {
     try {
       const fileArray = Array.from(files);
       const result = await loadCAPPackages(fileArray);
+
+      // Log errors to console for debugging
+      if (result.errors.length > 0) {
+        console.error("CAP Package Loading Errors:", result.errors);
+      }
+
       setLoadResult(result);
     } catch (error) {
       console.error("Upload error:", error);
@@ -204,7 +216,7 @@ export default function UploadBatchPage() {
                 download
                 className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50"
               >
-                Load Sample (1)
+                Single Sample (1)
               </a>
               <a
                 href="https://label-verify-samples.s3.amazonaws.com/sample-10.zip"
@@ -220,6 +232,13 @@ export default function UploadBatchPage() {
               >
                 Large Batch (100)
               </a>
+              <a
+                href="https://label-verify-samples.s3.amazonaws.com/sample-real-photos-3.zip"
+                download
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded hover:bg-gray-50"
+              >
+                Real Photos (3)
+              </a>              
             </div>
           </div>
         </div>
@@ -254,6 +273,56 @@ export default function UploadBatchPage() {
                 </button>
               </div>
             </div>
+
+            {/* Error Details */}
+            {errorCount > 0 && (
+              <div className="mt-4 border-t border-gray-200 pt-4">
+                <h3 className="text-base font-semibold text-red-900 mb-2">
+                  Errors ({errorCount})
+                </h3>
+                <div className="space-y-2">
+                  {loadResult.errors.map((err, idx) => (
+                    <div
+                      key={idx}
+                      className="bg-red-50 border border-red-200 rounded p-3"
+                    >
+                      <div className="text-sm font-medium text-red-900">
+                        {err.source}
+                      </div>
+                      <div className="text-sm text-red-700 mt-1">
+                        {err.message}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Missing Images Warning */}
+            {missingImagesCount > 0 && (
+              <div className="mt-4 border-t border-gray-200 pt-4">
+                <h3 className="text-base font-semibold text-yellow-900 mb-2">
+                  Missing Images ({missingImagesCount})
+                </h3>
+                <div className="space-y-2">
+                  {loadResult.applications
+                    .filter((app) => app.images.length === 0)
+                    .map((app, idx) => (
+                      <div
+                        key={idx}
+                        className="bg-yellow-50 border border-yellow-200 rounded p-3"
+                      >
+                        <div className="text-sm font-medium text-yellow-900">
+                          {app.cap.ttbId || "Unknown"}
+                        </div>
+                        <div className="text-sm text-yellow-700 mt-1">
+                          {app.cap.label.brandName} - No images found
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
