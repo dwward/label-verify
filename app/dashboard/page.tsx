@@ -463,7 +463,7 @@ export default function DashboardPage() {
         {isProcessing && statistics && (
           <div className="bg-white border-b border-gray-200 px-6 py-3">
             <div className="flex items-center gap-2">
-              <span className="text-xs text-gray-500">Processing:</span>
+              <span className="text-sm text-gray-500">Processing:</span>
               <div className="flex-1 bg-gray-200 rounded-full h-2">
                 <div
                   className="bg-blue-600 h-2 rounded-full transition-all"
@@ -472,7 +472,7 @@ export default function DashboardPage() {
                   }}
                 ></div>
               </div>
-              <span className="text-xs font-medium text-gray-700">
+              <span className="text-sm font-medium text-gray-700">
                 {completedCount} / {queue.length}
               </span>
             </div>
@@ -588,7 +588,7 @@ export default function DashboardPage() {
           </button>
 
           {filterState === "needs_review" && statistics && (
-            <span className="ml-auto text-xs text-gray-600 px-2 py-1 bg-blue-50 border border-blue-200 rounded">
+            <span className="ml-auto text-sm text-gray-600 px-2 py-1 bg-blue-50 border border-blue-200 rounded">
               {(statistics.byWorkflowState.approved || 0) +
                 (statistics.byWorkflowState.rejected || 0)}{" "}
               of {statistics.reviewQueueSize} reviewed
@@ -742,7 +742,7 @@ export default function DashboardPage() {
                           <>
                             <td className="px-3 py-2">
                               {isManuallyReviewed ? (
-                                <span className="text-xs italic text-amber-700">
+                                <span className="text-sm italic text-amber-700">
                                   Manually reviewed
                                 </span>
                               ) : item.status === "completed" && confidence > 0 ? (
@@ -760,7 +760,7 @@ export default function DashboardPage() {
                                     ></div>
                                   </div>
                                   <span
-                                    className={`text-xs font-bold ${
+                                    className={`text-sm font-bold ${
                                       confidence >= 0.85
                                         ? "text-green-600"
                                         : confidence >= 0.6
@@ -772,10 +772,10 @@ export default function DashboardPage() {
                                   </span>
                                 </div>
                               ) : (
-                                <span className="text-xs text-gray-400">—</span>
+                                <span className="text-sm text-gray-400">—</span>
                               )}
                             </td>
-                            <td className="px-3 py-2 text-xs text-gray-700">
+                            <td className="px-3 py-2 text-sm text-gray-700">
                               {item.totalProcessingMs ? (
                                 <span className="font-medium">
                                   {(item.totalProcessingMs / 1000).toFixed(1)}s
@@ -784,7 +784,7 @@ export default function DashboardPage() {
                                 <span className="text-gray-400">—</span>
                               )}
                             </td>
-                            <td className="px-3 py-2 text-xs text-gray-700">
+                            <td className="px-3 py-2 text-sm text-gray-700">
                               {item.status === "processing" && "Processing..."}
                               {item.status === "pending" && "Pending"}
                               {item.status === "error" && (
@@ -812,10 +812,10 @@ export default function DashboardPage() {
               {/* Inspector Header */}
               <div className="bg-gray-900 text-white px-4 py-2 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <h2 className="text-sm font-semibold">
+                  <h2 className="text-base font-semibold">
                     {selectedItem.ttbId || selectedItem.id.slice(0, 10)}
                   </h2>
-                  <span className="text-xs text-gray-400">
+                  <span className="text-sm text-gray-400">
                     {selectedItem.applicationData.brandName} •{" "}
                     {selectedItem.applicationData.classType}
                   </span>
@@ -846,22 +846,22 @@ export default function DashboardPage() {
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
                     {selectedItem.workflowState === "auto_passed" && (
-                      <span className="text-xs font-semibold text-green-700 bg-green-100 px-2 py-1 rounded">
+                      <span className="text-sm font-semibold text-green-700 bg-green-100 px-2 py-1 rounded">
                         ✓ Auto Accepted
                       </span>
                     )}
                     {selectedItem.workflowState === "approved" && (
-                      <span className="text-xs font-semibold text-blue-700 bg-blue-100 px-2 py-1 rounded">
+                      <span className="text-sm font-semibold text-blue-700 bg-blue-100 px-2 py-1 rounded">
                         ✓ Manually Approved
                       </span>
                     )}
                     {selectedItem.workflowState === "rejected" && (
-                      <span className="text-xs font-semibold text-red-700 bg-red-100 px-2 py-1 rounded">
+                      <span className="text-sm font-semibold text-red-700 bg-red-100 px-2 py-1 rounded">
                         ✗ Manually Rejected
                       </span>
                     )}
                     {selectedItem.workflowState === "needs_review" && (
-                      <span className="text-xs font-medium text-gray-700">
+                      <span className="text-sm font-medium text-gray-700">
                         Overall Confidence
                       </span>
                     )}
@@ -906,7 +906,7 @@ export default function DashboardPage() {
                   </div>
                 </div>
                 {selectedItem.result.applicationConfidence?.reason && (
-                  <div className="bg-yellow-50 border-l-4 border-yellow-500 p-2 text-xs">
+                  <div className="bg-yellow-50 border-l-4 border-yellow-500 p-2 text-sm">
                     <div className="font-medium text-yellow-800 mb-0.5">
                       Needs review because:
                     </div>
@@ -932,7 +932,7 @@ export default function DashboardPage() {
                             setImageZoom(1);
                             setImagePan({ x: 0, y: 0 });
                           }}
-                          className={`px-3 py-1 text-xs font-medium rounded ${
+                          className={`px-4 py-1.5 text-sm font-medium rounded ${
                             activeImageIndex === idx
                               ? "bg-blue-600 text-white"
                               : "bg-gray-700 text-gray-300 hover:bg-gray-600"
@@ -943,13 +943,13 @@ export default function DashboardPage() {
                       ))}
 
                       <div className="ml-auto flex items-center gap-2">
-                        <span className="text-xs text-gray-400">Zoom:</span>
+                        <span className="text-sm text-gray-500">Zoom:</span>
                         <button
                           onClick={() => {
                             setImageZoom(1);
                             setImagePan({ x: 0, y: 0 });
                           }}
-                          className={`px-2 py-1 text-xs rounded ${
+                          className={`px-3 py-1.5 text-sm rounded ${
                             imageZoom === 1
                               ? "bg-blue-600 text-white"
                               : "text-gray-400 hover:bg-gray-700"
@@ -962,7 +962,7 @@ export default function DashboardPage() {
                             setImageZoom(2);
                             setImagePan({ x: 0, y: 0 });
                           }}
-                          className={`px-2 py-1 text-xs rounded ${
+                          className={`px-3 py-1.5 text-sm rounded ${
                             imageZoom === 2
                               ? "bg-blue-600 text-white"
                               : "text-gray-400 hover:bg-gray-700"
@@ -975,7 +975,7 @@ export default function DashboardPage() {
                             setImageZoom(3);
                             setImagePan({ x: 0, y: 0 });
                           }}
-                          className={`px-2 py-1 text-xs rounded ${
+                          className={`px-3 py-1.5 text-sm rounded ${
                             imageZoom === 3
                               ? "bg-blue-600 text-white"
                               : "text-gray-400 hover:bg-gray-700"
@@ -1061,8 +1061,8 @@ export default function DashboardPage() {
                       <svg className="mx-auto h-12 w-12 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
-                      <p className="text-sm font-medium">Images Not Available</p>
-                      <p className="text-xs mt-1">
+                      <p className="text-base font-medium">Images Not Available</p>
+                      <p className="text-sm mt-1">
                         Images are only available during the current session.<br />
                         Verification results are preserved.
                       </p>
@@ -1072,7 +1072,7 @@ export default function DashboardPage() {
 
                 {/* Field Comparison Table - Right Side */}
                 <div className="w-1/2 overflow-auto bg-white">
-                  <table className="min-w-full text-xs">
+                  <table className="min-w-full text-sm">
                     <thead className="bg-gray-100 sticky top-0">
                       <tr>
                         <th className="px-2 py-1.5 text-left text-sm font-medium text-gray-600 uppercase w-24">
@@ -1137,7 +1137,7 @@ export default function DashboardPage() {
                                       }}
                                     ></div>
                                   </div>
-                                  <span className="text-xs font-medium">
+                                  <span className="text-sm font-medium">
                                     {Math.round(verdict.confidence.score * 100)}%
                                   </span>
                                 </div>
@@ -1145,7 +1145,7 @@ export default function DashboardPage() {
                             </td>
                             <td className="px-2 py-1.5">
                               <span
-                                className={`inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium ${badgeColor}`}
+                                className={`inline-flex items-center px-2 py-1 rounded text-sm font-medium ${badgeColor}`}
                               >
                                 {verdict.status === "MATCH"
                                   ? "Match"
@@ -1168,18 +1168,18 @@ export default function DashboardPage() {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => handleApprove(selectedItem.id)}
-                      className="flex-1 px-3 py-1.5 bg-green-600 text-white rounded text-sm font-medium hover:bg-green-700"
+                      className="flex-1 px-4 py-2.5 bg-green-600 text-white rounded text-base font-medium hover:bg-green-700"
                     >
                       ✓ Approve
                     </button>
                     <button
                       onClick={() => handleReject(selectedItem.id)}
-                      className="flex-1 px-3 py-1.5 bg-red-600 text-white rounded text-sm font-medium hover:bg-red-700"
+                      className="flex-1 px-4 py-2.5 bg-red-600 text-white rounded text-base font-medium hover:bg-red-700"
                     >
                       ✗ Reject
                     </button>
                   </div>
-                  <p className="text-xs text-gray-500 mt-1.5 text-center">
+                  <p className="text-sm text-gray-500 mt-1.5 text-center">
                     Approve if matches, Reject if needs correction
                   </p>
                 </div>
