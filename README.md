@@ -192,9 +192,11 @@ COLA Application Package interchange format for pairing application data with la
 ## Performance
 
 - **Target:** <5 seconds per application
-- **Measured:** ~1.5-3s typical
-- **Timing displayed:** Prominent badge in results UI
+- **Measured:** ~1.5-3s typical (AI verification only, server-side)
+- **Timing displayed:** Per-item in results table and batch average
 - **Optimization:** Client-side image compression for faster uploads
+
+**Note on timing:** Processing time displayed reflects AI extraction and comparison only (server-side measurement). Network transfer time varies by connection speed and is excluded—consistent with the requirement that verification itself complete in under 5 seconds. On a fast connection, total response time (including upload) will be ~3-4s; on mobile LTE it may be 8-10s, but the displayed verification time remains consistent at ~3s.
 
 ## Network and Deployment Considerations
 

@@ -317,7 +317,7 @@ export default function DashboardPage() {
       status: item.workflowState || item.status,
       overallVerdict: item.result?.overall || null,
       confidence: item.result?.applicationConfidence?.overall || null,
-      processingTimeMs: item.totalProcessingMs || null,
+      processingTimeMs: item.result?.processingMs || null,
       addedAt: toISOSafe(item.addedAt),
       completedAt: toISOSafe(item.completedAt),
       reviewedAt: toISOSafe(item.reviewedAt),
@@ -484,10 +484,10 @@ export default function DashboardPage() {
 
         {/* Batch Summary Banner (dismissible, shown after import completes) */}
         {batchSummaryVisible && statistics && !isProcessing && (() => {
-          // Calculate average processing time
-          const completedItems = queue.filter(item => item.totalProcessingMs);
+          // Calculate average processing time (server-side only)
+          const completedItems = queue.filter(item => item.result?.processingMs);
           const avgTime = completedItems.length > 0
-            ? completedItems.reduce((sum, item) => sum + (item.totalProcessingMs || 0), 0) / completedItems.length
+            ? completedItems.reduce((sum, item) => sum + (item.result?.processingMs || 0), 0) / completedItems.length
             : 0;
 
           return (
@@ -515,7 +515,7 @@ export default function DashboardPage() {
                   {statistics.byWorkflowState.error || 0} failed
                   {avgTime > 0 && (
                     <span className="ml-2 text-blue-700">
-                      • Avg time: {(avgTime / 1000).toFixed(1)}s
+                      • Avg AI verification: {(avgTime / 1000).toFixed(1)}s
                     </span>
                   )}
                 </div>
@@ -819,9 +819,9 @@ export default function DashboardPage() {
                               )}
                             </td>
                             <td className="px-3 py-2 text-sm text-gray-700">
-                              {item.totalProcessingMs ? (
+                              {item.result?.processingMs ? (
                                 <span className="font-medium">
-                                  {(item.totalProcessingMs / 1000).toFixed(1)}s
+                                  {(item.result.processingMs / 1000).toFixed(1)}s
                                 </span>
                               ) : (
                                 <span className="text-gray-400">—</span>
